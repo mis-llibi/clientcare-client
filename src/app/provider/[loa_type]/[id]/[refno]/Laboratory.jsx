@@ -17,9 +17,9 @@ function Laboratory({ patient, provider, refno, setIsSubmitted }) {
   const uploadedFiles = watch("files");
   const fileArray = uploadedFiles ? Array.from(uploadedFiles) : []; // ✅ convert FileList to array
 
-  useEffect(() => {
-    console.log("Watched files:", uploadedFiles);
-  }, [uploadedFiles]);
+  // useEffect(() => {
+  //   console.log("Watched files:", uploadedFiles);
+  // }, [uploadedFiles]);
 
   function truncateFileName(name, maxLength = 20) {
     if (name.length <= maxLength) return name;
@@ -41,11 +41,18 @@ function Laboratory({ patient, provider, refno, setIsSubmitted }) {
   const handleRemovePdf = (fileToRemove) => {
     const remaining = fileArray.filter((f) => f !== fileToRemove);
 
-    // ✅ update RHF state with new file list
+    if (remaining.length === 0) {
+      // ✅ reset field completely if no files left
+      setValue("files", null, { shouldValidate: true });
+      return;
+    }
+
+    // ✅ rebuild FileList for remaining files
     const dt = new DataTransfer();
     remaining.forEach((file) => dt.items.add(file));
     setValue("files", dt.files, { shouldValidate: true });
-  }
+  };
+
 
   return (
     <Card>
