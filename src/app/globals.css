@@ -120,3 +120,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: roboto;
+  src: url('../assets/fonts/Roboto-Regular.ttf');
+}
+
+.roboto{
+  font-family: roboto;
+}

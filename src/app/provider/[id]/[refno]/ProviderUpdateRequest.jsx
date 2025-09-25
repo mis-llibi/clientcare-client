@@ -1,22 +1,27 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 
 // Components
 import Card from '@/components/ClientCare/Card'
 import InputSelectMultiple from '@/components/InputSelectMultiple'
 
 import { useForm } from 'react-hook-form'
-import { Select } from '@/components/ui/select'
-import SelectComponent from '@/components/Select'
 import SelectWithoutDefaultValue from '@/components/SelectWithoutDefaultValue'
+import Label from '@/components/Label'
+import Input from '@/components/Input'
+
+import { useClientRequest } from '@/hooks/useClientRequest'
+
+import { MoonLoader } from 'react-spinners'
 
 
-
-function ProviderUpdateRequest({patient, doctors}) {
-
+function ProviderUpdateRequest({patient, doctors, provider, refno, setIsSubmitted}) {
 
 
+    const [loading, setLoading] = useState(false)
   const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm()
+
+  const { submitClientRequest } = useClientRequest()
 
   const complaints = [
     { value: 0, label: 'Back Pain / Body Pain' },
@@ -43,19 +48,13 @@ function ProviderUpdateRequest({patient, doctors}) {
   ]
 
   const onSubmit = (data) => {
-    console.log(data)
+    setLoading(true)
+    submitClientRequest({
+        ...data,
+        setLoading,
+        setIsSubmitted
+    })
   }
-
-  const patientType = [
-    {
-      name: "Patient is Employee",
-      value: "employee",
-    },
-    {
-      name: "Patient is Dependent",
-      value: "dependent",
-    },
-  ];
 
 
   return (
@@ -65,10 +64,18 @@ function ProviderUpdateRequest({patient, doctors}) {
 
         <div className='mt-2'>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='flex flex-col gap-2'>
-
+                <div className='flex flex-col gap-2'> 
+                    <input 
+                      type="hidden" 
+                      {...register('refno', {
+                        value: refno
+                      })}
+                    />
                     <div>
-                        <label htmlFor="complaint" className='text-[#1E3161] font-semibold'>Chief Complaint</label>
+                        <Label 
+                            label={"Chief Complaint"}
+                            htmlFor={"complaint"}
+                        />
                         <InputSelectMultiple
                         id="complaint"
                         label="Select or type complaint"
@@ -87,7 +94,10 @@ function ProviderUpdateRequest({patient, doctors}) {
                     </div>
 
                     <div>
-                        <label htmlFor="doctor" className='text-[#1E3161] font-semibold'>Doctor</label>
+                        <Label 
+                            label={"Doctor (Optional)"}
+                            htmlFor={"doctor"}
+                        />
                         <SelectWithoutDefaultValue 
                             control={control}
                             name={"doctor"}
@@ -97,8 +107,60 @@ function ProviderUpdateRequest({patient, doctors}) {
                     </div>
 
                     <div>
-                        <button type='submit'>Submit</button>
+                        <Label 
+                            label={"Hospital"}
+                            htmlFor={"hospital"}
+                        />
+
+                        <Input 
+                            type={"text"}
+                            {...register('hospital', {
+                              value: provider
+                            })}
+                            className={"bg-[#F6F6F6] opacity-80 "}
+                            disabled={true}
+                        />
+
                     </div>
+
+                    <div>
+                        <Label 
+                            label={"Email (optional)"}
+                            htmlFor={"email"}
+                        />
+                        <Input 
+                            type="email"
+                            {...register('email')}
+                         
+                        />
+
+                    </div>
+
+                    <div>
+                        <Label 
+                            label={"Contact # (optional)"}
+                            htmlFor={"contact"}
+                        />
+                        <Input 
+                            type="text"
+                            {...register('contact')}
+                            placeholder={"09"}
+                        />
+
+                    </div>
+
+                {loading ? (
+                    <>
+                    <div className='bg-[#1E3161] text-white py-2 rounded-r-4xl cursor-pointer rounded-bl-4xl flex items-center justify-center'>
+                        <MoonLoader size={20} color='white' />
+                    </div>
+                    </>
+                ) : (
+                    <>
+                    <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
+                    </>
+                )}
+
 
 
 

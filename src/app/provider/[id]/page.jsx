@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import Loading from "@/components/Loading";
 import ProviderClientRequest from "./ProviderClientRequest";
 import { useClientRequest } from "@/hooks/useClientRequest";
+import Error from "./Error";
 
 function Page() {
 
@@ -29,7 +30,7 @@ function Page() {
     }, [id])
 
   if (isLoading) return <Loading />;
-  if (isError) return <div>Error</div>
+  if (isError) return <Error message={"We cannot find the provider, please go back"} />
 
   return <ProviderClientRequest provider={provider} />
 }

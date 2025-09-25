@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { useClientRequest } from '@/hooks/useClientRequest'
 
 import { useParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 import Loading from '@/components/Loading'
 import ProviderUpdateRequest from './ProviderUpdateRequest'
+import Error from './Error'
+import Submitted from './Submitted'
 
 
 function Page() {
@@ -18,8 +21,11 @@ function Page() {
 
 
     const params = useParams()
+    const searchParams = useSearchParams()
 
     const { id, refno } = params
+    const provider = searchParams.get('provider')
+    // console.log(searchParams.get('provider'))
 
     const { checkRefNo } = useClientRequest()
 
@@ -37,10 +43,19 @@ function Page() {
     }, [id, refno])
 
   if (isLoading) return <Loading />;
-  if (isError) return <div>We cannot find you in our database, please go back to the member's form.</div>
-  if (isSubmitted) return <div>Your request has been submitted, your reference # is 1758709879. We will notify you through the email and mobile number you provided.</div>
+  if (isError) return <Error message={"We cannot find you in our database, please go back to the member's form."} />
+  if (isSubmitted) return <Submitted 
+                            message={`Your request has been submitted, your reference # is ${refno}. We will notify you and the hospital/clinic through email and mobile number you provided.`} 
+                            provider_id={id}
+                            />
 
-  return <ProviderUpdateRequest patient={getData} doctors={getDoctors} />
+  return <ProviderUpdateRequest 
+            patient={getData} 
+            doctors={getDoctors} 
+            provider={provider} 
+            refno={refno}
+            setIsSubmitted={setIsSubmitted}
+            />
 }
 
 export default Page

@@ -2,56 +2,64 @@
 import React from 'react'
 import axios from '@/lib/axios'
 import { useRouter } from "next/navigation";
+import Swal from 'sweetalert2';
 
 
 
 export const useClientRequest = () => {
 
-  const router = useRouter()
-  const csrf = () => axios.get('/sanctum/csrf-cookie')
+    const router = useRouter()
+    const csrf = () => axios.get('/sanctum/csrf-cookie')
 
-  const getProvider = async({setIsError, setIsLoading, setProvider, id}) => {
-    await csrf()
-    axios.get('/api/get-provider-id', {
-      params: {
-        id
-      }
-    })
-    .then((res) => {
-      setProvider(res.data.provider)
-    })
-    .catch((err) => {
-        if(err.status == 422){
-            setIsError(true)
-        }
-    })
-    .finally(() => {
-        setIsLoading(false)
-    })
-
-
-
-  }
-
-  const submitClient = async({setLoading, ...props}) => {
+    const getProvider = async({setIsError, setIsLoading, setProvider, id}) => {
         await csrf()
-        
-        axios.post('/api/submit-client-request', {
-            ...props
+        axios.get('/api/get-provider-id', {
+        params: {
+            id
+        }
         })
         .then((res) => {
-            // console.log(res.data)
-            router.push(res.data)
+        setProvider(res.data.provider)
         })
         .catch((err) => {
-            console.log(err)
+            if(err.status == 422){
+                setIsError(true)
+            }
         })
         .finally(() => {
-            setLoading(false)
+            setIsLoading(false)
         })
-  }
 
-    const checkRefNo = async({setIsLoading, setIsError, setIsSubmitted, setGetData, setGetDoctors, ...props} ) => {
+
+
+    }
+
+    const submitClient = async({setLoading, ...props}) => {
+            await csrf()
+            
+            axios.post('/api/submit-client-request', {
+                ...props
+            })
+            .then((res) => {
+                // console.log(res.data)
+                router.push(res.data)
+            })
+            .catch((err) => {
+                // console.log(err)
+                if(err.status == 404){
+                    Swal.fire({
+                        title: "Error",
+                        text: `${err.response.data.message}`,
+                        icon: "error"
+                    })
+                }
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+    }
+
+    const checkRefNo = async({setIsLoading, setIsError, setIsSubmitted, setGetData, setGetDoctors, ...props} = {} ) => {
         await csrf()
 
         axios.get('/api/update-client-request', {
@@ -79,11 +87,32 @@ export const useClientRequest = () => {
         })
     }
 
+    const submitClientRequest = async({setLoading, setIsSubmitted, ...props}) => {
+        await csrf()
+
+        axios.post('/api/submit-update-request', props)
+        .then((res) => {
+            console.log(res)
+            if(res.status == 200){
+                setIsSubmitted(true)
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+        .finally(() => {
+            setLoading(false)
+        })
+    }
+
+
+
   
   return {
     getProvider,
     submitClient,
-    checkRefNo
+    checkRefNo,
+    submitClientRequest
   }
 }
 
