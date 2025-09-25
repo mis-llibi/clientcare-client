@@ -15,7 +15,8 @@ function Page() {
     const { getProvider } = useClientRequest()
 
     const params = useParams()
-    const { id } = params;
+    const { id, loa_type } = params;
+
 
     useEffect(() => {
         if(id){
@@ -31,8 +32,9 @@ function Page() {
 
   if (isLoading) return <Loading />;
   if (isError) return <Error message={"We cannot find the provider, please go back"} />
+  if (loa_type != "consultation" && loa_type != "laboratory") return <div>Error</div>
 
-  return <ProviderClientRequest provider={provider} />
+  return <ProviderClientRequest provider={provider} loa_type={loa_type} />
 }
 
 export default Page

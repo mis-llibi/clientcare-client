@@ -59,7 +59,7 @@ export const useClientRequest = () => {
             })
     }
 
-    const checkRefNo = async({setIsLoading, setIsError, setIsSubmitted, setGetData, setGetDoctors, ...props} = {} ) => {
+    const checkRefNo = async({setIsLoading, setIsError, setIsSubmitted, setGetData, setGetDoctors, setGetHospitalName, ...props} = {} ) => {
         await csrf()
 
         axios.get('/api/update-client-request', {
@@ -74,6 +74,7 @@ export const useClientRequest = () => {
             }else{
                 setGetData(res.data.data)
                 setGetDoctors(res.data.doctors)
+                setGetHospitalName(res.data.provider)
             }
         })
         .catch((err) => {

@@ -15,7 +15,7 @@ import { useClientRequest } from '@/hooks/useClientRequest'
 import { MoonLoader } from 'react-spinners'
 
 
-function ProviderUpdateRequest({patient, doctors, provider, refno, setIsSubmitted}) {
+function Consultation({patient, doctors, provider, refno, setIsSubmitted}) {
 
 
     const [loading, setLoading] = useState(false)
@@ -174,4 +174,4 @@ function ProviderUpdateRequest({patient, doctors, provider, refno, setIsSubmitte
   )
 }
 
-export default ProviderUpdateRequest
+export default Consultation

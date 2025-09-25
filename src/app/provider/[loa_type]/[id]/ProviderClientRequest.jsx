@@ -8,7 +8,7 @@ import SelectComponent from "@/components/Select";
 import { useClientRequest } from "@/hooks/useClientRequest";
 
 
-function ProviderClientRequest({ provider }) {
+function ProviderClientRequest({ provider, loa_type }) {
   const [loading, setLoading] = useState(false);
 
   const {
@@ -70,6 +70,9 @@ function ProviderClientRequest({ provider }) {
         <h1 className="text-center text-[#1E3161] font-bold roboto">
           {provider?.provider}
         </h1>
+        <h1 className="text-center text-[#1E3161] font-bold roboto">
+          {loa_type.slice(0,1).toUpperCase() + loa_type.slice(1)}
+        </h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="hidden"
@@ -87,6 +90,12 @@ function ProviderClientRequest({ provider }) {
             type="hidden"
             {...register("provider_email", {
               value: provider?.email,
+            })}
+          />
+          <input 
+            type="hidden" 
+            {...register('loa_type', {
+              value: loa_type
             })}
           />
 

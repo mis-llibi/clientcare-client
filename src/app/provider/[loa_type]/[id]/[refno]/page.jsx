@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { useClientRequest } from '@/hooks/useClientRequest'
 
 import { useParams } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
 
 import Loading from '@/components/Loading'
-import ProviderUpdateRequest from './ProviderUpdateRequest'
 import Error from './Error'
 import Submitted from './Submitted'
+import Consultation from './Consultation'
+import Laboratory from './Laboratory'
 
 
 function Page() {
@@ -18,14 +18,13 @@ function Page() {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [getData, setGetData] = useState(null)
     const [getDoctors, setGetDoctors] = useState([])
-
+    const [getHospitalName, setGetHospitalName] = useState("")
 
     const params = useParams()
-    const searchParams = useSearchParams()
 
-    const { id, refno } = params
-    const provider = searchParams.get('provider')
-    // console.log(searchParams.get('provider'))
+
+    const { id, refno, loa_type } = params
+
 
     const { checkRefNo } = useClientRequest()
 
@@ -34,11 +33,13 @@ function Page() {
         checkRefNo({
             id: id,
             refno: refno,
+            loa_type: loa_type,
             setIsLoading,
             setIsError,
             setIsSubmitted,
             setGetData,
-            setGetDoctors
+            setGetDoctors,
+            setGetHospitalName
         })
     }, [id, refno])
 
@@ -47,15 +48,31 @@ function Page() {
   if (isSubmitted) return <Submitted 
                             message={`Your request has been submitted, your reference # is ${refno}. We will notify you and the hospital/clinic through email and mobile number you provided.`} 
                             provider_id={id}
+                            loa_type={loa_type}
                             />
 
-  return <ProviderUpdateRequest 
-            patient={getData} 
-            doctors={getDoctors} 
-            provider={provider} 
-            refno={refno}
-            setIsSubmitted={setIsSubmitted}
-            />
+  return (
+    <>
+    {loa_type == "consultation" ? <Consultation 
+                                    patient={getData} 
+                                    doctors={getDoctors}
+                                    provider={getHospitalName}
+                                    refno={refno}
+                                    setIsSubmitted={setIsSubmitted}
+                                    /> 
+                                : <Laboratory 
+                                    patient={getData}
+                                    provider={getHospitalName}
+                                    refno={refno}
+                                    setIsSubmitted={setIsSubmitted}
+                                    />
+                                }
+
+
+    
+    </>
+
+  )
 }
 
 export default Page

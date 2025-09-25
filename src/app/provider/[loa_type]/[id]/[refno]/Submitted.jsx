@@ -4,7 +4,7 @@ import Card from '@/components/ClientCare/Card'
 import Link from 'next/link'
 import { applink } from '@/lib/applink'
 
-function Submitted({message, provider_id}) {
+function Submitted({message, provider_id, loa_type}) {
   return (
     <>
     <DotLottieReact
@@ -16,7 +16,7 @@ function Submitted({message, provider_id}) {
         <h1 className='font-bold roboto'>{message}</h1>
 
         <div className='flex justify-center items-center text-center mt-2'>
-          <Link href={`${applink}/provider/${provider_id}`} className='text-white roboto bg-[#1E3161] py-1 rounded-r-4xl w-full cursor-pointer rounded-bl-4xl'>Back to Request</Link>
+          <Link href={`${applink}/provider/${loa_type}/${provider_id}`} className='text-white roboto bg-[#1E3161] py-1 rounded-r-4xl w-full cursor-pointer rounded-bl-4xl'>Back to Request</Link>
         </div>
 
     </Card>
