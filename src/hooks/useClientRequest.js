@@ -92,7 +92,7 @@ export const useClientRequest = () => {
 
         axios.post('/api/submit-update-request', props)
         .then((res) => {
-            console.log(res)
+            // console.log(res)
             if(res.status == 200){
                 setIsSubmitted(true)
             }
