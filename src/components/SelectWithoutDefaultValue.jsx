@@ -6,6 +6,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -35,11 +36,27 @@ function SelectWithoutDefaultValue({
 
             <SelectContent className={"w-2/3 ml-1"}>
               <SelectGroup>
-                {itemList.map((item) => (
+                {itemList.length > 0 ? (
+                  <>
+                  {itemList.map((item) => (
+                    <SelectItem key={item.value} value={String(item.value)}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                  </>
+                ) : (
+                  <>
+                  <SelectLabel>
+                    No Doctors found in this hospital
+                  </SelectLabel>
+                  </>
+                )}
+
+                {/* {itemList.map((item) => (
                   <SelectItem key={item.value} value={String(item.value)}>
                     {item.name}
                   </SelectItem>
-                ))}
+                ))} */}
               </SelectGroup>
             </SelectContent>
           </Select>
