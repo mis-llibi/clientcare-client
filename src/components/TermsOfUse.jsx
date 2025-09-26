@@ -18,7 +18,7 @@ function TermsOfUse({ onAccept }) {
         </CardHeader>
 
         {/* Scrollable main content */}
-        <CardContent className="overflow-y-auto max-h-[65vh] pr-2 space-y-4 text-sm text-gray-700 roboto">
+        <CardContent className="overflow-y-auto max-h-[65vh] space-y-4 text-sm text-gray-700 roboto">
           <p className="text-justify">
             Please read these Terms of Use before using the <b>LLIBI Client Care Portal ("Portal").</b><br /><br />
             By using this Portal, you explicitly consent and agree to comply with the terms set forth below. If you do not agree with these terms, please discontinue your use of the Portal. <br /><br />
