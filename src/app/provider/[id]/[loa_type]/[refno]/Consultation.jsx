@@ -19,9 +19,13 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted}) {
 
 
     const [loading, setLoading] = useState(false)
-  const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm()
+  const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm({
+    defaultValues: {
+        refno: refno
+    }
+  })
 
-  const { submitClientRequest } = useClientRequest()
+  const { submitClientRequestConsultation } = useClientRequest()
 
   const complaints = [
     { value: 0, label: 'Back Pain / Body Pain' },
@@ -49,7 +53,7 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted}) {
 
   const onSubmit = (data) => {
     setLoading(true)
-    submitClientRequest({
+    submitClientRequestConsultation({
         ...data,
         setLoading,
         setIsSubmitted
@@ -65,12 +69,6 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted}) {
         <div className='mt-2'>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className='flex flex-col gap-2'> 
-                    <input 
-                      type="hidden" 
-                      {...register('refno', {
-                        value: refno
-                      })}
-                    />
                     <div>
                         <Label 
                             label={"Chief Complaint"}

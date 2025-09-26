@@ -88,10 +88,10 @@ export const useClientRequest = () => {
         })
     }
 
-    const submitClientRequest = async({setLoading, setIsSubmitted, ...props}) => {
+    const submitClientRequestConsultation = async({setLoading, setIsSubmitted, ...props}) => {
         await csrf()
 
-        axios.post('/api/submit-update-request', props)
+        axios.post('/api/submit-update-request/consultation', props)
         .then((res) => {
             // console.log(res)
             if(res.status == 200){
@@ -106,6 +106,33 @@ export const useClientRequest = () => {
         })
     }
 
+    const submitClientRequestLaboratory = async ({ formData, setLoading, setIsSubmitted }) => {
+
+        await csrf()
+        axios.post('/api/submit-update-request/laboratory', formData, {
+            headers: {
+                "Content-Type" : "multipart/form-data"
+            }
+        })
+        .then((res) => {
+            if(res.status == 200){
+                setIsSubmitted(true)
+            }
+        })
+        .catch((err) => {
+            if(err.status == 422){
+                Swal.fire({
+                    title: "Error",
+                    text: `${err.response.data.message}`,
+                    icon: "error"
+                })
+            }
+        })
+        .finally(() => {
+            setLoading(false);
+        })
+
+    };
 
 
   
@@ -113,7 +140,8 @@ export const useClientRequest = () => {
     getProvider,
     submitClient,
     checkRefNo,
-    submitClientRequest
+    submitClientRequestConsultation,
+    submitClientRequestLaboratory
   }
 }
 

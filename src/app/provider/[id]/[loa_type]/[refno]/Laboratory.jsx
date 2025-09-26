@@ -1,25 +1,39 @@
+'use client'
+import React, { useEffect, useState } from 'react'
+
+// Components
 import Card from '@/components/ClientCare/Card'
 import FileUpload from '@/components/Fileupload'
 import Input from '@/components/Input';
 import Label from '@/components/Label';
-import React, { useEffect, useState } from 'react'
+import { MoonLoader } from 'react-spinners';
+
+// Hooks
 import { useForm } from 'react-hook-form'
+import { useClientRequest } from '@/hooks/useClientRequest'
+
+// Icons
 import { FaFileAlt } from "react-icons/fa";
 import { HiMiniXMark } from "react-icons/hi2";
-import { MoonLoader } from 'react-spinners';
+
+
 
 function Laboratory({ patient, provider, refno, setIsSubmitted }) {
 
   const [loading, setLoading] = useState(false)
+
   
-  const { register, control, watch, handleSubmit, setValue } = useForm();
+  const { register, control, watch, handleSubmit, setValue } = useForm({
+    defaultValues: {
+      refno: refno
+    }
+  });
+
+  const { submitClientRequestLaboratory } = useClientRequest()
 
   const uploadedFiles = watch("files");
   const fileArray = uploadedFiles ? Array.from(uploadedFiles) : []; // ✅ convert FileList to array
 
-  // useEffect(() => {
-  //   console.log("Watched files:", uploadedFiles);
-  // }, [uploadedFiles]);
 
   function truncateFileName(name, maxLength = 20) {
     if (name.length <= maxLength) return name;
@@ -35,7 +49,32 @@ function Laboratory({ patient, provider, refno, setIsSubmitted }) {
   }
 
   const onSubmit = (data) => {
-    console.log(data)
+
+    const formData = new FormData()
+    formData.append("contact", data.contact)
+    formData.append("email", data.email)
+    formData.append("hospital", data.hospital)
+    formData.append("refno", data.refno)
+
+    if (data.files && data.files.length > 0) {
+      const files = Array.from(data.files); // ✅ convert FileList → Array<File>
+
+      files.forEach((file) => {
+        formData.append("files[]", file);
+      });
+    }
+
+    setLoading(true)
+    submitClientRequestLaboratory({
+        formData,
+        setLoading,
+        setIsSubmitted
+    })
+
+
+    
+
+
   }
 
   const handleRemovePdf = (fileToRemove) => {
@@ -44,13 +83,10 @@ function Laboratory({ patient, provider, refno, setIsSubmitted }) {
     if (remaining.length === 0) {
       // ✅ reset field completely if no files left
       setValue("files", null, { shouldValidate: true });
-      return;
+    } else {
+      // ✅ directly set the remaining array of files
+      setValue("files", remaining, { shouldValidate: true });
     }
-
-    // ✅ rebuild FileList for remaining files
-    const dt = new DataTransfer();
-    remaining.forEach((file) => dt.items.add(file));
-    setValue("files", dt.files, { shouldValidate: true });
   };
 
 
@@ -108,6 +144,30 @@ function Laboratory({ patient, provider, refno, setIsSubmitted }) {
                 className={"bg-[#F6F6F6] opacity-80 "}
                 disabled={true}
             />
+          </div>
+
+          <div>
+              <Label 
+                  label={"Email (optional)"}
+                  htmlFor={"email"}
+              />
+              <Input 
+                  type="email"
+                  {...register('email')}
+               
+              />
+          </div>
+
+          <div>
+              <Label 
+                  label={"Contact # (optional)"}
+                  htmlFor={"contact"}
+              />
+              <Input 
+                  type="text"
+                  {...register('contact')}
+                  placeholder={"09"}
+              />
           </div>
 
           {loading ? (

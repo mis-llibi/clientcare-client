@@ -64,6 +64,7 @@ function ProviderClientRequest({ provider, loa_type }) {
     });
   }, [verificationDetailsType, typeOfPatient, reset]);
 
+
   return (
     <>
       <Card>
