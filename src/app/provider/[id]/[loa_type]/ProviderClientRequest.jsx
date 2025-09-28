@@ -6,6 +6,8 @@ import { MoonLoader } from "react-spinners";
 import Card from "@/components/ClientCare/Card";
 import SelectComponent from "@/components/Select";
 import { useClientRequest } from "@/hooks/useClientRequest";
+import Link from "next/link";
+import { applink } from "@/lib/applink";
 
 
 function ProviderClientRequest({ provider, loa_type }) {
@@ -270,6 +272,9 @@ function ProviderClientRequest({ provider, loa_type }) {
                 ) : (
                     <>
                     <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
+                    <Link href={`${applink}/provider/${provider?.provider_id}`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center">
+                      BACK
+                    </Link>
                     </>
                 )}
 

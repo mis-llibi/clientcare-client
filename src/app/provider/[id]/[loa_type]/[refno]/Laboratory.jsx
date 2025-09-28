@@ -15,10 +15,12 @@ import { useClientRequest } from '@/hooks/useClientRequest'
 // Icons
 import { FaFileAlt } from "react-icons/fa";
 import { HiMiniXMark } from "react-icons/hi2";
+import Link from 'next/link';
+import { applink } from '@/lib/applink';
 
 
 
-function Laboratory({ patient, provider, refno, setIsSubmitted }) {
+function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
 
   const [loading, setLoading] = useState(false)
 
@@ -175,7 +177,12 @@ function Laboratory({ patient, provider, refno, setIsSubmitted }) {
                   <MoonLoader size={20} color='white' />
               </div>
           ) : (
+              <>
               <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
+              <Link href={`${applink}/provider/${provider_id}/laboratory`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center">
+                BACK
+              </Link>
+              </>
           )}
         </div>
       </form>

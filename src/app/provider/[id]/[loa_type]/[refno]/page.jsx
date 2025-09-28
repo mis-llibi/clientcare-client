@@ -59,12 +59,14 @@ function Page() {
                                     provider={getHospitalName}
                                     refno={refno}
                                     setIsSubmitted={setIsSubmitted}
+                                    provider_id={id}
                                     /> 
                                 : <Laboratory 
                                     patient={getData}
                                     provider={getHospitalName}
                                     refno={refno}
                                     setIsSubmitted={setIsSubmitted}
+                                    provider_id={id}
                                     />
                                 }
 

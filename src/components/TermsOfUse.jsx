@@ -69,12 +69,12 @@ function TermsOfUse({ onAccept }) {
         </CardContent>
 
         <CardFooter className="flex justify-end gap-2 border-t pt-2">
-          <button
+          {/* <button
             onClick={() => (window.location.href = "https://google.com")}
             className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100"
           >
             Decline
-          </button>
+          </button> */}
           <button
             onClick={onAccept}
             className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90"

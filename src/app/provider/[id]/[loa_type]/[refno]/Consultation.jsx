@@ -13,9 +13,11 @@ import Input from '@/components/Input'
 import { useClientRequest } from '@/hooks/useClientRequest'
 
 import { MoonLoader } from 'react-spinners'
+import Link from 'next/link'
+import { applink } from '@/lib/applink'
 
 
-function Consultation({patient, doctors, provider, refno, setIsSubmitted}) {
+function Consultation({patient, doctors, provider, refno, setIsSubmitted, provider_id}) {
 
 
     const [loading, setLoading] = useState(false)
@@ -156,6 +158,9 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted}) {
                 ) : (
                     <>
                     <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
+                    <Link href={`${applink}/provider/${provider_id}/consultation`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center">
+                      BACK
+                    </Link>
                     </>
                 )}
 
