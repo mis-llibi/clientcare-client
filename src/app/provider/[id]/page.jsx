@@ -47,7 +47,7 @@ function Home() {
   return (
     <>
       {showTerms && (
-        <TermsOfUse onAccept={() => setShowTerms(false)} />
+        <TermsOfUse onAccept={() => setShowTerms(false)} provider_id={id} />
       )}
 
       {!showTerms && (

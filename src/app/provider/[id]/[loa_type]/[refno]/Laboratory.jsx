@@ -27,9 +27,11 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
   
   const { register, control, watch, handleSubmit, setValue } = useForm({
     defaultValues: {
-      refno: refno
+      refno: refno,
+      provider_id: provider_id
     }
   });
+
 
   const { submitClientRequestLaboratory } = useClientRequest()
 
@@ -57,6 +59,7 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
     formData.append("email", data.email)
     formData.append("hospital", data.hospital)
     formData.append("refno", data.refno)
+    formData.append('provider_id', data.provider_id)
 
     if (data.files && data.files.length > 0) {
       const files = Array.from(data.files); // ✅ convert FileList → Array<File>

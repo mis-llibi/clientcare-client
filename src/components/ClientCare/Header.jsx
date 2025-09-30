@@ -6,7 +6,7 @@ import LiveClock from '../LiveClock'
 
 function Header() {
   return (
-    <div className='py-2 bg-white px-4 shadow-[0px_3px_4px_1px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center gap-1 sticky top-0'>
+    <div className='py-2 bg-white px-4 shadow-[0px_3px_4px_1px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center gap-1 sticky top-0 z-[999] '>
       <Image 
         src={Logo}
         width={200}

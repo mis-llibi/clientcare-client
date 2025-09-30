@@ -1,4 +1,10 @@
+'use client'
 import React from 'react'
+import { useRouter } from 'next/navigation'
+
+import { applink } from '@/lib/applink'
+
+
 import {
   Card,
   CardContent,
@@ -7,7 +13,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-function TermsOfUse({ onAccept }) {
+function TermsOfUse({ onAccept, provider_id }) {
+
+  const router = useRouter()
+
   return (
     <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-50">
       <Card className="w-full max-w-3xl max-h-[85vh] flex flex-col shadow-xl">
@@ -69,12 +78,12 @@ function TermsOfUse({ onAccept }) {
         </CardContent>
 
         <CardFooter className="flex justify-end gap-2 border-t pt-2">
-          {/* <button
-            onClick={() => (window.location.href = "https://google.com")}
+          <button
+            onClick={() => router.push(`${applink}/provider/${provider_id}/declined-TOU`)}
             className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100"
           >
             Decline
-          </button> */}
+          </button>
           <button
             onClick={onAccept}
             className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90"

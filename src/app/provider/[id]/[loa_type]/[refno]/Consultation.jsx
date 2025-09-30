@@ -23,7 +23,8 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
     const [loading, setLoading] = useState(false)
   const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm({
     defaultValues: {
-        refno: refno
+        refno: refno,
+        provider_id: provider_id
     }
   })
 

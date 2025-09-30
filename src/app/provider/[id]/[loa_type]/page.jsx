@@ -68,18 +68,18 @@ function Page() {
             </CardContent>
 
             <CardFooter className="flex justify-center gap-4">
-              <Link
-                href={`${applink}/provider/${provider_id}`}
-                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm"
-              >
-                No
-              </Link>
               <Button
                 className="bg-[#1E3161] text-white hover:opacity-90"
                 onClick={() => setShowTerms(false)} // proceed
               >
                 Yes, Proceed
               </Button>
+              <Link
+                href={`${applink}/provider/${provider_id}`}
+                className="px-4 py-2 rounded-lg  hover:bg-gray-100 text-sm"
+              >
+                No
+              </Link>
             </CardFooter>
           </Card>
         </div>
