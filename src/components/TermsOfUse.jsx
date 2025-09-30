@@ -18,7 +18,7 @@ function TermsOfUse({ onAccept, provider_id }) {
   const router = useRouter()
 
   return (
-    <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/10 flex items-center justify-center z-[9999]">
       <Card className="w-full max-w-3xl max-h-[85vh] flex flex-col shadow-xl">
         <CardHeader>
           <CardTitle className="text-center text-[#1E3161] font-bold roboto">
