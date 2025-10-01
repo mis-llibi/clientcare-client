@@ -234,7 +234,7 @@ function ProviderClientRequest({ provider, loa_type }) {
                 {typeOfPatient == "dependent" && (
                   <>
                 <div>
-                  <label htmlFor="last_name">Last Name</label>
+                  <label htmlFor="last_name" className="text-[#1E3161] font-semibold">Last Name</label>
                   <input 
                     type="text" 
                     id="last_name" 
@@ -247,7 +247,7 @@ function ProviderClientRequest({ provider, loa_type }) {
                 </div>
 
                 <div>
-                  <label htmlFor="first_name">First Name</label>
+                  <label htmlFor="first_name" className="text-[#1E3161] font-semibold">First Name</label>
                   <input 
                     type="text" 
                     id="first_name" 
