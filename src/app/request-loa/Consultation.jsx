@@ -344,13 +344,13 @@ function Consultation() {
               <p className="font-bold mb-1">
                 Doctor:{' '}
                 <span className="font-normal">
-                  {selectedDoctor.last}, {selectedDoctor.first}
+                  {selectedDoctor?.last}, {selectedDoctor?.first}
                 </span>
               </p>
               <p className="font-bold mb-1">
                 Specialization:{' '}
                 <span className="font-normal">
-                  {selectedDoctor.specialization}
+                  {selectedDoctor?.specialization}
                 </span>
               </p>
             </div>
