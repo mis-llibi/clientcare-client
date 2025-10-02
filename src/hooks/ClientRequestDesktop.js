@@ -65,13 +65,43 @@ export const ClientRequestDesktop = () => {
         .finally(() => {
             setDocloading(false)
         })
+    }
 
+    const submitRequestConsultation = async({setLoading, reset, setSelectedHospital, setSelectedDoctor, ...props}) => {
+        await csrf()
 
+        axios.post('/api/submit-request-consultation', props)
+        .then((res) => {
+            if(res.status == 201){
+                Swal.fire({
+                    title: "Successful Request for LOA",
+                    text: `Your request has been submitted, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
+                    icon: "success"
+                })
+                reset()
+                setSelectedDoctor()
+                setSelectedHospital()
+            }
+            // console.log(res)
+        })
+        .catch((err) => {
+            if(err.status == 404){
+                Swal.fire({
+                    title: "Error",
+                    text: `${err.response.data.message}`,
+                    icon: "error"
+                })
+            }
+        })
+        .finally(() => {
+            setLoading(false)
+        })
     }
 
     return {
         searcHospital,
-        searchDoctor
+        searchDoctor,
+        submitRequestConsultation
     }
 
 

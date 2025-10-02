@@ -23,6 +23,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { useForm } from 'react-hook-form'
 import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop';
 import FindHospitalDialog from './FindHospitalDialog';
+import Swal from 'sweetalert2';
+import { MoonLoader } from 'react-spinners';
 
 function Consultation() {
 
@@ -31,8 +33,10 @@ function Consultation() {
     const [selectedHospital, setSelectedHospital] = useState()
     const [selectedDoctor, setSelectedDoctor] = useState()
 
+    const { submitRequestConsultation } = ClientRequestDesktop()
 
-    const { register, handleSubmit, watch, reset, control, formState: {errors}, resetField } = useForm({
+
+    const { register, handleSubmit, watch, reset, control, formState: {errors}, setValue } = useForm({
         defaultValues: {
             patientType: "employee",
             verificationDetailsType: "insurance",
@@ -91,13 +95,51 @@ function Consultation() {
       patientLastName: "",
       patientFirstName: "",
       dob: "",
-      loaType: "consultation"
+      loaType: "consultation",
+      complaint: []
     });
   }, [verificationDetailsType, typeOfPatient, reset]);
 
+  useEffect(() => {
+    if (selectedHospital)
+      setValue(
+        'provider',
+        `${selectedHospital?.id}||${selectedHospital?.name}++${
+          selectedHospital?.address
+        }++${selectedHospital?.city}++${selectedHospital?.state}++${
+          selectedHospital?.email1
+        }--${selectedDoctor?.id || 0}||${selectedDoctor?.last || ''}, ${
+          selectedDoctor?.first || ''
+        }++${selectedDoctor?.specialization || ''}`,
+      )
+    setValue('providerEmail2', selectedHospital?.email2)
+  }, [selectedHospital, selectedDoctor])
+
   const onSubmit = (data) => {
-      console.log(data)
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Once you click Submit, you will not be able to make any further changes to your LOA request.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, confirm',
+      })
+      .then((result) => {
+        if(result.isConfirmed){
+          setLoading(true)
+          submitRequestConsultation({
+            ...data,
+            setLoading,
+            reset,
+            setSelectedHospital,
+            setSelectedDoctor
+          })
+        }
+      })
   }
+
+
 
 
 
@@ -106,7 +148,7 @@ function Consultation() {
 
   return (
     <>
-    <Toaster />
+    <Toaster position="top-center" richColors />
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='flex flex-col items-center my-2'>
         <h1 className='text-[#1E3161] font-bold roboto text-lg'>CONSULTATION</h1>
@@ -302,6 +344,14 @@ function Consultation() {
             setSelectedDoctor={setSelectedDoctor}
             setSelectedHospital={setSelectedHospital}
           />
+          <input
+            type="hidden"
+            {...register('provider', {
+              required:
+                'You must select Hospital or Clinic to complete the assessment',
+            })}
+          />
+          {errors?.provider && <h1 className="text-red-800 text-sm font-semibold">{errors?.provider?.message}</h1>}
         </div>
 
         {selectedHospital && (
@@ -335,12 +385,12 @@ function Consultation() {
             </p>
           </div>
           <div
-            className={`basis-1/2 text-sm border-l-2 md:pl-2 flex items-center`}>
-            {/* <div
-              className={`text-red-600 font-semibold`}>
+            className={`basis-1/2 text-sm border-l-2 md:pl-2 flex items-center ${!selectedDoctor && 'justify-center'}`}>
+            <div
+              className={`text-red-600 font-semibold ${selectedDoctor && 'hidden'}`}>
               No doctor selected
-            </div> */}
-            <div className={`capitalize`}>
+            </div>
+            <div className={`capitalize ${!selectedDoctor && 'hidden'}`}>
               <p className="font-bold mb-1">
                 Doctor:{' '}
                 <span className="font-normal">
@@ -386,7 +436,7 @@ function Consultation() {
             <div>
               <label htmlFor="contact" className="text-[#1E3161] font-semibold">Contact #</label>
               <input 
-                type="text" 
+                type="number" 
                 id="contact" 
                 className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
                 {...register('contact')}
