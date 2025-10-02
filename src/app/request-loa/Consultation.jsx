@@ -385,7 +385,7 @@ function Consultation() {
             </p>
           </div>
           <div
-            className={`basis-1/2 text-sm border-l-2 md:pl-2 flex items-center ${!selectedDoctor && 'justify-center'}`}>
+            className={`basis-1/2 text-sm md:pl-2 flex items-center ${!selectedDoctor && 'justify-center'}`}>
             <div
               className={`text-red-600 font-semibold ${selectedDoctor && 'hidden'}`}>
               No doctor selected
