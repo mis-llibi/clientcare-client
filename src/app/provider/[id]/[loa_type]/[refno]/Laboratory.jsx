@@ -17,6 +17,7 @@ import { FaFileAlt } from "react-icons/fa";
 import { HiMiniXMark } from "react-icons/hi2";
 import Link from 'next/link';
 import { applink } from '@/lib/applink';
+import Swal from 'sweetalert2';
 
 
 
@@ -69,11 +70,24 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
       });
     }
 
-    setLoading(true)
-    submitClientRequestLaboratory({
-        formData,
-        setLoading,
-        setIsSubmitted
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Once you click Submit, you will not be able to make any further changes to your LOA request.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, confirm',
+    })
+    .then((result) => {
+      if(result.isConfirmed){
+        setLoading(true)
+        submitClientRequestLaboratory({
+            formData,
+            setLoading,
+            setIsSubmitted
+        })
+      }
     })
 
 
@@ -150,6 +164,8 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
                 disabled={true}
             />
           </div>
+
+          <h1 className='text-[10px] font-bold roboto '>If you want to be notified on the status of your LOA Request, please provide either of the following: </h1>
 
           <div>
               <Label 

@@ -52,11 +52,10 @@ export const useClientRequest = () => {
                         text: `${err.response.data.message}`,
                         icon: "error"
                     })
+                    setLoading(false)
                 }
             })
-            .finally(() => {
-                setLoading(false)
-            })
+        
     }
 
     const checkRefNo = async({setIsLoading, setIsError, setIsSubmitted, setGetData, setGetDoctors, setGetHospitalName, ...props} = {} ) => {

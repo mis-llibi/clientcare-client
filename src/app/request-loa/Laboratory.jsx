@@ -16,7 +16,7 @@ function Laboratory() {
     const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm({
         defaultValues: {
             patientType: "employee",
-            verificationDetailsType: "insurance",
+            verificationDetailsType: "personal",
             erCardNumber: "",
             patientLastName: "",
             patientFirstName: "",
@@ -75,21 +75,7 @@ function Laboratory() {
         </div>
 
         <div className="flex">
-          <div className="basis-1/2 flex items-center gap-1">
-            <input
-              type="radio"
-              id="insurance_details"
-              value="insurance" // 👈 added value
-              {...register("verificationDetailsType")} // 👈 register here
-              className="w-4 h-4 accent-[#1E3161]"
-            />
-            <label
-              htmlFor="insurance_details"
-              className="text-[11px] roboto font-bold text-[#1E3161]"
-            >
-              Use Insurance Details
-            </label>
-          </div>
+
           <div className="basis-1/2 flex items-center gap-1">
             <input
               type="radio"
@@ -103,6 +89,22 @@ function Laboratory() {
               className="text-[11px] roboto font-bold text-[#1E3161]"
             >
               Use Personal Details
+            </label>
+          </div>
+
+          <div className="basis-1/2 flex items-center gap-1">
+            <input
+              type="radio"
+              id="insurance_details"
+              value="insurance" // 👈 added value
+              {...register("verificationDetailsType")} // 👈 register here
+              className="w-4 h-4 accent-[#1E3161]"
+            />
+            <label
+              htmlFor="insurance_details"
+              className="text-[11px] roboto font-bold text-[#1E3161]"
+            >
+              Use Insurance Details
             </label>
           </div>
         </div>
