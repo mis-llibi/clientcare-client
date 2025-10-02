@@ -65,6 +65,10 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, confirm',
+      customClass:{
+        title: 'roboto',
+        htmlContainer: 'roboto' // applies to text
+        }
     })
     .then((result) => {
       if(result.isConfirmed){
@@ -133,7 +137,7 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
                             {...register('hospital', {
                               value: provider
                             })}
-                            className={"bg-[#F6F6F6] opacity-80 "}
+                            className={"bg-[#F6F6F6] opacity-80 roboto"}
                             disabled={true}
                         />
 
@@ -149,7 +153,7 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
                         <Input 
                             type="email"
                             {...register('email')}
-                         
+                            className={'roboto'}
                         />
 
                     </div>
@@ -163,6 +167,7 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
                             type="text"
                             {...register('contact')}
                             placeholder={"09"}
+                            className={'roboto'}
                         />
 
                     </div>

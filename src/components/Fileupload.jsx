@@ -27,7 +27,7 @@ export default function FileUpload({ control, name, required }) {
         <>
           <label
             htmlFor="file-upload"
-            className={`w-full max-w-md p-6 border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-center transition cursor-pointer ${
+            className={`w-full max-w-md p-6 border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-center transition cursor-pointer roboto ${
               dragActive ? "border-blue-500 bg-blue-50" : "border-gray-400"
             }`}
             onDragEnter={handleDrag}
@@ -45,11 +45,11 @@ export default function FileUpload({ control, name, required }) {
           >
             <FaCloudUploadAlt className="w-10 h-10 text-blue-900 mb-3" />
 
-            <p className="mb-3 text-gray-700">
+            <p className="mb-3 text-gray-700 roboto">
               Drag and Drop some files here, or click to choose files
             </p>
 
-            <span className="px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition">
+            <span className="px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition roboto">
               Choose files
             </span>
 
@@ -64,7 +64,7 @@ export default function FileUpload({ control, name, required }) {
           </label>
 
           {error && (
-            <p className="text-red-500 text-sm mt-1 roboto">{error.message}</p>
+            <p className="text-red-800 text-sm font-semibold roboto">{error.message}</p>
           )}
         </>
       )}

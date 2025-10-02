@@ -107,7 +107,7 @@ function ProviderClientRequest({ provider, loa_type }) {
               <SelectComponent
                 defaultValue={"employee"}
                 itemList={patientType}
-                className={"w-full border-2"}
+                className={"w-full border-2 roboto"}
                 control={control}
                 name={"patientType"}
               />
@@ -155,71 +155,71 @@ function ProviderClientRequest({ provider, loa_type }) {
                 {verificationDetailsType == "insurance" ? (
                   <>
                   <div>
-                    <label htmlFor="er_card" className="text-[#1E3161] font-semibold">ER Card #</label>
+                    <label htmlFor="er_card" className="text-[#1E3161] font-semibold roboto">ER Card #</label>
                     <input 
                       type="text" 
                       id="er_card" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                       {...register('erCardNumber', {
                         required: "ER Card # is required"
                       })}
                       />
-                      {errors?.erCardNumber && <h1 className="text-red-800 text-sm font-semibold">{errors?.erCardNumber?.message}</h1>}
+                      {errors?.erCardNumber && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.erCardNumber?.message}</h1>}
                   </div>
 
                   <div>
-                    <label htmlFor="dob" className="text-[#1E3161] font-semibold">Date of Birth</label>
+                    <label htmlFor="dob" className="text-[#1E3161] font-semibold roboto">Date of Birth</label>
                     <input 
                       type="date" 
                       id="dob" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                       {...register('dob', {
                         required: "Date of Birth is required"
                       })}
                       />
-                      {errors?.dob && <h1 className="text-red-800 text-sm font-semibold">{errors?.dob?.message}</h1>}
+                      {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
                   </div>
 
                   </>
                 ) : (
                   <>
                   <div>
-                    <label htmlFor="last_name" className="text-[#1E3161] font-semibold">Last Name</label>
+                    <label htmlFor="last_name" className="text-[#1E3161] font-semibold roboto">Last Name</label>
                     <input 
                       type="text" 
                       id="last_name" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                       {...register('patientLastName', {
                         required: "Last Name is required"
                       })}
                       />
-                      {errors?.patientLastName && <h1 className="text-red-800 text-sm font-semibold">{errors?.patientLastName?.message}</h1>}
+                      {errors?.patientLastName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.patientLastName?.message}</h1>}
                   </div>
 
                   <div>
-                    <label htmlFor="first_name" className="text-[#1E3161] font-semibold">First Name</label>
+                    <label htmlFor="first_name" className="text-[#1E3161] font-semibold roboto">First Name</label>
                     <input 
                       type="text" 
                       id="first_name" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                       {...register('patientFirstName', {
                         required: "First Name is required"
                       })}
                       />
-                      {errors?.patientFirstName && <h1 className="text-red-800 text-sm font-semibold">{errors?.patientFirstName?.message}</h1>}
+                      {errors?.patientFirstName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.patientFirstName?.message}</h1>}
                   </div>
 
                   <div>
-                    <label htmlFor="dob" className="text-[#1E3161] font-semibold">Date of Birth</label>
+                    <label htmlFor="dob" className="text-[#1E3161] font-semibold roboto">Date of Birth</label>
                     <input 
                       type="date" 
                       id="dob" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                       {...register('dob', {
                         required: "Date of Birth is required"
                       })}
                       />
-                      {errors?.dob && <h1 className="text-red-800 text-sm font-semibold">{errors?.dob?.message}</h1>}
+                      {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
                   </div>
                   </>
 
@@ -234,29 +234,29 @@ function ProviderClientRequest({ provider, loa_type }) {
                 {typeOfPatient == "dependent" && (
                   <>
                 <div>
-                  <label htmlFor="last_name" className="text-[#1E3161] font-semibold">Last Name</label>
+                  <label htmlFor="last_name" className="text-[#1E3161] font-semibold roboto">Last Name</label>
                   <input 
                     type="text" 
                     id="last_name" 
-                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                     {...register('employeeLastName', {
                       required: "Last Name is required"
                     })}
                     />
-                    {errors?.employeeLastName && <h1 className="text-red-800 text-sm font-semibold">{errors?.employeeLastName?.message}</h1>}
+                    {errors?.employeeLastName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.employeeLastName?.message}</h1>}
                 </div>
 
                 <div>
-                  <label htmlFor="first_name" className="text-[#1E3161] font-semibold">First Name</label>
+                  <label htmlFor="first_name" className="text-[#1E3161] font-semibold roboto">First Name</label>
                   <input 
                     type="text" 
                     id="first_name" 
-                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                     {...register('employeeFirstName', {
                       required: "First Name is required"
                     })}
                     />
-                    {errors?.employeeFirstName && <h1 className="text-red-800 text-sm font-semibold">{errors?.employeeFirstName?.message}</h1>}
+                    {errors?.employeeFirstName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.employeeFirstName?.message}</h1>}
                 </div>
                   
                   
@@ -271,8 +271,8 @@ function ProviderClientRequest({ provider, loa_type }) {
                     </>
                 ) : (
                     <>
-                    <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
-                    <Link href={`${applink}/provider/${provider?.provider_id}`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center">
+                    <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto">SUBMIT</button>
+                    <Link href={`${applink}/provider/${provider?.provider_id}`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto">
                       BACK
                     </Link>
                     </>

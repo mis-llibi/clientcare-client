@@ -196,7 +196,7 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
                     {/* LEFT HOSPITAL */}
                     <div className="basis-1/2 min-w-[320px] lg:min-w-0">
-                    <label className="text-[#1E3161] font-semibold text-sm">
+                    <label className="text-[#1E3161] font-semibold text-sm roboto">
                         Hospital or Clinic
                     </label>
                     <input
@@ -243,7 +243,7 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
                     {/* RIGHT DOCTOR */}
                     <div className="basis-1/2 min-w-[320px] lg:min-w-0">
-                    <label className="text-[#1E3161] font-semibold text-sm">
+                    <label className="text-[#1E3161] font-semibold text-sm roboto">
                         Doctor (optional)
                     </label>
                     <input
@@ -298,7 +298,7 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
             {/* Footer */}
             <DialogFooter className="w-full mt-4 overflow-x-auto">
-            <div className="flex items-center justify-between gap-4 min-w-[700px] lg:min-w-0">
+            <div className="flex items-center justify-between gap-4 min-w-[700px] lg:min-w-0 roboto">
                 
                 {/* left side */}
                 <div className="text-sm text-[#1E3161] font-medium flex items-center gap-2 shrink-0">

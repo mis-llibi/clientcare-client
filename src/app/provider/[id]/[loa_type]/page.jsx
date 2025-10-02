@@ -62,21 +62,21 @@ function Page() {
             </CardHeader>
 
             <CardContent>
-              <p className="text-sm text-gray-700 text-center">
+              <p className="text-sm text-gray-700 text-center roboto">
                 Please have the picture of your Laboratory request ready for uploading.
               </p>
             </CardContent>
 
             <CardFooter className="flex justify-center gap-4">
               <Button
-                className="bg-[#1E3161] text-white hover:opacity-90"
+                className="bg-[#1E3161] text-white hover:opacity-90 roboto"
                 onClick={() => setShowTerms(false)} // proceed
               >
                 Yes, Proceed
               </Button>
               <Link
                 href={`${applink}/provider/${provider_id}`}
-                className="px-4 py-2 rounded-lg  hover:bg-gray-100 text-sm"
+                className="px-4 py-2 rounded-lg  hover:bg-gray-100 text-sm roboto"
               >
                 No
               </Link>

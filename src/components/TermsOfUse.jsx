@@ -80,13 +80,13 @@ function TermsOfUse({ onAccept, provider_id }) {
         <CardFooter className="flex justify-end gap-2 border-t pt-2">
           <button
             onClick={() => router.push(`${applink}/provider/${provider_id}/declined-TOU`)}
-            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100"
+            className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 roboto"
           >
             Decline
           </button>
           <button
             onClick={onAccept}
-            className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90"
+            className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 roboto"
           >
             Accept
           </button>

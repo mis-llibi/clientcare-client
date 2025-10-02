@@ -17,7 +17,7 @@ function DeclineTou() {
   return (
     <>
     <div className="flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
+      <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md roboto">
         {/* Sad face icon */}
         {/* <div className="text-6xl text-gray-500 mb-4">😔</div> */}
 

@@ -78,6 +78,10 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, confirm',
+      customClass:{
+        title: 'roboto',
+        htmlContainer: 'roboto' // applies to text
+        }
     })
     .then((result) => {
       if(result.isConfirmed){
@@ -134,7 +138,7 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
                   <div className="flex gap-2 items-center min-w-0">
                     <div><FaFileAlt className='text-[#1E3161]' /></div>
                     <div className="truncate max-w-xs">
-                      <h1 className="text-sm">
+                      <h1 className="text-sm roboto">
                         {truncateFileName(item.name, 25)}
                       </h1>
                     </div>
@@ -160,7 +164,7 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
                 {...register('hospital', {
                   value: provider
                 })}
-                className={"bg-[#F6F6F6] opacity-80 "}
+                className={"bg-[#F6F6F6] opacity-80 roboto"}
                 disabled={true}
             />
           </div>
@@ -175,7 +179,7 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
               <Input 
                   type="email"
                   {...register('email')}
-               
+                  className={'roboto'}
               />
           </div>
 
@@ -188,6 +192,7 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
                   type="text"
                   {...register('contact')}
                   placeholder={"09"}
+                  className={'roboto'}
               />
           </div>
 
@@ -197,8 +202,8 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
               </div>
           ) : (
               <>
-              <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
-              <Link href={`${applink}/provider/${provider_id}/laboratory`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center">
+              <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto">SUBMIT</button>
+              <Link href={`${applink}/provider/${provider_id}/laboratory`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto">
                 BACK
               </Link>
               </>

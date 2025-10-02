@@ -50,7 +50,11 @@ export const useClientRequest = () => {
                     Swal.fire({
                         title: "Error",
                         text: `${err.response.data.message}`,
-                        icon: "error"
+                        icon: "error",
+                        customClass: {
+                            title: 'roboto',
+                            htmlContainer: 'roboto' // applies to text
+                        }
                     })
                     setLoading(false)
                 }
@@ -98,7 +102,17 @@ export const useClientRequest = () => {
             }
         })
         .catch((err) => {
-            console.log(err)
+            if(err.status == 422){
+                Swal.fire({
+                    title: "Error",
+                    text: `${err.response.data.message}`,
+                    icon: "error",
+                    customClass: {
+                        title: 'roboto',
+                        htmlContainer: 'roboto' // applies to text
+                    }
+                })
+            }
         })
         .finally(() => {
             setLoading(false)
@@ -123,7 +137,11 @@ export const useClientRequest = () => {
                 Swal.fire({
                     title: "Error",
                     text: `${err.response.data.message}`,
-                    icon: "error"
+                    icon: "error",
+                    customClass: {
+                        title: 'roboto',
+                        htmlContainer: 'roboto' // applies to text
+                    }
                 })
             }
         })

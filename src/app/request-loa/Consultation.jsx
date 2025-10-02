@@ -124,6 +124,10 @@ function Consultation() {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, confirm',
+        customClass: {
+            title: 'roboto',
+            htmlContainer: 'roboto' // applies to text
+        }
       })
       .then((result) => {
         if(result.isConfirmed){
@@ -159,7 +163,7 @@ function Consultation() {
           <SelectComponent 
             defaultValue={"employee"}
             itemList={patientType}
-            className={"w-full border-2"}
+            className={"w-full border-2 roboto"}
             control={control}
             name={"patientType"}
           />
@@ -206,28 +210,28 @@ function Consultation() {
             <>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-2 '>
               <div>
-                <label htmlFor="er_card" className="text-[#1E3161] font-semibold">ER Card #</label>
+                <label htmlFor="er_card" className="text-[#1E3161] font-semibold roboto">ER Card #</label>
                 <input 
                   type="text" 
                   id="er_card" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                   {...register('erCardNumber', {
                     required: "ER Card # is required"
                   })}
                   />
-                  {errors?.erCardNumber && <h1 className="text-red-800 text-sm font-semibold">{errors?.erCardNumber?.message}</h1>}
+                  {errors?.erCardNumber && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.erCardNumber?.message}</h1>}
               </div>
               <div>
-                <label htmlFor="dob" className="text-[#1E3161] font-semibold">Date of Birth</label>
+                <label htmlFor="dob" className="text-[#1E3161] font-semibold roboto">Date of Birth</label>
                 <input 
                   type="date" 
                   id="dob" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                   {...register('dob', {
                     required: "Date of Birth is required"
                   })}
                   />
-                  {errors?.dob && <h1 className="text-red-800 text-sm font-semibold">{errors?.dob?.message}</h1>}
+                  {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
               </div>
             </div>
             </>
@@ -235,40 +239,40 @@ function Consultation() {
             <>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
               <div>
-                <label htmlFor="last_name" className="text-[#1E3161] font-semibold">Last Name</label>
+                <label htmlFor="last_name" className="text-[#1E3161] font-semibold roboto">Last Name</label>
                 <input 
                   type="text" 
                   id="last_name" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                   {...register('patientLastName', {
                     required: "Last Name is required"
                   })}
                   />
-                  {errors?.patientLastName && <h1 className="text-red-800 text-sm font-semibold">{errors?.patientLastName?.message}</h1>}
+                  {errors?.patientLastName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.patientLastName?.message}</h1>}
               </div>
               <div>
-                <label htmlFor="first_name" className="text-[#1E3161] font-semibold">First Name</label>
+                <label htmlFor="first_name" className="text-[#1E3161] font-semibold roboto">First Name</label>
                 <input 
                   type="text" 
                   id="first_name" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                   {...register('patientFirstName', {
                     required: "First Name is required"
                   })}
                   />
-                  {errors?.patientFirstName && <h1 className="text-red-800 text-sm font-semibold">{errors?.patientFirstName?.message}</h1>}
+                  {errors?.patientFirstName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.patientFirstName?.message}</h1>}
               </div>
               <div>
-                <label htmlFor="dob" className="text-[#1E3161] font-semibold">Date of Birth</label>
+                <label htmlFor="dob" className="text-[#1E3161] font-semibold roboto">Date of Birth</label>
                 <input 
                   type="date" 
                   id="dob" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                   {...register('dob', {
                     required: "Date of Birth is required"
                   })}
                   />
-                  {errors?.dob && <h1 className="text-red-800 text-sm font-semibold">{errors?.dob?.message}</h1>}
+                  {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
               </div>
             </div>
             </>
@@ -281,28 +285,28 @@ function Consultation() {
             <h1 className="font-bold roboto">Principal Information</h1>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
                 <div>
-                  <label htmlFor="last_name" className="text-[#1E3161] font-semibold">Last Name</label>
+                  <label htmlFor="last_name" className="text-[#1E3161] font-semibold roboto">Last Name</label>
                   <input 
                     type="text" 
                     id="last_name" 
-                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                     {...register('employeeLastName', {
                       required: "Last Name is required"
                     })}
                     />
-                    {errors?.employeeLastName && <h1 className="text-red-800 text-sm font-semibold">{errors?.employeeLastName?.message}</h1>}
+                    {errors?.employeeLastName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.employeeLastName?.message}</h1>}
                 </div>
                 <div>
-                  <label htmlFor="first_name" className="text-[#1E3161] font-semibold">First Name</label>
+                  <label htmlFor="first_name" className="text-[#1E3161] font-semibold roboto">First Name</label>
                   <input 
                     type="text" 
                     id="first_name" 
-                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                     {...register('employeeFirstName', {
                       required: "First Name is required"
                     })}
                     />
-                    {errors?.employeeFirstName && <h1 className="text-red-800 text-sm font-semibold">{errors?.employeeFirstName?.message}</h1>}
+                    {errors?.employeeFirstName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.employeeFirstName?.message}</h1>}
                 </div>
               </div>
           </div>
@@ -353,7 +357,7 @@ function Consultation() {
                 'You must select Hospital or Clinic to complete the assessment',
             })}
           />
-          {errors?.provider && <h1 className="text-red-800 text-sm font-semibold">{errors?.provider?.message}</h1>}
+          {errors?.provider && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.provider?.message}</h1>}
         </div>
 
         {selectedHospital && (
@@ -414,33 +418,33 @@ function Consultation() {
         <div>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
             <div>
-              <label htmlFor="email" className="text-[#1E3161] font-semibold">Email <span className='text-red-700 text-sm'>(required)</span></label>
+              <label htmlFor="email" className="text-[#1E3161] font-semibold roboto">Email <span className='text-red-700 text-sm'>(required)</span></label>
               <input 
                 type="text" 
                 id="email" 
-                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                 {...register('email', {
                   required: "Email is required"
                 })}
                 />
-                {errors?.email && <h1 className="text-red-800 text-sm font-semibold">{errors?.email?.message}</h1>}
+                {errors?.email && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.email?.message}</h1>}
             </div>
             <div>
-              <label htmlFor="alt_email" className="text-[#1E3161] font-semibold">Alternate Email (optional)</label>
+              <label htmlFor="alt_email" className="text-[#1E3161] font-semibold roboto">Alternate Email (optional)</label>
               <input 
                 type="text" 
                 id="alt_email" 
-                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                 {...register('alt_email')}
                 />
                 {/* {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>} */}
             </div>
             <div>
-              <label htmlFor="contact" className="text-[#1E3161] font-semibold">Contact #</label>
+              <label htmlFor="contact" className="text-[#1E3161] font-semibold roboto">Contact #</label>
               <input 
                 type="number" 
                 id="contact" 
-                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]" 
+                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
                 {...register('contact')}
                 />
                 {/* {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>} */}
@@ -457,7 +461,7 @@ function Consultation() {
             </>
         ) : (
             <>
-            <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
+            <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto">SUBMIT</button>
             </>
         )}
 

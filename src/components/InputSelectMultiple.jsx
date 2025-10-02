@@ -62,6 +62,7 @@ const InputSelectMultiple = ({
                             options={option}
                             menuPlacement="auto"
                             placeholder={props?.label}
+                            className='roboto'
                             onChange={onChange}
                             value={value}
                             isClearable={true}

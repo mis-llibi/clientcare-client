@@ -30,7 +30,7 @@ function SelectWithoutDefaultValue({
             onValueChange={(val) => field.onChange(val)}
             value={field.value ? String(field.value) : ""}
           >
-            <SelectTrigger className="w-full border-2 pr-8">
+            <SelectTrigger className="w-full border-2 pr-8 roboto">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
 
@@ -39,7 +39,7 @@ function SelectWithoutDefaultValue({
                 {itemList.length > 0 ? (
                   <>
                   {itemList.map((item) => (
-                    <SelectItem key={item.value} value={String(item.value)}>
+                    <SelectItem key={item.value} value={String(item.value)} className={"roboto"}>
                       {item.name}
                     </SelectItem>
                   ))}

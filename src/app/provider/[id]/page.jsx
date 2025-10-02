@@ -62,13 +62,13 @@ function Home() {
             <div className='flex items-center justify-center gap-4'>
               <Link
                 href={`${applink}/provider/${id}/consultation`}
-                className='px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90'
+                className='px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 roboto'
               >
                 Consultation
               </Link>
               <Link
                 href={`${applink}/provider/${id}/laboratory`}
-                className='px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 '
+                className='px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 roboto'
               >
                 Laboratory
               </Link>
