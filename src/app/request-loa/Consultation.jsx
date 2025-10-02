@@ -201,7 +201,7 @@ function Consultation() {
         </div>
 
         <div>
-          <h1 className='font-bold roboto'>Patient Information</h1>
+          <h1 className='font-bold roboto'>Patient Information (as shown in Emergency Room card)</h1>
           {verificationDetailsType === "insurance" ? (
             <>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-2 '>

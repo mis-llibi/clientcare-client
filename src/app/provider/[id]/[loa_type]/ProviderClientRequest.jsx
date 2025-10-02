@@ -126,7 +126,7 @@ function ProviderClientRequest({ provider, loa_type }) {
                   htmlFor="personal_details"
                   className="text-[11px] roboto font-bold text-[#1E3161]"
                 >
-                  Use Personal Details
+                  Use Personal Details 
                 </label>
               </div>
 
@@ -148,7 +148,7 @@ function ProviderClientRequest({ provider, loa_type }) {
             </div>
 
             <div className="border-2 rounded-lg py-2 px-3 border-black/30 shadow-[3px_3px_4px_0px_rgba(0,0,0,0.25)]">
-              <h1 className="font-bold roboto">Patient Information</h1>
+              <h1 className="font-bold roboto text-sm">Patient Information (as shown in Emergency Room card)</h1>
               <div className="mt-2 flex flex-col gap-2">
 
                 {/* Insurance Details */}
@@ -228,7 +228,7 @@ function ProviderClientRequest({ provider, loa_type }) {
               </div>
 
               {typeOfPatient == "dependent" && (
-                <h1 className="font-bold roboto mt-2">Employee Information</h1>
+                <h1 className="font-bold roboto mt-2 text-sm">Employee Information</h1>
               )}
               <div className="mt-2 flex flex-col gap-2">
                 {typeOfPatient == "dependent" && (
