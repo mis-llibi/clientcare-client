@@ -291,45 +291,47 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
                 </div>
             </div>
 
-
             {/* Footer */}
-            <DialogFooter className="w-full">
-            <div className="flex items-center justify-between gap-4 overflow-x-auto lg:overflow-x-hidden">
+            <DialogFooter className="w-full mt-4 overflow-x-auto">
+            <div className="flex items-center justify-between gap-4 min-w-[700px] lg:min-w-0">
+                
                 {/* left side */}
-                <div className="text-sm text-[#1E3161] font-medium shrink-0">
-                <div className='flex items-center gap-2 '>
-                    <input
+                <div className="text-sm text-[#1E3161] font-medium flex items-center gap-2 shrink-0">
+                <input
                     type='checkbox'
                     id="accepting_eloa"
                     className='cursor-pointer'
                     checked={!!isAcceptEloa}
                     onChange={(e) => handleEloaCheckbox(e)}
-                    />
-                    <label htmlFor="accepting_eloa" className='font-bold px-2 py-2 text-xs cursor-pointer'>
+                />
+                <label htmlFor="accepting_eloa" className='font-bold px-2 py-2 text-xs cursor-pointer'>
                     SHOW ONLY PROVIDERS ACCEPTING E-LOA
-                    </label>
+                </label>
                 </div>
-                </div>
+
                 {/* legend */}
                 <div className="flex flex-col items-center text-xs roboto shrink-0">
                 <h1 className='font-bold'>LEGEND</h1>
                 <h1 className='text-[#1E3161] font-bold '>⭐ - <span className='uppercase'>Accepts e-LOA</span></h1>
                 </div>
+
                 {/* buttons */}
                 <div className="flex gap-3 shrink-0">
-                    <DialogClose>
-                        <h1 className='px-4 py-1 roudned-lg bg-[#1E3161] text-white text-sm rounded-lg '>Cancel</h1>
-                    </DialogClose>
-                    <button 
-                        type="button" 
-                        onClick={onSubmit}
-                        className="px-4 py-1 rounded-lg bg-[#1E3161] text-white text-sm"
-                    >
-                        Submit
-                    </button>
+                <DialogClose>
+                    <h1 className='px-4 py-1 rounded-lg bg-[#1E3161] text-white text-sm'>Cancel</h1>
+                </DialogClose>
+                <button 
+                    type="button" 
+                    onClick={onSubmit}
+                    className="px-4 py-1 rounded-lg bg-[#1E3161] text-white text-sm"
+                >
+                    Submit
+                </button>
                 </div>
             </div>
             </DialogFooter>
+
+
             </>
         )}
       </DialogContent>
