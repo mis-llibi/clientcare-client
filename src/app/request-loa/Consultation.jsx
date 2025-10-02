@@ -276,7 +276,7 @@ function Consultation() {
         {typeOfPatient == "dependent" && (
           <>
           <div>
-            <h1 className="font-bold roboto">Employee Information</h1>
+            <h1 className="font-bold roboto">Principal Information</h1>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
                 <div>
                   <label htmlFor="last_name" className="text-[#1E3161] font-semibold">Last Name</label>
@@ -412,7 +412,7 @@ function Consultation() {
         <div>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
             <div>
-              <label htmlFor="email" className="text-[#1E3161] font-semibold">Email</label>
+              <label htmlFor="email" className="text-[#1E3161] font-semibold">Email <span className='text-red-700 text-sm'>required</span></label>
               <input 
                 type="text" 
                 id="email" 
