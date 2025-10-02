@@ -293,7 +293,7 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
 
             {/* Footer */}
-            <DialogFooter className="w-[250px] md:w-full">
+            <DialogFooter className="w-full">
             <div className="flex items-center justify-between gap-4 overflow-x-auto lg:overflow-x-hidden">
                 {/* left side */}
                 <div className="text-sm text-[#1E3161] font-medium shrink-0">
