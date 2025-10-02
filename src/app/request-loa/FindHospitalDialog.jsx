@@ -44,7 +44,7 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
     setDoctor(undefined)
     setSelectedHospitalIndex(null)
     setSelectedDoctorIndex(null)
-    setShowInfographics(true)
+    // setShowInfographics(true)
   }
 
   const onSubmit = () => {
@@ -142,6 +142,11 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
     if (!open) {
       resetStates()  // ✅ reset everything when dialog closes
     }
+
+    if(open == true){
+        setShowInfographics(true)
+    }
+    
   }, [open])
 
   return (
