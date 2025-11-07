@@ -54,12 +54,6 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor, loaType })
       return
     }
 
-    if (loaType === "consultation" && !chosenDoctor) {
-      toast("Doctor is required", {
-        description: "You must choose a Doctor to continue",
-      })
-      return
-    }
 
     setSelectedHospital(chosenHospital)
     setSelectedDoctor(chosenDoctor)
