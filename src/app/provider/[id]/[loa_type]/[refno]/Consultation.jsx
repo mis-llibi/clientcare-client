@@ -10,10 +10,10 @@ import Label from '@/components/Label'
 import Input from '@/components/Input'
 import { MoonLoader } from 'react-spinners'
 import Swal from 'sweetalert2'
-
+import PhoneInputMask from '@/components/InputMask'
 
 // Hooks
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useClientRequest } from '@/hooks/useClientRequest'
 
 // Helpers
@@ -57,6 +57,15 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
   ]
 
   const onSubmit = (data) => {
+    if (data.contact) {
+        const digits = data.contact.replace(/\D/g, ''); // remove all non-digits
+        // ensure it starts with 0 (not +63)
+        if (digits.startsWith('63')) {
+        data.contact = '0' + digits.slice(2);
+        } else if (!digits.startsWith('0')) {
+        data.contact = '0' + digits;
+        }
+    }
 
     Swal.fire({
       title: "Are you sure?",
@@ -164,11 +173,17 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
                             label={"Contact # (optional)"}
                             htmlFor={"contact"}
                         />
-                        <Input 
-                            type="text"
-                            {...register('contact')}
-                            placeholder={"09"}
-                            className={'roboto'}
+                        <Controller
+                            name="contact"
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <PhoneInputMask
+                                value={value || ''}
+                                onChange={onChange}
+                                placeholder="+63 (___)-___-____"
+                                className="roboto"
+                                />
+                        )}
                         />
 
 

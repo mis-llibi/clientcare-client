@@ -5,22 +5,11 @@ import React, { useEffect, useState } from 'react'
 import SelectComponent from '@/components/Select';
 import Label from '@/components/Label';
 import InputSelectMultiple from '@/components/InputSelectMultiple';
-
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Toaster } from '@/components/ui/sonner';
+import PhoneInputMask from '@/components/InputMask'
 
 // Hooks
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop';
 import FindHospitalDialog from './FindHospitalDialog';
 import Swal from 'sweetalert2';
@@ -116,31 +105,42 @@ function Consultation() {
   }, [selectedHospital, selectedDoctor])
 
   const onSubmit = (data) => {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "Once you click Submit, you will not be able to make any further changes to your LOA request.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, confirm',
-        customClass: {
-            title: 'roboto',
-            htmlContainer: 'roboto' // applies to text
+
+    if (data.contact) {
+        const digits = data.contact.replace(/\D/g, ''); // remove all non-digits
+        // ensure it starts with 0 (not +63)
+        if (digits.startsWith('63')) {
+        data.contact = '0' + digits.slice(2);
+        } else if (!digits.startsWith('0')) {
+        data.contact = '0' + digits;
         }
-      })
-      .then((result) => {
-        if(result.isConfirmed){
-          setLoading(true)
-          submitRequestConsultation({
-            ...data,
-            setLoading,
-            reset,
-            setSelectedHospital,
-            setSelectedDoctor
-          })
-        }
-      })
+    }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Once you click Submit, you will not be able to make any further changes to your LOA request.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, confirm',
+      customClass: {
+          title: 'roboto',
+          htmlContainer: 'roboto' // applies to text
+      }
+    })
+    .then((result) => {
+      if(result.isConfirmed){
+        setLoading(true)
+        submitRequestConsultation({
+          ...data,
+          setLoading,
+          reset,
+          setSelectedHospital,
+          setSelectedDoctor
+        })
+      }
+    })
   }
 
 
@@ -442,12 +442,18 @@ function Consultation() {
             </div>
             <div>
               <label htmlFor="contact" className="text-[#1E3161] font-semibold roboto">Contact #</label>
-              <input 
-                type="number" 
-                id="contact" 
-                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                {...register('contact')}
-                />
+              <Controller
+                  name="contact"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                      <PhoneInputMask
+                      value={value || ''}
+                      onChange={onChange}
+                      placeholder="+63 (___)-___-____"
+                      className="roboto"
+                      />
+              )}
+              />
                 {/* {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>} */}
             </div>
           </div>

@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 
 import SelectComponent from '@/components/Select';
 import Label from '@/components/Label';
-import InputSelectMultiple from '@/components/InputSelectMultiple';
+import PhoneInputMask from '@/components/InputMask'
 import { MoonLoader } from 'react-spinners';
 
 // Hooks
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import FileUpload from '@/components/Fileupload';
 import FindHospitalDialog from './FindHospitalDialog';
 import { FaFileAlt } from 'react-icons/fa';
@@ -107,6 +107,15 @@ function Laboratory() {
   const onSubmit = (data) => {
       // console.log(data)
 
+      if (data.contact) {
+          const digits = data.contact.replace(/\D/g, ''); // remove all non-digits
+          // ensure it starts with 0 (not +63)
+          if (digits.startsWith('63')) {
+          data.contact = '0' + digits.slice(2);
+          } else if (!digits.startsWith('0')) {
+          data.contact = '0' + digits;
+          }
+      }
       const formData = new FormData()
       formData.append('alt_email', data.alt_email)
       formData.append('contact', data.contact)
@@ -435,13 +444,18 @@ function Laboratory() {
             </div>
             <div>
               <label htmlFor="contact" className="text-[#1E3161] font-semibold roboto">Contact #</label>
-              <input 
-                type="number" 
-                id="contact" 
-                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                {...register('contact')}
-                />
-                {/* {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>} */}
+              <Controller
+                  name="contact"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                      <PhoneInputMask
+                      value={value || ''}
+                      onChange={onChange}
+                      placeholder="+63 (___)-___-____"
+                      className="roboto"
+                      />
+              )}
+              />
             </div>
           </div>
         </div>
