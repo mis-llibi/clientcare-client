@@ -47,7 +47,7 @@ function Home() {
   return (
     <>
       {showTerms && (
-        <TermsOfUse onAccept={() => setShowTerms(false)} provider_id={id} />
+        <TermsOfUse onAccept={() => setShowTerms(false)} provider_id={id} device={"mobile"} />
       )}
 
       {!showTerms && (

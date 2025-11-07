@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-function TermsOfUse({ onAccept, provider_id }) {
+function TermsOfUse({ onAccept, provider_id, device }) {
 
   const router = useRouter()
 
@@ -79,7 +79,7 @@ function TermsOfUse({ onAccept, provider_id }) {
 
         <CardFooter className="flex justify-end gap-2 border-t pt-2">
           <button
-            onClick={() => router.push(`${applink}/provider/${provider_id}/declined-TOU`)}
+            onClick={() => device == "mobile" ? router.push(`${applink}/provider/${provider_id}/declined-TOU`) : router.push(`${applink}/request-loa/declined-TOU`)}
             className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 roboto"
           >
             Decline
