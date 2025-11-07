@@ -98,10 +98,45 @@ export const ClientRequestDesktop = () => {
         })
     }
 
+    const submitRequestLaboratory = async ({ formData, setLoading, reset, setSelectedHospital, }) => {
+
+        await csrf()
+        axios.post('/api/submit-request-laboratory', formData, {
+            headers: {
+                "Content-Type" : "multipart/form-data"
+            }
+        })
+        .then((res) => {
+            if(res.status == 201){
+                Swal.fire({
+                    title: "Successful Request for LOA",
+                    text: `Your request has been submitted, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
+                    icon: "success"
+                })
+                reset()
+                setSelectedHospital()
+            }
+        })
+        .catch((err) => {
+            if(err.status == 404){
+                Swal.fire({
+                    title: "Error",
+                    text: `${err.response.data.message}`,
+                    icon: "error"
+                })
+            }
+        })
+        .finally(() => {
+            setLoading(false);
+        })
+
+    };
+
     return {
         searcHospital,
         searchDoctor,
-        submitRequestConsultation
+        submitRequestConsultation,
+        submitRequestLaboratory
     }
 
 

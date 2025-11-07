@@ -8,12 +8,21 @@ import { MoonLoader } from 'react-spinners';
 
 // Hooks
 import { useForm } from 'react-hook-form'
+import FileUpload from '@/components/Fileupload';
+import FindHospitalDialog from './FindHospitalDialog';
+import { FaFileAlt } from 'react-icons/fa';
+import { HiMiniXMark } from 'react-icons/hi2';
+import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop';
+import Swal from 'sweetalert2';
 
 function Laboratory() {
 
     const [loading, setLoading] = useState(false)
 
-    const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm({
+    const [selectedHospital, setSelectedHospital] = useState()
+    const [selectedDoctor, setSelectedDoctor] = useState()
+
+    const { register, handleSubmit, watch, reset, control, formState: {errors}, setValue } = useForm({
         defaultValues: {
             patientType: "employee",
             verificationDetailsType: "personal",
@@ -24,6 +33,8 @@ function Laboratory() {
             loaType: "laboratory"
         }
     })
+
+    const { submitRequestLaboratory } = ClientRequestDesktop()
 
   const patientType = [
     {
@@ -38,6 +49,8 @@ function Laboratory() {
 
   const verificationDetailsType = watch("verificationDetailsType");
   const typeOfPatient = watch("patientType");
+  const uploadedFiles = watch("files");
+  const fileArray = uploadedFiles ? Array.from(uploadedFiles) : []; // ✅ convert FileList to array
 
   useEffect(() => {
     reset({
@@ -51,8 +64,97 @@ function Laboratory() {
     });
   }, [verificationDetailsType, typeOfPatient, reset]);
 
+  useEffect(() => {
+    if (selectedHospital)
+      setValue(
+        'provider',
+        `${selectedHospital?.id}||${selectedHospital?.name}++${
+          selectedHospital?.address
+        }++${selectedHospital?.city}++${selectedHospital?.state}++${
+          selectedHospital?.email1
+        }--${selectedDoctor?.id || 0}||${selectedDoctor?.last || ''}, ${
+          selectedDoctor?.first || ''
+        }++${selectedDoctor?.specialization || ''}`,
+      )
+    setValue('providerEmail2', selectedHospital?.email2)
+  }, [selectedHospital, selectedDoctor])
+
+  function truncateFileName(name, maxLength = 20) {
+    if (name.length <= maxLength) return name;
+
+    const ext = name.includes(".") ? name.substring(name.lastIndexOf(".")) : "";
+    const base = name.replace(ext, "");
+
+    const charsToShow = maxLength - ext.length - 3; // 3 for "..."
+    const start = base.substring(0, Math.ceil(charsToShow / 2));
+    const end = base.substring(base.length - Math.floor(charsToShow / 2));
+
+    return `${start}...${end}${ext}`;
+  }
+
+  const handleRemovePdf = (fileToRemove) => {
+    const remaining = fileArray.filter((f) => f !== fileToRemove);
+
+    if (remaining.length === 0) {
+      // ✅ reset field completely if no files left
+      setValue("files", null, { shouldValidate: true });
+    } else {
+      // ✅ directly set the remaining array of files
+      setValue("files", remaining, { shouldValidate: true });
+    }
+  };
+
   const onSubmit = (data) => {
       console.log(data)
+
+      const formData = new FormData()
+      formData.append('alt_email', data.alt_email)
+      formData.append('contact', data.contact)
+      formData.append('dob', data.dob)
+      formData.append('email', data.email)
+      formData.append('erCardNumber', data.erCardNumber)
+      formData.append('loaType', data.loaType)
+      formData.append('patientFirstName', data.patientFirstName)
+      formData.append('patientLastName', data.patientLastName)
+      formData.append('patientType', data.patientType)
+      formData.append('provider', data.provider)
+      formData.append('verificationDetailsType', data.verificationDetailsType)
+      formData.append('employeeFirstName', data?.employeeFirstName)
+      formData.append('employeeLastName', data?.employeeLastName)
+
+
+      if (data.files && data.files.length > 0) {
+        const files = Array.from(data.files); // ✅ convert FileList → Array<File>
+
+        files.forEach((file) => {
+          formData.append("files[]", file);
+        });
+      }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Once you click Submit, you will not be able to make any further changes to your LOA request.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, confirm',
+      customClass:{
+        title: 'roboto',
+        htmlContainer: 'roboto' // applies to text
+        }
+    })
+    .then((result) => {
+      if(result.isConfirmed){
+        setLoading(true)
+        submitRequestLaboratory({
+            formData,
+            setLoading,
+            reset,
+            setSelectedHospital,
+        })
+      }
+    })
   }
 
 
@@ -224,6 +326,125 @@ function Laboratory() {
 
       <div className='mt-5 flex flex-col gap-3'>
         <h1 className='text-[#1E3161] font-bold roboto text-lg text-center'>FILL UP YOUR REQUEST</h1>
+
+        <Label label={"Attach your Doctor’s Request for Laboratory (with Diagnosis)"} />
+        <div className='flex flex-col items-center justify-center'>
+          <FileUpload control={control} name="files" required={"Doctor's Request is required"} />
+        </div>
+          {fileArray.length > 0 && (
+            <div>
+              <Label label={"Uploaded Files"} />
+              {fileArray.map((item, i) => (
+                <div
+                  className='mb-2 border border-black/30 w-full py-1 px-2 rounded-lg bg-[#F6F6F6] flex justify-between items-center'
+                  key={i}
+                >
+                  <div className="flex gap-2 items-center min-w-0">
+                    <div><FaFileAlt className='text-[#1E3161]' /></div>
+                    <div className="truncate max-w-xs">
+                      <h1 className="text-sm roboto">
+                        {truncateFileName(item.name, 25)}
+                      </h1>
+                    </div>
+                  </div>
+                  <div>
+                    <HiMiniXMark
+                      className='text-red-800 text-lg cursor-pointer'
+                      onClick={() => handleRemovePdf(item)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+        <Label 
+          label={"Find your preferred accredited provider (Hospital / Clinic)"}
+        />
+        <FindHospitalDialog 
+          setSelectedDoctor={setSelectedDoctor}
+          setSelectedHospital={setSelectedHospital}
+          loaType={"laboratory"}
+        />
+          <input
+            type="hidden"
+            {...register('provider', {
+              required:
+                'You must select Hospital or Clinic to complete the assessment',
+            })}
+          />
+          {errors?.provider && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.provider?.message}</h1>}
+
+        {selectedHospital && (
+          <>
+       <div
+          className={`flex flex-col md:flex-row p-2 border border-gray-400 border-dashed bg-gray-100 roboto`}>
+          <div className="basis-1/2 text-sm">
+            <p className="font-bold mb-1">
+              Hospital / Clinic:{' '}
+              <span className="font-normal">
+                {selectedHospital.name}
+              </span>
+            </p>
+            <p className="font-bold mb-1">
+              Address:{' '}
+              <span className="font-normal">
+                {selectedHospital.address}
+              </span>
+            </p>
+            <p className="font-bold mb-1">
+              City:{' '}
+              <span className="font-normal">
+                {selectedHospital.city}
+              </span>
+            </p>
+            <p className="font-bold mb-1">
+              State:{' '}
+              <span className="font-normal">
+                {selectedHospital.state}
+              </span>
+            </p>
+          </div>
+        </div>
+          </>
+        )}
+
+        <div>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
+            <div>
+              <label htmlFor="email" className="text-[#1E3161] font-semibold roboto">Email <span className='text-red-700 text-sm'>(required)</span></label>
+              <input 
+                type="text" 
+                id="email" 
+                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                {...register('email', {
+                  required: "Email is required"
+                })}
+                />
+                {errors?.email && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.email?.message}</h1>}
+            </div>
+            <div>
+              <label htmlFor="alt_email" className="text-[#1E3161] font-semibold roboto">Alternate Email (optional)</label>
+              <input 
+                type="text" 
+                id="alt_email" 
+                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                {...register('alt_email')}
+                />
+                {/* {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>} */}
+            </div>
+            <div>
+              <label htmlFor="contact" className="text-[#1E3161] font-semibold roboto">Contact #</label>
+              <input 
+                type="number" 
+                id="contact" 
+                className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                {...register('contact')}
+                />
+                {/* {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>} */}
+            </div>
+          </div>
+        </div>
 
         {loading ? (
             <>

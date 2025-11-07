@@ -349,6 +349,7 @@ function Consultation() {
           <FindHospitalDialog 
             setSelectedDoctor={setSelectedDoctor}
             setSelectedHospital={setSelectedHospital}
+            loaType={"consultation"}
           />
           <input
             type="hidden"

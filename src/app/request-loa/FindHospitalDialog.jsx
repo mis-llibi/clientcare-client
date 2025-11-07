@@ -11,24 +11,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop';
+import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop'
 import Label from '@/components/Label'
-import { toast } from 'sonner';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner'
 import Infographics from "@/assets/infographics-eloa.jpg"
 
-function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
-  const [open, setOpen] = useState(false) // control dialog open/close
+function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor, loaType }) {
+  const [open, setOpen] = useState(false)
   const [showInfographics, setShowInfographics] = useState(true)
-
   const [timer, setTimer] = useState(null)
   const [search, setSearch] = useState("")
   const [hosploading, setHosploading] = useState(false)
   const [hospital, setHospital] = useState()
-  const [isAcceptEloa, setIsAcceptEloa] = useState()
+  const [isAcceptEloa, setIsAcceptEloa] = useState(false)
   const [docloading, setDocloading] = useState(false)
   const [doctor, setDoctor] = useState()
-
   const [selectedHospitalIndex, setSelectedHospitalIndex] = useState(null)
   const [selectedDoctorIndex, setSelectedDoctorIndex] = useState(null)
 
@@ -39,29 +36,33 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
     setSearch("")
     setHosploading(false)
     setHospital(undefined)
-    setIsAcceptEloa(undefined)
+    setIsAcceptEloa(false)
     setDocloading(false)
     setDoctor(undefined)
     setSelectedHospitalIndex(null)
     setSelectedDoctorIndex(null)
-    // setShowInfographics(true)
   }
 
   const onSubmit = () => {
     const chosenHospital = hospital?.[selectedHospitalIndex] || null
     const chosenDoctor = doctor?.[selectedDoctorIndex] || null
 
-    if (chosenHospital == null) {
+    if (!chosenHospital) {
       toast("Hospital or Clinic is required", {
         description: "You must choose a Hospital or Clinic to continue",
       })
       return
     }
 
+    if (loaType === "consultation" && !chosenDoctor) {
+      toast("Doctor is required", {
+        description: "You must choose a Doctor to continue",
+      })
+      return
+    }
+
     setSelectedHospital(chosenHospital)
     setSelectedDoctor(chosenDoctor)
-
-    // ✅ close modal after submit
     setOpen(false)
     resetStates()
   }
@@ -69,16 +70,13 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
   const onSearchHospital = (search) => {
     setSearch(search)
     setHosploading(true)
-
-    if (timer) {
-      clearTimeout(timer)
-      setTimer(null)
-    }
+    if (timer) clearTimeout(timer)
 
     setTimer(
       setTimeout(() => {
-        if (search) searcHospital({ search, accepteloa: isAcceptEloa, setHospital, setHosploading })
-      }, 1000),
+        if (search)
+          searcHospital({ search, accepteloa: isAcceptEloa, setHospital, setHosploading })
+      }, 1000)
     )
   }
 
@@ -88,10 +86,7 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
   const onSearchDoctor = (search) => {
     setDocloading(true)
-    if (timer) {
-      clearTimeout(timer)
-      setTimer(null)
-    }
+    if (timer) clearTimeout(timer)
     setTimer(
       setTimeout(() => {
         if (search && selectedHospitalIndex !== null)
@@ -101,12 +96,12 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
             setDoctor,
             setDocloading,
           })
-      }, 1000),
+      }, 1000)
     )
   }
 
   useEffect(() => {
-    if (selectedHospitalIndex !== null) {
+    if (selectedHospitalIndex !== null && loaType === "consultation") {
       setDocloading(true)
       searchDoctor({
         id: hospital?.[selectedHospitalIndex]?.id,
@@ -140,13 +135,11 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
   useEffect(() => {
     if (!open) {
-      resetStates()  // ✅ reset everything when dialog closes
+      resetStates()
     }
-
-    if(open == true){
-        setShowInfographics(true)
+    if (open) {
+      setShowInfographics(true)
     }
-    
   }, [open])
 
   return (
@@ -159,188 +152,184 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
       <DialogContent className="w-full md:max-w-xl lg:max-w-3xl xl:max-w-5xl">
         {showInfographics ? (
-            <>
+          <>
             <DialogHeader>
-                <DialogTitle>E-LOA</DialogTitle>
+              <DialogTitle>E-LOA</DialogTitle>
             </DialogHeader>
             <div className='w-full'>
-                <Image 
-                    src={Infographics}
-                    width={1000}
-                    alt='Infographics'
-                />
+              <Image src={Infographics} width={1000} alt='Infographics' />
             </div>
-            <DialogFooter className={"flex justify-end roboto"}>
-              {/* <DialogClose>
-                <button className="px-4 py-1 rounded-lg bg-gray-300 text-sm">Cancel</button>
-              </DialogClose> */}
-              <button 
-                onClick={() => setShowInfographics(false)} 
+            <DialogFooter className="flex justify-end roboto">
+              <button
+                onClick={() => setShowInfographics(false)}
                 className="px-4 py-1 rounded-lg bg-[#1E3161] text-white text-sm"
               >
                 Okay
               </button>
             </DialogFooter>
-            </>
+          </>
         ) : (
-            <>
+          <>
             <DialogHeader className="text-start roboto">
-                <DialogTitle className="text-sm">
-                    Find your preferred accredited provider (Hospital / Clinic / Doctor)
-                </DialogTitle>
+              <DialogTitle className="text-sm">
+                {loaType === "laboratory"
+                  ? "Find your preferred accredited provider (Hospital / Clinic)"
+                  : "Find your preferred accredited provider (Hospital / Clinic / Doctor)"}
+              </DialogTitle>
             </DialogHeader>
 
             {/* Content */}
             <div className="overflow-x-auto lg:overflow-x-hidden">
-                <div className="flex gap-2 h-[450px] lg:h-[500px] min-w-[700px] lg:min-w-0">
-
-                    {/* LEFT HOSPITAL */}
-                    <div className="basis-1/2 min-w-[320px] lg:min-w-0">
-                    <label className="text-[#1E3161] font-semibold text-sm roboto">
-                        Hospital or Clinic 
-                        <span className='ml-2 text-xs text-gray-500 italic lg:hidden'>
-                          (⇄ Swipe horizontally)
-                        </span>
-                    </label>
-                    <input
-                        type="text"
-                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]"
-                        onChange={(e) => onSearchHospital(e.target.value)}
-                    />
-                    <ScrollArea className="bg-[#F6F6F6] mt-2 rounded-lg p-2 h-[380px] lg:h-[420px]">
-                        <div className={`min-w-[600px] lg:min-w-0 
-                                    ${(!hospital || hosploading ) && 'flex items-center justify-center h-96 w-full'}`}>
-                        {hosploading ? (
-                            <SyncLoader color="#CDCDCD" margin={10} size={15} />
-                        ) : hospital ? (
-                            <div className="p-2">
-                            {hospital?.map((row, index) => (
-                                <div
-                                key={index}
-                                className="w-full border-b border-dashed min-h-8 py-2 px-1 flex items-center gap-2"
-                                >
-                                <input
-                                    type="radio"
-                                    name="hospital"
-                                    checked={selectedHospitalIndex === index}
-                                    onChange={() => setSelectedHospitalIndex(index)}
-                                    className="w-3 h-3"
-                                    id={`hospital-${index}`}
-                                />
-                                <Label 
-                                    label={`${row.name} ${row.accept_eloa == 1 ? "⭐" : ""}`} 
-                                    className={"text-sm cursor-pointer"}
-                                    htmlFor={`hospital-${index}`}
-                                />
-                                </div>
-                            ))}
+              <div className={`flex gap-2 h-[450px] lg:h-[500px] min-w-[700px] lg:min-w-0 ${
+    loaType === "laboratory" ? "justify-center" : ""
+  }`}>
+                
+                {/* HOSPITAL SECTION */}
+                <div className={`${
+      loaType === "laboratory" ? "basis-full" : "basis-1/2"
+    } min-w-[320px] lg:min-w-0`}>
+                  <label className="text-[#1E3161] font-semibold text-sm roboto">
+                    Hospital or Clinic
+                    <span className='ml-2 text-xs text-gray-500 italic lg:hidden'>
+                      (⇄ Swipe horizontally)
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]"
+                    onChange={(e) => onSearchHospital(e.target.value)}
+                  />
+                  <ScrollArea className="bg-[#F6F6F6] mt-2 rounded-lg p-2 h-[380px] lg:h-[420px]">
+                    <div className={`min-w-[600px] lg:min-w-0 ${(!hospital || hosploading) && 'flex items-center justify-center h-96 w-full'}`}>
+                      {hosploading ? (
+                        <SyncLoader color="#CDCDCD" margin={10} size={15} />
+                      ) : hospital ? (
+                        <div className="p-2">
+                          {hospital.map((row, index) => (
+                            <div
+                              key={index}
+                              className="w-full border-b border-dashed min-h-8 py-2 px-1 flex items-center gap-2"
+                            >
+                              <input
+                                type="radio"
+                                name="hospital"
+                                checked={selectedHospitalIndex === index}
+                                onChange={() => setSelectedHospitalIndex(index)}
+                                className="w-3 h-3"
+                                id={`hospital-${index}`}
+                              />
+                              <Label
+                                label={`${row.name} ${row.accept_eloa == 1 ? "⭐" : ""}`}
+                                className="text-sm cursor-pointer"
+                                htmlFor={`hospital-${index}`}
+                              />
                             </div>
-                        ) : (
-                            <span className="text-red-600 font-semibold text-sm">No hospital found</span>
-                        )}
+                          ))}
                         </div>
-                        <ScrollBar orientation="horizontal" />
-                        <ScrollBar orientation="vertical" />
-                    </ScrollArea>
+                      ) : (
+                        <span className="text-red-600 font-semibold text-sm">No hospital found</span>
+                      )}
                     </div>
+                    <ScrollBar orientation="horizontal" />
+                    <ScrollBar orientation="vertical" />
+                  </ScrollArea>
+                </div>
 
-                    {/* RIGHT DOCTOR */}
-                    <div className="basis-1/2 min-w-[320px] lg:min-w-0">
+                {/* DOCTOR SECTION (only for consultation) */}
+                {loaType === "consultation" && (
+                  <div className="basis-1/2 min-w-[320px] lg:min-w-0">
                     <label className="text-[#1E3161] font-semibold text-sm roboto">
-                        Doctor (optional)
+                      Doctor (optional)
                     </label>
                     <input
-                        type="text"
-                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]"
-                        disabled={selectedHospitalIndex === null || hosploading}
-                        onChange={(e) => onSearchDoctor(e.target.value)}
+                      type="text"
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161]"
+                      disabled={selectedHospitalIndex === null || hosploading}
+                      onChange={(e) => onSearchDoctor(e.target.value)}
                     />
                     <ScrollArea className="bg-[#F6F6F6] mt-2 rounded-lg p-2 h-[380px] lg:h-[420px]">
-                        <div className={`min-w-[600px] lg:min-w-0 
-                                    ${(!doctor || docloading ) && 'flex items-center justify-center h-96 w-full'}`}>
+                      <div className={`min-w-[600px] lg:min-w-0 ${(!doctor || docloading) && 'flex items-center justify-center h-96 w-full'}`}>
                         {docloading ? (
-                            <SyncLoader color="#CDCDCD" margin={10} size={15} />
+                          <SyncLoader color="#CDCDCD" margin={10} size={15} />
                         ) : doctor ? (
-                            <div className="p-2">
-                            {doctor?.map((row, index) => (
-                                <div
+                          <div className="p-2">
+                            {doctor.map((row, index) => (
+                              <div
                                 key={index}
                                 className="w-full border-b border-dashed min-h-8 py-2 px-1 flex items-center gap-2"
-                                >
+                              >
                                 <input
-                                    type="radio"
-                                    name="doctor"
-                                    checked={selectedDoctorIndex === index}
-                                    onChange={() => setSelectedDoctorIndex(index)}
-                                    className="w-3 h-3"
-                                    id={`doctor-${index}`}
+                                  type="radio"
+                                  name="doctor"
+                                  checked={selectedDoctorIndex === index}
+                                  onChange={() => setSelectedDoctorIndex(index)}
+                                  className="w-3 h-3"
+                                  id={`doctor-${index}`}
                                 />
                                 <Label
-                                    label={
+                                  label={
                                     <>
-                                        {row.last}, {row.first} <br />
-                                        {row.specialization}
+                                      {row.last}, {row.first} <br />
+                                      {row.specialization}
                                     </>
-                                    }
-                                    className="text-sm cursor-pointer"
-                                    htmlFor={`doctor-${index}`}
+                                  }
+                                  className="text-sm cursor-pointer"
+                                  htmlFor={`doctor-${index}`}
                                 />
-                                </div>
+                              </div>
                             ))}
-                            </div>
+                          </div>
                         ) : (
-                            <span className="text-red-600 font-semibold text-sm">No doctor found</span>
+                          <span className="text-red-600 font-semibold text-sm">No doctor found</span>
                         )}
-                        </div>
-                        <ScrollBar orientation="horizontal" />
-                        <ScrollBar orientation="vertical" />
+                      </div>
+                      <ScrollBar orientation="horizontal" />
+                      <ScrollBar orientation="vertical" />
                     </ScrollArea>
-                    </div>
-                </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Footer */}
             <DialogFooter className="w-full mt-4 overflow-x-auto">
-            <div className="flex items-center justify-between gap-4 min-w-[700px] lg:min-w-0 roboto">
-                
-                {/* left side */}
+              <div className="flex items-center justify-between gap-4 min-w-[700px] lg:min-w-0 roboto">
+                {/* Checkbox */}
                 <div className="text-sm text-[#1E3161] font-medium flex items-center gap-2 shrink-0">
-                <input
+                  <input
                     type='checkbox'
                     id="accepting_eloa"
                     className='cursor-pointer'
                     checked={!!isAcceptEloa}
-                    onChange={(e) => handleEloaCheckbox(e)}
-                />
-                <label htmlFor="accepting_eloa" className='font-bold px-2 py-2 text-xs cursor-pointer'>
+                    onChange={handleEloaCheckbox}
+                  />
+                  <label htmlFor="accepting_eloa" className='font-bold px-2 py-2 text-xs cursor-pointer'>
                     SHOW ONLY PROVIDERS ACCEPTING E-LOA
-                </label>
+                  </label>
                 </div>
 
-                {/* legend */}
+                {/* Legend */}
                 <div className="flex flex-col items-center text-xs roboto shrink-0">
-                <h1 className='font-bold'>LEGEND</h1>
-                <h1 className='text-[#1E3161] font-bold '>⭐ - <span className='uppercase'>Accepts e-LOA</span></h1>
+                  <h1 className='font-bold'>LEGEND</h1>
+                  <h1 className='text-[#1E3161] font-bold '>⭐ - <span className='uppercase'>Accepts e-LOA</span></h1>
                 </div>
 
-                {/* buttons */}
+                {/* Buttons */}
                 <div className="flex gap-3 shrink-0">
-                <DialogClose>
+                  <DialogClose>
                     <h1 className='px-4 py-1 rounded-lg bg-[#1E3161] text-white text-sm'>Cancel</h1>
-                </DialogClose>
-                <button 
-                    type="button" 
+                  </DialogClose>
+                  <button
+                    type="button"
                     onClick={onSubmit}
                     className="px-4 py-1 rounded-lg bg-[#1E3161] text-white text-sm"
-                >
+                  >
                     Submit
-                </button>
+                  </button>
                 </div>
-            </div>
+              </div>
             </DialogFooter>
-
-
-            </>
+          </>
         )}
       </DialogContent>
     </Dialog>
