@@ -192,15 +192,15 @@ function FindHospitalDialog({ setSelectedHospital, setSelectedDoctor }) {
 
             {/* Content */}
             <div className="overflow-x-auto lg:overflow-x-hidden">
-                <p className="absolute top-0 right-2 text-xs text-gray-500 italic md:hidden">
-                  ⇄ Swipe horizontally
-                </p>
                 <div className="flex gap-2 h-[450px] lg:h-[500px] min-w-[700px] lg:min-w-0">
 
                     {/* LEFT HOSPITAL */}
                     <div className="basis-1/2 min-w-[320px] lg:min-w-0">
                     <label className="text-[#1E3161] font-semibold text-sm roboto">
-                        Hospital or Clinic
+                        Hospital or Clinic 
+                        <span className='ml-2 text-xs text-gray-500 italic lg:hidden'>
+                          (⇄ Swipe horizontally)
+                        </span>
                     </label>
                     <input
                         type="text"

@@ -129,14 +129,3 @@
 .roboto{
   font-family: roboto;
 }
-
-::-webkit-scrollbar {
-  height: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-}
