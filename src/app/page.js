@@ -1,9 +1,6 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="text-center">
-      <h1 className="font-bold roboto">Request a LOA in your preferred hospital</h1>
-    </div>
-  );
+  // Instantly redirect on the server
+  redirect("/request-loa");
 }
