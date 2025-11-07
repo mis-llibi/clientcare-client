@@ -105,7 +105,7 @@ function Laboratory() {
   };
 
   const onSubmit = (data) => {
-      console.log(data)
+      // console.log(data)
 
       const formData = new FormData()
       formData.append('alt_email', data.alt_email)
