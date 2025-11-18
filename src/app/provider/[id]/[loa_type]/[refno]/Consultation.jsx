@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 // Components
@@ -15,6 +15,7 @@ import PhoneInputMask from '@/components/InputMask'
 // Hooks
 import { useForm, Controller } from 'react-hook-form'
 import { useClientRequest } from '@/hooks/useClientRequest'
+import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop'
 
 // Helpers
 import { applink } from '@/lib/applink'
@@ -22,7 +23,11 @@ import { applink } from '@/lib/applink'
 function Consultation({patient, doctors, provider, refno, setIsSubmitted, provider_id}) {
 
 
+    const [isTyping, setIsTyping] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [loadingComplaints, setLoadingComplaints] = useState(false)
+    const [getText, setGetText] = useState("")
+    const [complaints, setComplaints] = useState([])
   const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm({
     defaultValues: {
         refno: refno,
@@ -31,8 +36,9 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
   })
 
   const { submitClientRequestConsultation } = useClientRequest()
+  const { searchComplaints } = ClientRequestDesktop()
 
-  const complaints = [
+  const complaintsV1 = [
     { value: 0, label: 'Back Pain / Body Pain' },
     { value: 1, label: 'Chest Pain' },
     { value: 2, label: 'Cough' },
@@ -55,6 +61,33 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
     { value: 19, label: 'Dizziness' },
     { value: 20, label: 'Fever' },
   ]
+
+  useEffect(() => {
+    
+    if(isTyping){
+
+      setComplaints([])
+      
+      if (!getText) return
+
+      setLoadingComplaints(true)
+      const timeoutId = setTimeout(() => {
+        searchComplaints({ 
+          complaint: getText,
+          setLoadingComplaints: setLoadingComplaints,
+          setComplaints: setComplaints
+          
+        })
+      }, 500)
+      return () => clearTimeout(timeoutId)
+
+
+
+    }else{
+      setComplaints(complaintsV1)
+    }
+
+  }, [isTyping, getText])
 
   const onSubmit = (data) => {
     if (data.contact) {
@@ -120,6 +153,9 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
                             return textA < textB ? -1 : textA > textB ? 1 : 0
                             }) || []
                         }
+                        setIsTyping={setIsTyping}
+                        loadingComplaints={loadingComplaints}
+                        setGetText={setGetText}
                         />
                     </div>
 

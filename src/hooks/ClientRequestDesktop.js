@@ -132,11 +132,32 @@ export const ClientRequestDesktop = () => {
 
     };
 
+    const searchComplaints = async({setLoadingComplaints, setComplaints, ...props}) => {
+
+        await csrf()
+
+        axios.get('/api/search-complaint', {
+            params: {
+                complaint: props.complaint
+            }
+        })
+        .then((res) => {
+            setComplaints(res.data)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+        .finally(() => {
+            setLoadingComplaints(false)
+        })
+    }
+
     return {
         searcHospital,
         searchDoctor,
         submitRequestConsultation,
-        submitRequestLaboratory
+        submitRequestLaboratory,
+        searchComplaints
     }
 
 

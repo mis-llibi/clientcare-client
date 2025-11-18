@@ -14,6 +14,7 @@ import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop';
 import FindHospitalDialog from './FindHospitalDialog';
 import Swal from 'sweetalert2';
 import { MoonLoader } from 'react-spinners';
+import FindProviderDialog from './FindHospitalDialog';
 
 function Consultation() {
 
@@ -21,8 +22,13 @@ function Consultation() {
 
     const [selectedHospital, setSelectedHospital] = useState()
     const [selectedDoctor, setSelectedDoctor] = useState()
+    const [isTyping, setIsTyping] = useState(false)
+    const [complaints, setComplaints] = useState([])
+    const [getText, setGetText] = useState("")
+    const [loadingComplaints, setLoadingComplaints] = useState(false)
 
-    const { submitRequestConsultation } = ClientRequestDesktop()
+
+    const { submitRequestConsultation, searchComplaints } = ClientRequestDesktop()
 
 
     const { register, handleSubmit, watch, reset, control, formState: {errors}, setValue } = useForm({
@@ -49,7 +55,7 @@ function Consultation() {
     },
   ];
 
-  const complaints = [
+  const complaintsV1 = [
     { value: 0, label: 'Back Pain / Body Pain' },
     { value: 1, label: 'Chest Pain' },
     { value: 2, label: 'Cough' },
@@ -72,6 +78,33 @@ function Consultation() {
     { value: 19, label: 'Dizziness' },
     { value: 20, label: 'Fever' },
   ]
+
+  useEffect(() => {
+    
+    if(isTyping){
+
+      setComplaints([])
+      
+      if (!getText) return
+
+      setLoadingComplaints(true)
+      const timeoutId = setTimeout(() => {
+        searchComplaints({ 
+          complaint: getText,
+          setLoadingComplaints: setLoadingComplaints,
+          setComplaints: setComplaints
+          
+        })
+      }, 500)
+      return () => clearTimeout(timeoutId)
+
+
+
+    }else{
+      setComplaints(complaintsV1)
+    }
+
+  }, [isTyping, getText])
 
   const verificationDetailsType = watch("verificationDetailsType");
   const typeOfPatient = watch("patientType");
@@ -106,6 +139,16 @@ function Consultation() {
 
   const onSubmit = (data) => {
 
+
+    if(data.email == data.alt_email){
+      Swal.fire({
+        title: "Email duplicate",
+        text: "Your email is duplicated, change the alternate email",
+        icon: "warning"
+      })
+      return
+    }
+
     if (data.contact) {
         const digits = data.contact.replace(/\D/g, ''); // remove all non-digits
         // ensure it starts with 0 (not +63)
@@ -115,6 +158,7 @@ function Consultation() {
         data.contact = '0' + digits;
         }
     }
+
 
     Swal.fire({
       title: "Are you sure?",
@@ -223,14 +267,15 @@ function Consultation() {
               </div>
               <div>
                 <label htmlFor="dob" className="text-[#1E3161] font-semibold roboto">Date of Birth</label>
-                <input 
-                  type="date" 
-                  id="dob" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                <input
+                  type="date"
+                  id="dob"
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100"
                   {...register('dob', {
                     required: "Date of Birth is required"
                   })}
-                  />
+                  onKeyDown={(e) => e.preventDefault()} // disable typing
+                />
                   {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
               </div>
             </div>
@@ -267,10 +312,11 @@ function Consultation() {
                 <input 
                   type="date" 
                   id="dob" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100" 
                   {...register('dob', {
                     required: "Date of Birth is required"
                   })}
+                  onKeyDown={(e) => e.preventDefault()} // disable typing
                   />
                   {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
               </div>
@@ -339,6 +385,9 @@ function Consultation() {
                 return textA < textB ? -1 : textA > textB ? 1 : 0
                 }) || []
             }
+            setIsTyping={setIsTyping}
+            loadingComplaints={loadingComplaints}
+            setGetText={setGetText}
             />
         </div>
 
@@ -346,7 +395,7 @@ function Consultation() {
           <Label 
             label={"Find your preferred accredited provider (Hospital / Clinic)"}
           />
-          <FindHospitalDialog 
+          <FindProviderDialog 
             setSelectedDoctor={setSelectedDoctor}
             setSelectedHospital={setSelectedHospital}
             loaType={"consultation"}

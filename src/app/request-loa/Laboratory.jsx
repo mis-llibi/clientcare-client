@@ -107,6 +107,14 @@ function Laboratory() {
   const onSubmit = (data) => {
       // console.log(data)
 
+      if(data.email == data.alt_email){
+        Swal.fire({
+          title: "Email duplicate",
+          text: "Your email is duplicated, change the alternate email",
+          icon: "warning"
+        })
+        return
+      }
       if (data.contact) {
           const digits = data.contact.replace(/\D/g, ''); // remove all non-digits
           // ensure it starts with 0 (not +63)
@@ -242,10 +250,11 @@ function Laboratory() {
                 <input 
                   type="date" 
                   id="dob" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100" 
                   {...register('dob', {
                     required: "Date of Birth is required"
                   })}
+                  onKeyDown={(e) => e.preventDefault()}
                   />
                   {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
               </div>
@@ -283,10 +292,11 @@ function Laboratory() {
                 <input 
                   type="date" 
                   id="dob" 
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100" 
                   {...register('dob', {
                     required: "Date of Birth is required"
                   })}
+                  onKeyDown={(e) => e.preventDefault()}
                   />
                   {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
               </div>

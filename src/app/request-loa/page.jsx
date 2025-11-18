@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Image from 'next/image'
+import Head from 'next/head'
 
 // Assets
 import BgImage from "@/assets/bg-portal.webp"
@@ -22,7 +23,6 @@ function RequestLoa() {
 
   return (
     <>
-
       {showTerms ? (
         <>
          <TermsOfUse onAccept={() => setShowTerms(false)} device={"desktop"} />
