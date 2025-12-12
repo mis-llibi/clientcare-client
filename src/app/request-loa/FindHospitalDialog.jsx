@@ -92,6 +92,7 @@ function FindProviderDialog({ loaType, setSelectedHospital, setSelectedDoctor })
 
   const onSearchDoctor = (value) => {
     setDocloading(true);
+    setSearch(value)
     if (timer) clearTimeout(timer);
 
     setTimer(
