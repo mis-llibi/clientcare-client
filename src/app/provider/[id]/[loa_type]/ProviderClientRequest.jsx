@@ -172,10 +172,11 @@ function ProviderClientRequest({ provider, loa_type }) {
                     <input 
                       type="date" 
                       id="dob" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100"
                       {...register('dob', {
                         required: "Date of Birth is required"
                       })}
+                      onKeyDown={(e) => e.preventDefault()}
                       />
                       {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
                   </div>
@@ -214,10 +215,11 @@ function ProviderClientRequest({ provider, loa_type }) {
                     <input 
                       type="date" 
                       id="dob" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100"
                       {...register('dob', {
                         required: "Date of Birth is required"
                       })}
+                      onKeyDown={(e) => e.preventDefault()}
                       />
                       {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
                   </div>

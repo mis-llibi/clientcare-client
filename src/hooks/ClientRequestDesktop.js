@@ -73,11 +73,19 @@ export const ClientRequestDesktop = () => {
         axios.post('/api/submit-request-consultation', props)
         .then((res) => {
             if(res.status == 201){
-                Swal.fire({
-                    title: "Successful Request for LOA",
-                    text: `Your request has been submitted, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
-                    icon: "success"
-                })
+                if(res.data.isAuto == false){
+                    Swal.fire({
+                            title: "Successful Request for LOA",
+                            text: `Your request has been submitted, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
+                            icon: "success"
+                    })
+                }else{
+                    Swal.fire({
+                            title: "Successful Request for LOA",
+                            text: `Your request has been successfully approved, we already send you the loa in your email`,
+                            icon: "success"
+                    })
+                }
                 reset()
                 setSelectedDoctor()
                 setSelectedHospital()

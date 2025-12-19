@@ -20,7 +20,7 @@ import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop'
 // Helpers
 import { applink } from '@/lib/applink'
 
-function Consultation({patient, doctors, provider, refno, setIsSubmitted, provider_id}) {
+function Consultation({patient, doctors, provider, refno, setIsSubmitted, provider_id, setIsAuto}) {
 
 
     const [isTyping, setIsTyping] = useState(false)
@@ -28,7 +28,7 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
     const [loadingComplaints, setLoadingComplaints] = useState(false)
     const [getText, setGetText] = useState("")
     const [complaints, setComplaints] = useState([])
-  const { register, handleSubmit, watch, reset, control, formState: {errors} } = useForm({
+  const { register, handleSubmit, watch, reset, control, formState: {errors}, setError, clearErrors } = useForm({
     defaultValues: {
         refno: refno,
         provider_id: provider_id
@@ -119,7 +119,8 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
           submitClientRequestConsultation({
               ...data,
               setLoading,
-              setIsSubmitted
+              setIsSubmitted,
+              setIsAuto
           })
       }
     })
@@ -140,22 +141,18 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
                             htmlFor={"complaint"}
                         />
                         <InputSelectMultiple
-                        id="complaint"
-                        label="Select or type complaint"
-                        register={register('complaint')}
-                        required={true}
-                        errors={errors?.complaint}
-                        control={control}
-                        option={
-                            complaints.sort(function (a, b) {
-                            var textA = a.label.toUpperCase()
-                            var textB = b.label.toUpperCase()
-                            return textA < textB ? -1 : textA > textB ? 1 : 0
-                            }) || []
-                        }
-                        setIsTyping={setIsTyping}
-                        loadingComplaints={loadingComplaints}
-                        setGetText={setGetText}
+                          id="complaint"
+                          label="Select or type complaint"
+                          register={register('complaint')}
+                          required={true}
+                          errors={errors?.complaint}
+                          control={control}
+                          setError={setError}
+                          clearErrors={clearErrors}
+                          option={complaints.sort((a,b)=>a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1) || []}
+                          setIsTyping={setIsTyping}
+                          loadingComplaints={loadingComplaints}
+                          setGetText={setGetText}
                         />
                     </div>
 

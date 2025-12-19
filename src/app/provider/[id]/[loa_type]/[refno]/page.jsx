@@ -16,6 +16,7 @@ function Page() {
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [isAuto, setIsAuto] = useState(false)
     const [getData, setGetData] = useState(null)
     const [getDoctors, setGetDoctors] = useState([])
     const [getHospitalName, setGetHospitalName] = useState("")
@@ -46,7 +47,7 @@ function Page() {
   if (isLoading) return <Loading />;
   if (isError) return <Error message={"We cannot find you in our database, please go back to the member's form."} />
   if (isSubmitted) return <Submitted 
-                            message={`Your request has been submitted, your reference # is ${refno}. We will notify you and the hospital/clinic through email and mobile number you provided.`} 
+                            message={`${isAuto ? "Your request has been approved" : `Your request has been submitted, your reference # is ${refno}. We will notify you and the hospital/clinic through email and mobile number you provided.`}`} 
                             provider_id={id}
                             loa_type={loa_type}
                             />
@@ -60,6 +61,7 @@ function Page() {
                                     refno={refno}
                                     setIsSubmitted={setIsSubmitted}
                                     provider_id={id}
+                                    setIsAuto={setIsAuto}
                                     /> 
                                 : <Laboratory 
                                     patient={getData}

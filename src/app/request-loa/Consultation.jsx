@@ -31,7 +31,7 @@ function Consultation() {
     const { submitRequestConsultation, searchComplaints } = ClientRequestDesktop()
 
 
-    const { register, handleSubmit, watch, reset, control, formState: {errors}, setValue } = useForm({
+    const { register, handleSubmit, watch, reset, control, formState: {errors}, setValue, setError, clearErrors } = useForm({
         defaultValues: {
             patientType: "employee",
             verificationDetailsType: "personal",
@@ -372,23 +372,20 @@ function Consultation() {
                 htmlFor={"complaint"}
             />
             <InputSelectMultiple
-            id="complaint"
-            label="Select or type complaint"
-            register={register('complaint')}
-            required={true}
-            errors={errors?.complaint}
-            control={control}
-            option={
-                complaints.sort(function (a, b) {
-                var textA = a.label.toUpperCase()
-                var textB = b.label.toUpperCase()
-                return textA < textB ? -1 : textA > textB ? 1 : 0
-                }) || []
-            }
-            setIsTyping={setIsTyping}
-            loadingComplaints={loadingComplaints}
-            setGetText={setGetText}
+              id="complaint"
+              label="Select or type complaint"
+              register={register('complaint')}
+              required={true}
+              errors={errors?.complaint}
+              control={control}
+              setError={setError}
+              clearErrors={clearErrors}
+              option={complaints.sort((a,b)=>a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1) || []}
+              setIsTyping={setIsTyping}
+              loadingComplaints={loadingComplaints}
+              setGetText={setGetText}
             />
+
         </div>
 
         <div className='flex flex-col w-full'>

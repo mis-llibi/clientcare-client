@@ -91,14 +91,15 @@ export const useClientRequest = () => {
         })
     }
 
-    const submitClientRequestConsultation = async({setLoading, setIsSubmitted, ...props}) => {
+    const submitClientRequestConsultation = async({setLoading, setIsSubmitted, setIsAuto, ...props}) => {
         await csrf()
 
         axios.post('/api/submit-update-request/consultation', props)
         .then((res) => {
             // console.log(res)
-            if(res.status == 200){
+            if(res.status == 201){
                 setIsSubmitted(true)
+                setIsAuto(res.data.isAuto)
             }
         })
         .catch((err) => {
