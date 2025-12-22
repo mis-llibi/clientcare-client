@@ -34,7 +34,7 @@ export const useClientRequest = () => {
 
     }
 
-    const submitClient = async({setLoading, ...props}) => {
+    const submitClient = async({setLoading, setErrorLogs, setShowErrorLogsModal, ...props}) => {
             await csrf()
             
             axios.post('/api/submit-client-request', {
@@ -45,19 +45,35 @@ export const useClientRequest = () => {
                 router.push(res.data)
             })
             .catch((err) => {
-                // console.log(err)
-                if(err.status == 404){
-                    Swal.fire({
-                        title: "Error",
-                        text: `${err.response.data.message}`,
-                        icon: "error",
-                        customClass: {
-                            title: 'roboto',
-                            htmlContainer: 'roboto' // applies to text
-                        }
-                    })
-                    setLoading(false)
-                }
+                if(err.status == 404 && err.response.data.message == "Cannot find the patient"){
+                        Swal.fire({
+                            title: "Validation Error",
+                            text: `We are unable to validate your information. Please check your input and try again.`,
+                            icon: "error",
+                            showDenyButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: true,
+                            confirmButtonText: "Report",
+                            denyButtonText: "Close"
+                        }).then((res) => {
+                            if(res.isConfirmed){
+                                setErrorLogs(err.response.data.error_data)
+                                setShowErrorLogsModal(true)
+                            }else{
+                                setErrorLogs(null)
+                                setShowErrorLogsModal(false)
+                            }
+                        })
+                    }else{
+                        Swal.fire({
+                            title: "Error",
+                            text: `${err.response.data.message}`,
+                            icon: "error"
+                        })
+                    }
+            })
+            .finally(() => {
+                setLoading(false)
             })
         
     }

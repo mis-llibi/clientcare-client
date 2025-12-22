@@ -14,6 +14,7 @@ import { FaFileAlt } from 'react-icons/fa';
 import { HiMiniXMark } from 'react-icons/hi2';
 import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop';
 import Swal from 'sweetalert2';
+import ClientErrorLogForm from './ClientErrorLogForm';
 
 function Laboratory() {
 
@@ -21,6 +22,9 @@ function Laboratory() {
 
     const [selectedHospital, setSelectedHospital] = useState()
     const [selectedDoctor, setSelectedDoctor] = useState()
+
+    const [errorLogs, setErrorLogs] = useState([])
+    const [showErrorLogsModal, setShowErrorLogsModal] = useState(false)
 
     const { register, handleSubmit, watch, reset, control, formState: {errors}, setValue } = useForm({
         defaultValues: {
@@ -169,6 +173,8 @@ function Laboratory() {
             setLoading,
             reset,
             setSelectedHospital,
+            setErrorLogs,
+            setShowErrorLogsModal
         })
       }
     })
@@ -486,6 +492,14 @@ function Laboratory() {
 
       </div>
     </form>
+
+
+    {showErrorLogsModal && (
+      <ClientErrorLogForm 
+        onClose={() => setShowErrorLogsModal(false)}
+        errorData={errorLogs}
+      />
+    )}
     
     </>
   )

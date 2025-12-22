@@ -15,6 +15,7 @@ import FindHospitalDialog from './FindHospitalDialog';
 import Swal from 'sweetalert2';
 import { MoonLoader } from 'react-spinners';
 import FindProviderDialog from './FindHospitalDialog';
+import ClientErrorLogForm from './ClientErrorLogForm';
 
 function Consultation() {
 
@@ -26,6 +27,9 @@ function Consultation() {
     const [complaints, setComplaints] = useState([])
     const [getText, setGetText] = useState("")
     const [loadingComplaints, setLoadingComplaints] = useState(false)
+
+    const [errorLogs, setErrorLogs] = useState([])
+    const [showErrorLogsModal, setShowErrorLogsModal] = useState(false)
 
 
     const { submitRequestConsultation, searchComplaints } = ClientRequestDesktop()
@@ -137,6 +141,12 @@ function Consultation() {
     setValue('providerEmail2', selectedHospital?.email2)
   }, [selectedHospital, selectedDoctor])
 
+  useEffect(() => {
+    if(errorLogs.id){
+      console.log(errorLogs)
+    }
+  }, [errorLogs])
+
   const onSubmit = (data) => {
 
 
@@ -181,7 +191,9 @@ function Consultation() {
           setLoading,
           reset,
           setSelectedHospital,
-          setSelectedDoctor
+          setSelectedDoctor,
+          setErrorLogs,
+          setShowErrorLogsModal
         })
       }
     })
@@ -522,6 +534,13 @@ function Consultation() {
 
       </div>
     </form>
+
+    {showErrorLogsModal && (
+      <ClientErrorLogForm 
+        onClose={() => setShowErrorLogsModal(false)}
+        errorData={errorLogs}
+      />
+    )}
     
     </>
   )

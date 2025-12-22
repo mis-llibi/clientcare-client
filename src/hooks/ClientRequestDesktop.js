@@ -2,6 +2,7 @@ import axios from "@/lib/axios";
 import useSWR from "swr";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
+import ClientErrorLogForm from "@/app/request-loa/ClientErrorLogForm";
 
 
 export const ClientRequestDesktop = () => {
@@ -67,7 +68,7 @@ export const ClientRequestDesktop = () => {
         })
     }
 
-    const submitRequestConsultation = async({setLoading, reset, setSelectedHospital, setSelectedDoctor, ...props}) => {
+    const submitRequestConsultation = async({setLoading, reset, setSelectedHospital, setSelectedDoctor, setErrorLogs, setShowErrorLogsModal, ...props}) => {
         await csrf()
 
         axios.post('/api/submit-request-consultation', props)
@@ -93,7 +94,26 @@ export const ClientRequestDesktop = () => {
             // console.log(res)
         })
         .catch((err) => {
-            if(err.status == 404){
+            if(err.status == 404 && err.response.data.message == "Cannot find the patient"){
+                Swal.fire({
+                    title: "Validation Error",
+                    text: `We are unable to validate your information. Please check your input and try again.`,
+                    icon: "error",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonText: "Report",
+                    denyButtonText: "Close"
+                }).then((res) => {
+                    if(res.isConfirmed){
+                        setErrorLogs(err.response.data.error_data)
+                        setShowErrorLogsModal(true)
+                    }else{
+                        setErrorLogs(null)
+                        setShowErrorLogsModal(false)
+                    }
+                })
+            }else{
                 Swal.fire({
                     title: "Error",
                     text: `${err.response.data.message}`,
@@ -106,7 +126,7 @@ export const ClientRequestDesktop = () => {
         })
     }
 
-    const submitRequestLaboratory = async ({ formData, setLoading, reset, setSelectedHospital, }) => {
+    const submitRequestLaboratory = async ({ formData, setLoading, reset, setSelectedHospital, setErrorLogs, setShowErrorLogsModal}) => {
 
         await csrf()
         axios.post('/api/submit-request-laboratory', formData, {
@@ -126,7 +146,26 @@ export const ClientRequestDesktop = () => {
             }
         })
         .catch((err) => {
-            if(err.status == 404){
+           if(err.status == 404 && err.response.data.message == "Cannot find the patient"){
+                Swal.fire({
+                    title: "Validation Error",
+                    text: `We are unable to validate your information. Please check your input and try again.`,
+                    icon: "error",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonText: "Report",
+                    denyButtonText: "Close"
+                }).then((res) => {
+                    if(res.isConfirmed){
+                        setErrorLogs(err.response.data.error_data)
+                        setShowErrorLogsModal(true)
+                    }else{
+                        setErrorLogs(null)
+                        setShowErrorLogsModal(false)
+                    }
+                })
+            }else{
                 Swal.fire({
                     title: "Error",
                     text: `${err.response.data.message}`,
@@ -160,12 +199,39 @@ export const ClientRequestDesktop = () => {
         })
     }
 
+    const SubmitErrorLogs = async({onClose, ...props}) => {
+        await csrf()
+
+        axios.post('/api/error-logs', props)
+            .then((res) => {
+                if(res.status == 204){
+                    Swal.fire({
+                        title: "Success",
+                        text: "Please allow 4 - 8 hours to validate your membership information. Meanwhile you may contact our 24/7 Client Care Hotline for urgent assistance.",
+                        icon: "success",
+                        allowOutsideClick: false,
+                        showConfirmButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: "OK"
+                    }).then((res) => {
+                        if(res.isConfirmed){
+                            onClose()
+                        }
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     return {
         searcHospital,
         searchDoctor,
         submitRequestConsultation,
         submitRequestLaboratory,
-        searchComplaints
+        searchComplaints,
+        SubmitErrorLogs
     }
 
 

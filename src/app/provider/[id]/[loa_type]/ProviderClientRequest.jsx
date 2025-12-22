@@ -8,10 +8,14 @@ import SelectComponent from "@/components/Select";
 import { useClientRequest } from "@/hooks/useClientRequest";
 import Link from "next/link";
 import { applink } from "@/lib/applink";
+import ClientErrorLogForm from "@/app/request-loa/ClientErrorLogForm";
 
 
 function ProviderClientRequest({ provider, loa_type }) {
   const [loading, setLoading] = useState(false);
+
+   const [errorLogs, setErrorLogs] = useState([])
+   const [showErrorLogsModal, setShowErrorLogsModal] = useState(false)
 
   const {
     register,
@@ -51,7 +55,9 @@ function ProviderClientRequest({ provider, loa_type }) {
     setLoading(true)
     submitClient({
         ...data,
-        setLoading
+        setLoading,
+        setErrorLogs,
+        setShowErrorLogsModal
     })
   };
 
@@ -288,6 +294,13 @@ function ProviderClientRequest({ provider, loa_type }) {
           </div>
         </form>
       </Card>
+
+    {showErrorLogsModal && (
+      <ClientErrorLogForm 
+        onClose={() => setShowErrorLogsModal(false)}
+        errorData={errorLogs}
+      />
+    )}
     </>
   );
 }
