@@ -141,12 +141,6 @@ function Consultation() {
     setValue('providerEmail2', selectedHospital?.email2)
   }, [selectedHospital, selectedDoctor])
 
-  useEffect(() => {
-    if(errorLogs.id){
-      console.log(errorLogs)
-    }
-  }, [errorLogs])
-
   const onSubmit = (data) => {
 
 

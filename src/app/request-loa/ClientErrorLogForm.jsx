@@ -10,10 +10,6 @@ export default function ClientErrorLogForm({
 }) {
 
     const { SubmitErrorLogs } = ClientRequestDesktop()
-    const [loading, setLoading] = useState(false)
-
-
-
     
     // lock body scroll while modal is open
     useEffect(() => {
