@@ -141,6 +141,15 @@ function FindProviderDialog({ loaType, setSelectedHospital, setSelectedDoctor })
       )
     }
   }, [isAcceptEloa])
+  
+
+  useEffect(() => {
+
+    setTimeout(() => {
+      setShowInfographics(false)
+    }, 4000)
+
+  }, [showInfographics])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -155,17 +164,49 @@ function FindProviderDialog({ loaType, setSelectedHospital, setSelectedDoctor })
 
         {showInfographics ? (
           <>
-          <DialogContent className="w-full max-w-3xl sm:max-w-4xl">
-            <DialogHeader>
-              <DialogTitle>E-LOA</DialogTitle>
+          <DialogContent
+            className="
+              w-[95vw] sm:w-full
+              max-w-[95vw] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
+              max-h-[85vh]
+              overflow-y-auto
+              rounded-2xl sm:rounded-3xl
+            "
+          >
+            <DialogHeader className="px-1">
+              <DialogTitle className="text-sm sm:text-base md:text-lg">E-LOA</DialogTitle>
             </DialogHeader>
-            <div className="">
-              <Image src={Infographics} width={800} height={400} alt="Infographics" className="w-full h-auto object-contain" />
+
+            {/* body */}
+            <div className="mt-2">
+              <div
+                className="
+                  w-full
+                  rounded-xl
+                  border border-slate-200
+                  bg-white
+                  overflow-hidden
+                "
+              >
+                <Image
+                  src={Infographics}
+                  alt="Infographics"
+                  width={1400}
+                  height={800}
+                  priority
+                  className="
+                    w-full
+                    h-auto
+                    object-contain
+                  "
+                />
+              </div>
             </div>
-            <DialogFooter className="flex justify-end">
+
+            <DialogFooter className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button
-                className="px-4 py-1 rounded-lg bg-[#1E3161] text-white text-sm"
-                onClick={() => setShowInfographics(false)} // just hide infographic, keep dialog open
+                className="w-full sm:w-auto px-4 py-2 rounded-lg bg-[#1E3161] text-white text-sm"
+                onClick={() => setShowInfographics(false)}
               >
                 Okay
               </button>
