@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 
 // Assets
-import BgImage from '@/assets/bg-portal.webp'
 import PortalSticky from '@/assets/0115.gif'
 
 // Components
@@ -46,10 +45,10 @@ function RequestLoa() {
                   <span>Of</span>
                   <span>Authority</span>
                 </h2>
-                <Image
+                <Image unoptimized
                   src={PortalSticky}
                   alt="Portal Sticky"
-                  className="sticky rounded-2xl left-0 right-0 w-full h-full blur-[3px] opacity-90"
+                  className="sticky rounded-2xl left-0 right-0 w-full h-full opacity-90"
                 />
               </div>
             </div>
