@@ -3,7 +3,12 @@ import React, { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { Controller } from "react-hook-form";
 
-export default function FileUpload({ control, name, required }) {
+export default function FileUpload({
+  control,
+  name,
+  required,
+  className = "",
+}) {
   const [dragActive, setDragActive] = useState(false);
 
   const handleDrag = (e) => {
@@ -21,13 +26,13 @@ export default function FileUpload({ control, name, required }) {
       name={name}
       control={control}
       rules={{
-        required: required
+        required: required,
       }}
       render={({ field: { onChange }, fieldState: { error } }) => (
         <>
           <label
             htmlFor="file-upload"
-            className={`w-full max-w-md p-6 border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-center transition cursor-pointer roboto ${
+            className={`w-full ${className || "max-w-md"} p-6 border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-center transition cursor-pointer roboto ${
               dragActive ? "border-blue-500 bg-blue-50" : "border-gray-400"
             }`}
             onDragEnter={handleDrag}
@@ -64,7 +69,9 @@ export default function FileUpload({ control, name, required }) {
           </label>
 
           {error && (
-            <p className="text-red-800 text-sm font-semibold roboto">{error.message}</p>
+            <p className="text-red-800 text-sm font-semibold roboto">
+              {error.message}
+            </p>
           )}
         </>
       )}
