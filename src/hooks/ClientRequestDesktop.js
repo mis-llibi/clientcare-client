@@ -360,6 +360,40 @@ export const ClientRequestDesktop = () => {
       });
   };
 
+  const submitFollowupRequest = async ({
+    reference_number,
+    setLoading,
+    reset,
+  }) => {
+    await csrf();
+
+    axios
+      .post("/api/submit-followup-request", { reference_number })
+      .then((res) => {
+        if (res.status === 201 || res.status === 200) {
+          Swal.fire({
+            title: "Success",
+            text:
+              res.data.message || "Follow up request submitted successfully!",
+            icon: "success",
+          });
+          if (reset) reset();
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text:
+            err.response?.data?.message ||
+            "Something went wrong. Please try again later.",
+          icon: "error",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   return {
     searcHospital,
     searchDoctor,
@@ -369,5 +403,6 @@ export const ClientRequestDesktop = () => {
     submitReimbursement,
     searchComplaints,
     SubmitErrorLogs,
+    submitFollowupRequest,
   };
 };

@@ -39,6 +39,7 @@ const ReimbursementFormModal = ({ onClose, initialData }) => {
       in_patient: false,
       out_patient: false,
       opd_medicines: false,
+      request_origin: "client-care",
     },
   });
 
