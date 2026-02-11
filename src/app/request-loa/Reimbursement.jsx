@@ -125,7 +125,7 @@ function Reimbursement() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col items-center my-2">
           <h1 className="text-[#1E3161] font-bold roboto text-lg">
-            REIMBURSEMENT
+            MEMBER VERIFICATION
           </h1>
         </div>
 

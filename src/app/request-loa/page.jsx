@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Consultation from "./Consultation";
 import Laboratory from "./Laboratory";
 import Reimbursement from "./Reimbursement";
+import FollowUpRequest from "./FollowUpRequest";
 import TermsOfUse from "@/components/TermsOfUse";
 import NotificationSystem from "@/components/NotificationSystem";
 
@@ -60,6 +61,9 @@ function RequestLoa() {
                     <TabsTrigger value="reimbursement" className="roboto">
                       Reimbursement
                     </TabsTrigger>
+                    <TabsTrigger value="followup" className="roboto">
+                      Follow Up
+                    </TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="consultation">
@@ -72,6 +76,10 @@ function RequestLoa() {
 
                   <TabsContent value="reimbursement">
                     <Reimbursement />
+                  </TabsContent>
+
+                  <TabsContent value="followup">
+                    <FollowUpRequest />
                   </TabsContent>
                 </Tabs>
               </div>
