@@ -58,12 +58,12 @@ function RequestLoa() {
                     <TabsTrigger value="laboratory" className="roboto">
                       Laboratory
                     </TabsTrigger>
-                    <TabsTrigger value="reimbursement" className="roboto">
+                    {/* <TabsTrigger value="reimbursement" className="roboto">
                       Reimbursement
                     </TabsTrigger>
                     <TabsTrigger value="followup" className="roboto">
                       Follow Up
-                    </TabsTrigger>
+                    </TabsTrigger> */}
                   </TabsList>
 
                   <TabsContent value="consultation">
