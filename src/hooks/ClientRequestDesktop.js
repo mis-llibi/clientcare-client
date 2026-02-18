@@ -365,33 +365,57 @@ export const ClientRequestDesktop = () => {
     setLoading,
     reset,
   }) => {
-    await csrf();
+    try {
+      await csrf();
+      axios
+        .post("/api/submit-followup-request", { reference_number })
+        .then((res) => {
+          if (res.status === 201 || res.status === 200) {
+            const isWarning = res.data.type === "warning";
+            const isThumbsUp = res.data.type === "thumbsup";
 
-    axios
-      .post("/api/submit-followup-request", { reference_number })
-      .then((res) => {
-        if (res.status === 201 || res.status === 200) {
+            if (!isThumbsUp) {
+              Swal.fire({
+                title: isWarning ? "Warning" : "Success",
+                text:
+                  res.data.message ||
+                  "Follow up request submitted successfully!",
+                icon: isWarning ? "warning" : "success",
+              });
+            } else {
+              Swal.fire({
+                title: "Success",
+                text: res.data.message,
+                iconColor: "#22c55e",
+                iconHtml:
+                  '<i class="fa-solid fa-thumbs-up fa-sm text-green-500"></i>',
+              });
+            }
+            if (reset) reset();
+          }
+        })
+        .catch((err) => {
           Swal.fire({
-            title: "Success",
+            title: "Error",
             text:
-              res.data.message || "Follow up request submitted successfully!",
-            icon: "success",
+              err.response?.data?.message ||
+              "Something went wrong. Please try again later.",
+            icon: "error",
           });
-          if (reset) reset();
-        }
-      })
-      .catch((err) => {
-        Swal.fire({
-          title: "Error",
-          text:
-            err.response?.data?.message ||
-            "Something went wrong. Please try again later.",
-          icon: "error",
+        })
+        .finally(() => {
+          setLoading(false);
         });
-      })
-      .finally(() => {
-        setLoading(false);
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "Something went wrong. Please try again later.",
+        icon: "error",
       });
+      setLoading(false);
+    }
   };
 
   return {

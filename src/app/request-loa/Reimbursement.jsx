@@ -350,9 +350,6 @@ function Reimbursement() {
             </>
           )}
         </div>
-
-        <div className="border-2 mt-5 bg-[#E7E7E7]"></div>
-
         <div className="mt-5 flex flex-col gap-3">
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -376,20 +373,6 @@ function Reimbursement() {
                     {errors?.email?.message}
                   </h1>
                 )}
-              </div>
-              <div>
-                <label
-                  htmlFor="alt_email"
-                  className="text-[#1E3161] font-semibold roboto"
-                >
-                  Alternate Email (optional)
-                </label>
-                <input
-                  type="text"
-                  id="alt_email"
-                  className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
-                  {...register("alt_email")}
-                />
               </div>
               <div>
                 <label
