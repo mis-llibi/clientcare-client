@@ -126,7 +126,7 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
 
   return (
     <Card>
-      <h1 className='mb-2 text-[10px] font-bold roboto'>
+      <h1 className='mb-2 text-[15px] font-bold roboto'>
         Hi <span className='text-[#1E3161]'>{patient?.patient_first_name} {patient?.patient_last_name}</span>, Kindly answer the following:
       </h1>
 

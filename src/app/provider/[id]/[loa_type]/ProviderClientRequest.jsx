@@ -11,7 +11,7 @@ import { applink } from "@/lib/applink";
 import ClientErrorLogForm from "@/app/request-loa/ClientErrorLogForm";
 
 
-function ProviderClientRequest({ provider, loa_type }) {
+function ProviderClientRequest({ provider, loa_type, hashed_id }) {
   const [loading, setLoading] = useState(false);
 
    const [errorLogs, setErrorLogs] = useState([])
@@ -53,8 +53,14 @@ function ProviderClientRequest({ provider, loa_type }) {
 
   const onSubmit = (data) => {
     setLoading(true)
+
+
+    const mergedData = {
+      ...data,
+      hashed_id
+    }
     submitClient({
-        ...data,
+        ...mergedData,
         setLoading,
         setErrorLogs,
         setShowErrorLogsModal
@@ -280,7 +286,7 @@ function ProviderClientRequest({ provider, loa_type }) {
                 ) : (
                     <>
                     <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto">SUBMIT</button>
-                    <Link href={`${applink}/provider/${provider?.provider_id}`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto">
+                    <Link href={`${applink}/provider/${hashed_id}`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto">
                       BACK
                     </Link>
                     </>

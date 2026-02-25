@@ -26,6 +26,8 @@ function Page() {
 
     const { id, refno, loa_type } = params
 
+    console.log(id)
+
 
     const { checkRefNo } = useClientRequest()
 

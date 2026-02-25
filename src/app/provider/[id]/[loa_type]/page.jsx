@@ -87,7 +87,7 @@ function Page() {
 
       {/* Show main content when consultation OR laboratory after accepting */}
       {loa_type === "consultation" || (loa_type === "laboratory" && !showTerms) ? (
-        <ProviderClientRequest provider={provider} loa_type={loa_type} />
+        <ProviderClientRequest provider={provider} loa_type={loa_type} hashed_id={provider_id} />
       ) : null}
     </>
   );
