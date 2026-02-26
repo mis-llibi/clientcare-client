@@ -210,58 +210,69 @@ export const ClientRequestDesktop = () => {
     setShowErrorLogsModal,
     cb,
   }) => {
-    await csrf();
-    axios
-      .post("/api/validate-reimbursement", formData)
-      .then((res) => {
-        if (res.status == 201) {
-          if (cb) {
-            // Pass the entire response data including member_id
-            cb(res.data);
+    try {
+      await csrf();
+      axios
+        .post("/api/validate-reimbursement", formData)
+        .then((res) => {
+          if (res.status == 201) {
+            if (cb) {
+              // Pass the entire response data including member_id
+              cb(res.data);
+            } else {
+              Swal.fire({
+                title: "Validation Success",
+                text: `Your information has been successfully validated.`,
+                icon: "success",
+              });
+              reset();
+            }
+          }
+        })
+        .catch((err) => {
+          if (
+            err.status == 404 &&
+            err.response.data.message == "Cannot find the patient"
+          ) {
+            Swal.fire({
+              title: "Validation Error",
+              text: `We are unable to validate your information. Please check your input and try again.`,
+              icon: "error",
+              showDenyButton: true,
+              showCancelButton: false,
+              showConfirmButton: true,
+              confirmButtonText: "Report",
+              denyButtonText: "Close",
+            }).then((res) => {
+              if (res.isConfirmed) {
+                setErrorLogs(err.response.data.error_data);
+                setShowErrorLogsModal(true);
+              } else {
+                setErrorLogs(null);
+                setShowErrorLogsModal(false);
+              }
+            });
           } else {
             Swal.fire({
-              title: "Validation Success",
-              text: `Your information has been successfully validated.`,
-              icon: "success",
+              title: "Error",
+              text: `${err.response.data.message}`,
+              icon: "error",
             });
-            reset();
           }
-        }
-      })
-      .catch((err) => {
-        if (
-          err.status == 404 &&
-          err.response.data.message == "Cannot find the patient"
-        ) {
-          Swal.fire({
-            title: "Validation Error",
-            text: `We are unable to validate your information. Please check your input and try again.`,
-            icon: "error",
-            showDenyButton: true,
-            showCancelButton: false,
-            showConfirmButton: true,
-            confirmButtonText: "Report",
-            denyButtonText: "Close",
-          }).then((res) => {
-            if (res.isConfirmed) {
-              setErrorLogs(err.response.data.error_data);
-              setShowErrorLogsModal(true);
-            } else {
-              setErrorLogs(null);
-              setShowErrorLogsModal(false);
-            }
-          });
-        } else {
-          Swal.fire({
-            title: "Error",
-            text: `${err.response.data.message}`,
-            icon: "error",
-          });
-        }
-      })
-      .finally(() => {
-        setLoading(false);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "Something went wrong. Please try again later.",
+        icon: "error",
       });
+      setLoading(false);
+    }
   };
 
   const submitReimbursement = async ({
@@ -270,43 +281,110 @@ export const ClientRequestDesktop = () => {
     reset,
     showAlert = true,
   }) => {
-    await csrf();
-    axios
-      .post(
-        "https://corporate-api.llibi.app/api/reimbursement/signature-request",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
+    try {
+      await csrf();
+      axios
+        .post(
+          "http://127.0.0.1:8001/api/reimbursement/signature-request",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
-        },
-      )
-      .then((res) => {
-        if (res.data.success) {
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (showAlert) {
+              Swal.fire({
+                title: "Success",
+                text: res.data.message,
+                icon: "success",
+              });
+            }
+            reset(res.data);
+          }
+        })
+        .catch((err) => {
           if (showAlert) {
             Swal.fire({
-              title: "Success",
-              text: res.data.message,
-              icon: "success",
+              title: "Error",
+              text:
+                err.response?.data?.error ||
+                "Failed to submit reimbursement request.",
+              icon: "error",
             });
           }
-          reset();
-        }
-      })
-      .catch((err) => {
-        if (showAlert) {
-          Swal.fire({
-            title: "Error",
-            text:
-              err.response?.data?.error ||
-              "Failed to submit reimbursement request.",
-            icon: "error",
-          });
-        }
-      })
-      .finally(() => {
-        setLoading(false);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "Something went wrong. Please try again later.",
+        icon: "error",
       });
+      setLoading(false);
+    }
+  };
+
+  const submitReimbursementByFiles = async ({
+    formData,
+    setLoading,
+    reset,
+    showAlert = true,
+  }) => {
+    try {
+      await csrf();
+      axios
+        .post(
+          "http://127.0.0.1:8001/api/reimbursement-requirements/send-files-email",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        )
+        .then((res) => {
+          if (res.data.success) {
+            if (showAlert) {
+              Swal.fire({
+                title: "Success",
+                text: res.data.message,
+                icon: "success",
+              });
+            }
+            reset(res.data);
+          }
+        })
+        .catch((err) => {
+          if (showAlert) {
+            Swal.fire({
+              title: "Error",
+              text:
+                err.response?.data?.error ||
+                "Failed to submit reimbursement request.",
+              icon: "error",
+            });
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "Something went wrong. Please try again later.",
+        icon: "error",
+      });
+      setLoading(false);
+    }
   };
 
   const searchComplaints = async ({
@@ -425,6 +503,7 @@ export const ClientRequestDesktop = () => {
     submitRequestLaboratory,
     verifyReimbursement,
     submitReimbursement,
+    submitReimbursementByFiles,
     searchComplaints,
     SubmitErrorLogs,
     submitFollowupRequest,
