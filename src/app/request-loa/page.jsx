@@ -51,17 +51,29 @@ function RequestLoa() {
             <div className="border border-black/30 shadow-[2px_2px_4px_0px_rgba(0,0,0,0.25)] rounded-lg py-4 px-2 lg:p-4 w-full">
               <div className="w-full">
                 <Tabs defaultValue="consultation">
-                  <TabsList className="w-full">
-                    <TabsTrigger value="consultation" className="roboto">
+                  <TabsList className="w-full grid grid-cols-2 sm:flex h-auto sm:h-9 p-1 gap-1 sm:gap-0 sm:p-[3px]">
+                    <TabsTrigger
+                      value="consultation"
+                      className="roboto w-full sm:w-auto"
+                    >
                       Consultation
                     </TabsTrigger>
-                    <TabsTrigger value="laboratory" className="roboto">
+                    <TabsTrigger
+                      value="laboratory"
+                      className="roboto w-full sm:w-auto"
+                    >
                       Laboratory
                     </TabsTrigger>
-                    {/* <TabsTrigger value="reimbursement" className="roboto">
+                    {/* <TabsTrigger
+                      value="reimbursement"
+                      className="roboto w-full sm:w-auto"
+                    >
                       Reimbursement
                     </TabsTrigger> */}
-                    <TabsTrigger value="followup" className="roboto">
+                    <TabsTrigger
+                      value="followup"
+                      className="roboto w-full sm:w-auto"
+                    >
                       Follow Up
                     </TabsTrigger>
                   </TabsList>
