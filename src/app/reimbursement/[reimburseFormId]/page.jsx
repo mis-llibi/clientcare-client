@@ -92,7 +92,7 @@ function escapeHtml(value) {
 }
 
 function withApiBase(path) {
-  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || '').trim();
+  const base = "https://corporate-api.llibi.app";
   if (!base) return path;
   return `${base.replace(/\/+$/, '')}${path}`;
 }
