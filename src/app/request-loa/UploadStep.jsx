@@ -109,11 +109,11 @@ const UploadStep = ({ verifiedData, mode, formData, onBack }) => {
 
           if (isNextBusinessDay) {
             setSuccessMessage(
-              "We have received your reimbursement claim request. Your request will be processed on the next business day. We will get back to you.",
+              "Thank you for your submission. Our team will review your request on the next business day and we will respond with the next steps soon.   ",
             );
           } else {
             setSuccessMessage(
-              "We have received your reimbursement claim request. We will review your documents and get back to you.",
+              "Thank you for your submission. Our team is currently reviewing your request and we will respond with the next steps soon.",
             );
           }
 

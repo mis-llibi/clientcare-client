@@ -38,7 +38,7 @@ const ReimbursementForm = ({
   const [claimType, setClaimType] = useState(initialData?.claimType || "");
   const [claimTypeError, setClaimTypeError] = useState(false);
 
-  const calculateDefaultAccountName = () => {
+  const getAccountName = () => {
     if (initialData?.account_name) return initialData.account_name;
 
     if (verifiedData?.dob) {
@@ -77,7 +77,7 @@ const ReimbursementForm = ({
       employee_email: initialData?.employee_email || verifiedData?.email || "",
       mobile_number: initialData?.mobile_number || verifiedData?.contact || "",
       mode_of_payment: initialData?.mode_of_payment || "",
-      account_name: calculateDefaultAccountName(),
+      account_name: getAccountName(),
       account_holder_address: initialData?.account_holder_address || "",
       bank_name: initialData?.bank_name || "",
       account_number: initialData?.account_number || "",
@@ -124,11 +124,11 @@ const ReimbursementForm = ({
           <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
             <div>
               <h3 className="text-lg font-bold text-[#1E3161] uppercase roboto">
-                SELECT REQUIREMENT TYPE
+                REIMBURSMENT CLAIM TYPE
               </h3>
               <p className="text-sm text-gray-500 roboto mt-1">
-                Please select the type of claim and check the requirements you
-                have ready.
+                Select the type of claim and prepare required documents for
+                submission.
               </p>
             </div>
 
@@ -185,8 +185,10 @@ const ReimbursementForm = ({
             {claimType && (
               <div className="border border-red-500 pt-2 mx-5 p-4 rounded-lg">
                 <span className="text-sm space-y-3 pt-2 text-red-500 roboto">
-                  Note: Please have all the necessary documents needed to
-                  process your claim reimbursement ready for uploading.
+                  Note: To avoid delays, kindly provide all required documents
+                  when submitting your reimbursement request. Only complete
+                  submission will be processed. Incomplete filings will require
+                  resubmission.
                 </span>
               </div>
             )}
@@ -433,10 +435,11 @@ const ReimbursementForm = ({
             <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
               <div>
                 <h3 className="text-lg font-bold text-[#1E3161] uppercase roboto">
-                  SELECT REQUIREMENT TYPE
+                  REIMBURSMENT CLAIM TYPE
                 </h3>
                 <p className="text-sm text-gray-500 roboto mt-1">
-                  Please select the type of claim you are submitting.
+                  Select the type of claim and prepare required documents for
+                  submission.
                 </p>
               </div>
 
@@ -493,8 +496,10 @@ const ReimbursementForm = ({
               {claimType && (
                 <div className="border border-red-500 pt-2 mx-5 p-4 rounded-lg">
                   <span className="text-sm space-y-3 pt-2 text-red-500 roboto">
-                    Note: Please have all the necessary documents needed to
-                    process your claim reimbursement ready for uploading.
+                    Note: To avoid delays, kindly provide all required documents
+                    when submitting your reimbursement request. Only complete
+                    submission will be processed. Incomplete filings will
+                    require resubmission.
                   </span>
                 </div>
               )}
