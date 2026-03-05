@@ -56,29 +56,29 @@ function FollowUpRequestForm({ onBack }) {
               </span>
             )}
           </div>
-        </div>
-        {loadingFollowup ? (
-          <div className="bg-[#1E3161] w-full text-white py-2 rounded-r-4xl rounded-bl-4xl flex items-center justify-center">
-            <MoonLoader size={20} color="white" />
-          </div>
-        ) : (
+          {loadingFollowup ? (
+            <div className="bg-[#1E3161] w-full text-white py-2 rounded-r-4xl rounded-bl-4xl flex items-center justify-center">
+              <MoonLoader size={20} color="white" />
+            </div>
+          ) : (
+            <button
+              type="submit"
+              className="bg-[#1E3161] w-full text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto -mt"
+            >
+              SUBMIT
+            </button>
+          )}
           <button
-            type="submit"
-            className="bg-[#1E3161] w-full text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto mt-2"
+            type="button"
+            onClick={() => {
+              reset();
+              if (onBack) onBack();
+            }}
+            className="bg-red-700 w-full text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto -mt-2"
           >
-            SUBMIT
+            BACK
           </button>
-        )}
-        <button
-          type="button"
-          onClick={() => {
-            reset();
-            if (onBack) onBack();
-          }}
-          className="bg-red-700 w-full text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto mt-2"
-        >
-          BACK
-        </button>
+        </div>
       </form>
     </div>
   );

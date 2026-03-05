@@ -133,6 +133,7 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
               control={control}
               name="files"
               required={"Doctor's Request is required"}
+              className="w-full mt-2"
             />
           </div>
 

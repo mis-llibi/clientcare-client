@@ -70,7 +70,7 @@ function Home() {
               Please choose your LOA type
             </h1>
 
-            <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 w-full">
+            <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-2 w-full">
               <Link
                 href={`${applink}/provider/${id}/consultation`}
                 className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 roboto w-full max-w-[250px] text-center"
