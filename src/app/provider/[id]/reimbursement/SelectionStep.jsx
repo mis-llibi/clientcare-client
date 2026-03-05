@@ -64,17 +64,14 @@ const SelectionStep = ({ onSelect, onBack }) => {
           <HiOutlineArrowDownTray className="group-hover:animate-bounce" />
           Download Reimbursement Form (PDF)
         </a>
-
-        <div className="mt-6 max-w-md mx-auto">
-          <button
-            type="button"
-            onClick={onBack}
-            className="w-full bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto"
-          >
-            BACK
-          </button>
-        </div>
       </div>
+      <button
+        type="button"
+        onClick={onBack}
+        className="w-full bg-red-700 text-white py-1 mt-6 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto"
+      >
+        BACK
+      </button>
     </div>
   );
 };

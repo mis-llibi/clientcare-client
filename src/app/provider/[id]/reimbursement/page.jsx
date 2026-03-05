@@ -39,7 +39,7 @@ function Reimbursement({ onBack }) {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto pb-10">
+    <div className="w-full max-w-5xl mx-auto">
       <div className="text-white text-center my-2">
         <h1 className="text-[#1E3161] font-bold roboto text-lg">
           REIMBURSEMENT

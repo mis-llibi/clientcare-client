@@ -328,7 +328,7 @@ const VerificationStep = ({ onVerify, onBack, initialData }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1E3161] flex justify-center items-center text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950"
+            className="w-full bg-[#1E3161] flex justify-center items-center text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto"
           >
             {loading ? (
               <MoonLoader size={18} color="white" />
