@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -43,9 +43,7 @@ function Page() {
 
   if (isLoading) return <Loading />;
   if (isError)
-    return (
-      <Error message={"We cannot find the provider, please go back"} />
-    );
+    return <Error message={"We cannot find the provider, please go back"} />;
   if (loa_type != "consultation" && loa_type != "laboratory")
     return <div>Error</div>;
 
@@ -63,7 +61,8 @@ function Page() {
 
             <CardContent>
               <p className="text-sm text-gray-700 text-center roboto">
-                Please have the picture of your Laboratory request ready for uploading.
+                Please have the picture of your Laboratory request ready for
+                uploading.
               </p>
             </CardContent>
 
@@ -86,8 +85,13 @@ function Page() {
       )}
 
       {/* Show main content when consultation OR laboratory after accepting */}
-      {loa_type === "consultation" || (loa_type === "laboratory" && !showTerms) ? (
-        <ProviderClientRequest provider={provider} loa_type={loa_type} />
+      {loa_type === "consultation" ||
+      (loa_type === "laboratory" && !showTerms) ? (
+        <ProviderClientRequest
+          provider={provider}
+          loa_type={loa_type}
+          hashed_id={provider_id}
+        />
       ) : null}
     </>
   );
