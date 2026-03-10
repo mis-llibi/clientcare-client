@@ -353,39 +353,68 @@ const ReimbursementForm = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <div className="space-y-1">
                     <label className="text-[11px] font-bold text-gray-500 uppercase">
-                      Bank Name
+                      Bank Name <span className="text-red-500">*</span>
                     </label>
                     <input
-                      {...register("bank_name")}
+                      {...register("bank_name", {
+                        required: selectedModeOfPayment === "0",
+                      })}
                       className="w-full border p-2 rounded-lg text-sm bg-white"
                     />
+                    {errors.bank_name && (
+                      <span className="text-red-500 text-xs roboto ml-2">
+                        Bank Name is required
+                      </span>
+                    )}
                   </div>
                   <div className="space-y-1">
                     <label className="text-[11px] font-bold text-gray-500 uppercase">
-                      Account Number
+                      Account Number <span className="text-red-500">*</span>
                     </label>
                     <input
-                      {...register("account_number")}
+                      {...register("account_number", {
+                        required: selectedModeOfPayment === "0",
+                      })}
                       className="w-full border p-2 rounded-lg text-sm bg-white"
                     />
+                    {errors.account_number && (
+                      <span className="text-red-500 text-xs roboto ml-2">
+                        Account Number is required
+                      </span>
+                    )}
                   </div>
                   <div className="space-y-1">
                     <label className="text-[11px] font-bold text-gray-500 uppercase">
-                      Account Name
+                      Account Name <span className="text-red-500">*</span>
                     </label>
                     <input
-                      {...register("account_name")}
+                      {...register("account_name", {
+                        required: selectedModeOfPayment === "0",
+                      })}
                       className="w-full border p-2 rounded-lg text-sm bg-white"
                     />
+                    {errors.account_name && (
+                      <span className="text-red-500 text-xs roboto ml-2">
+                        Account Name is required
+                      </span>
+                    )}
                   </div>
                   <div className="space-y-1">
                     <label className="text-[11px] font-bold text-gray-500 uppercase">
-                      Account Holder Address
+                      Account Holder Address{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <input
-                      {...register("account_holder_address")}
+                      {...register("account_holder_address", {
+                        required: selectedModeOfPayment === "0",
+                      })}
                       className="w-full border p-2 rounded-lg text-sm bg-white"
                     />
+                    {errors.account_holder_address && (
+                      <span className="text-red-500 text-xs roboto ml-2">
+                        Account Holder Address is required
+                      </span>
+                    )}
                   </div>
                 </div>
               )}
