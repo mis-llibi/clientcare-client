@@ -38,6 +38,13 @@ function Reimbursement({ onBack }) {
     if (step > 1) setStep(step - 1);
   };
 
+  const handleReset = () => {
+    setStep(1);
+    setMode(null);
+    setVerifiedData(null);
+    setFormData({});
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto">
       <div className="text-white text-center my-2">
@@ -81,6 +88,7 @@ function Reimbursement({ onBack }) {
             mode={mode}
             formData={formData}
             onBack={() => setStep(3)}
+            onReset={handleReset}
           />
         )}
       </div>

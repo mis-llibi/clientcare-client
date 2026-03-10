@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const UploadStep = ({ verifiedData, mode, formData, onBack }) => {
+const UploadStep = ({ verifiedData, mode, formData, onBack, onReset }) => {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -186,6 +186,15 @@ const UploadStep = ({ verifiedData, mode, formData, onBack }) => {
             {successMessage ||
               "We have received your reimbursement claim request. We will review your documents and get back to you."}
           </p>
+
+          <div className="mt-8 flex justify-center w-full">
+            <button
+              onClick={onReset}
+              className="w-full sm:w-auto px-8 py-3 bg-[#1E3161] text-white rounded-lg font-bold hover:bg-[#005f8d] transition-colors roboto shadow-lg cursor-pointer"
+            >
+              Back to Request
+            </button>
+          </div>
         </div>
       </div>
     );
