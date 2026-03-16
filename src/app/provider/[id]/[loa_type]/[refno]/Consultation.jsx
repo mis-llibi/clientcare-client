@@ -1,103 +1,112 @@
-'use client'
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+"use client";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 // Components
-import Card from '@/components/ClientCare/Card'
-import InputSelectMultiple from '@/components/InputSelectMultiple'
-import SelectWithoutDefaultValue from '@/components/SelectWithoutDefaultValue'
-import Label from '@/components/Label'
-import Input from '@/components/Input'
-import { MoonLoader } from 'react-spinners'
-import Swal from 'sweetalert2'
-import PhoneInputMask from '@/components/InputMask'
+import Card from "@/components/ClientCare/Card";
+import InputSelectMultiple from "@/components/InputSelectMultiple";
+import SelectWithoutDefaultValue from "@/components/SelectWithoutDefaultValue";
+import Label from "@/components/Label";
+import Input from "@/components/Input";
+import { MoonLoader } from "react-spinners";
+import Swal from "sweetalert2";
+import PhoneInputMask from "@/components/InputMask";
 
 // Hooks
-import { useForm, Controller } from 'react-hook-form'
-import { useClientRequest } from '@/hooks/useClientRequest'
-import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop'
+import { useForm, Controller } from "react-hook-form";
+import { useClientRequest } from "@/hooks/useClientRequest";
+import { ClientRequestDesktop } from "@/hooks/ClientRequestDesktop";
 
 // Helpers
-import { applink } from '@/lib/applink'
+import { applink } from "@/lib/applink";
 
-function Consultation({patient, doctors, provider, refno, setIsSubmitted, provider_id, setIsAuto}) {
-
-
-    const [isTyping, setIsTyping] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [loadingComplaints, setLoadingComplaints] = useState(false)
-    const [getText, setGetText] = useState("")
-    const [complaints, setComplaints] = useState([])
-  const { register, handleSubmit, watch, reset, control, formState: {errors}, setError, clearErrors } = useForm({
+function Consultation({
+  patient,
+  doctors,
+  provider,
+  refno,
+  setIsSubmitted,
+  provider_id,
+  setIsAuto,
+}) {
+  const [isTyping, setIsTyping] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingComplaints, setLoadingComplaints] = useState(false);
+  const [getText, setGetText] = useState("");
+  const [complaints, setComplaints] = useState([]);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    control,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm({
     defaultValues: {
-        refno: refno,
-        provider_id: provider_id
-    }
-  })
+      refno: refno,
+      provider_id: provider_id,
+      provider_remarks: "",
+    },
+  });
 
-  const { submitClientRequestConsultation } = useClientRequest()
-  const { searchComplaints } = ClientRequestDesktop()
+  const { submitClientRequestConsultation } = useClientRequest();
+  const { searchComplaints } = ClientRequestDesktop();
 
   const complaintsV1 = [
-    { value: 0, label: 'Back Pain / Body Pain' },
-    { value: 1, label: 'Chest Pain' },
-    { value: 2, label: 'Cough' },
-    { value: 3, label: 'Cold, Flu-like symtoms' },
-    { value: 4, label: 'Headache' },
-    { value: 5, label: 'Urinary Complaints' },
-    { value: 6, label: 'Ear Pain' },
-    { value: 7, label: 'Highblood pressure' },
-    { value: 8, label: 'Nausea' },
-    { value: 9, label: 'Diarrhea' },
-    { value: 10, label: 'Sore Throat' },
-    { value: 11, label: 'Eye Conditions' },
-    { value: 12, label: 'Skin Conditions' },
-    { value: 13, label: 'Menstrual Pain' },
-    { value: 14, label: 'Abdominal Pain' },
-    { value: 15, label: 'Joint Pain' },
-    { value: 16, label: 'Mass / Lump' },
-    { value: 17, label: 'Pre and Post natal consultation' },
-    { value: 18, label: 'Allergies' },
-    { value: 19, label: 'Dizziness' },
-    { value: 20, label: 'Fever' },
-  ]
+    { value: 0, label: "Back Pain / Body Pain" },
+    { value: 1, label: "Chest Pain" },
+    { value: 2, label: "Cough" },
+    { value: 3, label: "Cold, Flu-like symtoms" },
+    { value: 4, label: "Headache" },
+    { value: 5, label: "Urinary Complaints" },
+    { value: 6, label: "Ear Pain" },
+    { value: 7, label: "Highblood pressure" },
+    { value: 8, label: "Nausea" },
+    { value: 9, label: "Diarrhea" },
+    { value: 10, label: "Sore Throat" },
+    { value: 11, label: "Eye Conditions" },
+    { value: 12, label: "Skin Conditions" },
+    { value: 13, label: "Menstrual Pain" },
+    { value: 14, label: "Abdominal Pain" },
+    { value: 15, label: "Joint Pain" },
+    { value: 16, label: "Mass / Lump" },
+    { value: 17, label: "Pre and Post natal consultation" },
+    { value: 18, label: "Allergies" },
+    { value: 19, label: "Dizziness" },
+    { value: 20, label: "Fever" },
+  ];
 
   useEffect(() => {
-    
-    if(isTyping){
+    if (isTyping) {
+      setComplaints([]);
 
-      setComplaints([])
-      
-      if (!getText) return
+      if (!getText) return;
 
-      setLoadingComplaints(true)
+      setLoadingComplaints(true);
       const timeoutId = setTimeout(() => {
-        searchComplaints({ 
+        searchComplaints({
           complaint: getText,
           setLoadingComplaints: setLoadingComplaints,
-          setComplaints: setComplaints
-          
-        })
-      }, 500)
-      return () => clearTimeout(timeoutId)
-
-
-
-    }else{
-      setComplaints(complaintsV1)
+          setComplaints: setComplaints,
+        });
+      }, 500);
+      return () => clearTimeout(timeoutId);
+    } else {
+      setComplaints(complaintsV1);
     }
-
-  }, [isTyping, getText])
+  }, [isTyping, getText]);
 
   const onSubmit = (data) => {
     if (data.contact) {
-        const digits = data.contact.replace(/\D/g, ''); // remove all non-digits
-        // ensure it starts with 0 (not +63)
-        if (digits.startsWith('63')) {
-        data.contact = '0' + digits.slice(2);
-        } else if (!digits.startsWith('0')) {
-        data.contact = '0' + digits;
-        }
+      const digits = data.contact.replace(/\D/g, ""); // remove all non-digits
+      // ensure it starts with 0 (not +63)
+      if (digits.startsWith("63")) {
+        data.contact = "0" + digits.slice(2);
+      } else if (!digits.startsWith("0")) {
+        data.contact = "0" + digits;
+      }
     }
 
     Swal.fire({
@@ -105,149 +114,153 @@ function Consultation({patient, doctors, provider, refno, setIsSubmitted, provid
       text: "Once you click Submit, you will not be able to make any further changes to your LOA request.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, confirm',
-      customClass:{
-        title: 'roboto',
-        htmlContainer: 'roboto' // applies to text
-        }
-    })
-    .then((result) => {
-      if(result.isConfirmed){
-          setLoading(true)
-          submitClientRequestConsultation({
-              ...data,
-              setLoading,
-              setIsSubmitted,
-              setIsAuto
-          })
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, confirm",
+      customClass: {
+        title: "roboto",
+        htmlContainer: "roboto", // applies to text
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setLoading(true);
+        submitClientRequestConsultation({
+          ...data,
+          setLoading,
+          setIsSubmitted,
+          setIsAuto,
+        });
       }
-    })
-  }
-
+    });
+  };
 
   return (
     <>
-    <Card>
-        <h1 className='text-[10px] font-bold roboto '>Hi <span className='text-[#1E3161]'>{patient?.patient_first_name} {patient?.patient_last_name}</span>, Kindly answer the following: </h1>
+      <Card>
+        <h1 className="text-[10px] font-bold roboto ">
+          Hi{" "}
+          <span className="text-[#1E3161]">
+            {patient?.patient_first_name} {patient?.patient_last_name}
+          </span>
+          , Kindly answer the following:{" "}
+        </h1>
 
-        <div className='mt-2'>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='flex flex-col gap-2'> 
-                    <div>
-                        <Label 
-                            label={"Chief Complaint"}
-                            htmlFor={"complaint"}
-                        />
-                        <InputSelectMultiple
-                          id="complaint"
-                          label="Select or type complaint"
-                          register={register('complaint')}
-                          required={true}
-                          errors={errors?.complaint}
-                          control={control}
-                          setError={setError}
-                          clearErrors={clearErrors}
-                          option={complaints.sort((a,b)=>a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1) || []}
-                          setIsTyping={setIsTyping}
-                          loadingComplaints={loadingComplaints}
-                          setGetText={setGetText}
-                        />
-                    </div>
+        <div className="mt-2">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-2">
+              <div>
+                <Label label={"Chief Complaint"} htmlFor={"complaint"} />
+                <InputSelectMultiple
+                  id="complaint"
+                  label="Select or type complaint"
+                  register={register("complaint")}
+                  required={true}
+                  errors={errors?.complaint}
+                  control={control}
+                  setError={setError}
+                  clearErrors={clearErrors}
+                  option={
+                    complaints.sort((a, b) =>
+                      a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1,
+                    ) || []
+                  }
+                  setIsTyping={setIsTyping}
+                  loadingComplaints={loadingComplaints}
+                  setGetText={setGetText}
+                />
+              </div>
 
-                    <div>
-                        <Label 
-                            label={"Doctor (Optional)"}
-                            htmlFor={"doctor"}
-                        />
-                        <SelectWithoutDefaultValue 
-                            control={control}
-                            name={"doctor"}
-                            itemList={doctors}
-                            placeholder='Select a doctor'
-                        />
-                    </div>
+              <div>
+                <Label label={"Note (optional)"} htmlFor={"provider_remarks"} />
+                <textarea
+                  id="provider_remarks"
+                  className="border border-black/30 w-full py-2 px-2 rounded-lg outline-[#1E3161] roboto resize-y min-h-[100px]"
+                  {...register("provider_remarks")}
+                  placeholder="Enter any additional notes here..."
+                />
+              </div>
 
-                    <div>
-                        <Label 
-                            label={"Hospital"}
-                            htmlFor={"hospital"}
-                        />
+              <div>
+                <Label label={"Doctor (Optional)"} htmlFor={"doctor"} />
+                <SelectWithoutDefaultValue
+                  control={control}
+                  name={"doctor"}
+                  itemList={doctors}
+                  placeholder="Select a doctor"
+                />
+              </div>
 
-                        <Input 
-                            type={"text"}
-                            {...register('hospital', {
-                              value: provider
-                            })}
-                            className={"bg-[#F6F6F6] opacity-80 roboto"}
-                            disabled={true}
-                        />
+              <div>
+                <Label label={"Hospital"} htmlFor={"hospital"} />
 
-                    </div>
+                <Input
+                  type={"text"}
+                  {...register("hospital", {
+                    value: provider,
+                  })}
+                  className={"bg-[#F6F6F6] opacity-80 roboto"}
+                  disabled={true}
+                />
+              </div>
 
-                    <h1 className='text-[10px] font-bold roboto '>If you want to be notified on the status of your LOA Request, please provide either of the following: </h1>
+              <h1 className="text-[10px] font-bold roboto ">
+                If you want to be notified on the status of your LOA Request,
+                please provide either of the following:{" "}
+              </h1>
 
-                    <div>
-                        <Label 
-                            label={"Email (optional)"}
-                            htmlFor={"email"}
-                        />
-                        <Input 
-                            type="email"
-                            {...register('email')}
-                            className={'roboto'}
-                        />
+              <div>
+                <Label label={"Email (optional)"} htmlFor={"email"} />
+                <Input
+                  type="email"
+                  {...register("email")}
+                  className={"roboto"}
+                />
+              </div>
 
-                    </div>
+              <div>
+                <Label label={"Contact # (optional)"} htmlFor={"contact"} />
+                <Controller
+                  name="contact"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <PhoneInputMask
+                      value={value || ""}
+                      onChange={onChange}
+                      placeholder="+63 (___)-___-____"
+                      className="roboto"
+                    />
+                  )}
+                />
+              </div>
 
-                    <div>
-                        <Label 
-                            label={"Contact # (optional)"}
-                            htmlFor={"contact"}
-                        />
-                        <Controller
-                            name="contact"
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <PhoneInputMask
-                                value={value || ''}
-                                onChange={onChange}
-                                placeholder="+63 (___)-___-____"
-                                className="roboto"
-                                />
-                        )}
-                        />
-
-
-                    </div>
-
-                {loading ? (
-                    <>
-                    <div className='bg-[#1E3161] text-white py-2 rounded-r-4xl cursor-pointer rounded-bl-4xl flex items-center justify-center'>
-                        <MoonLoader size={20} color='white' />
-                    </div>
-                    </>
-                ) : (
-                    <>
-                    <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950">SUBMIT</button>
-                    <Link href={`${applink}/provider/${provider_id}/consultation`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center">
-                      BACK
-                    </Link>
-                    </>
-                )}
-
-
-
-
-                </div>
-            </form>
+              {loading ? (
+                <>
+                  <div className="bg-[#1E3161] text-white py-2 rounded-r-4xl cursor-pointer rounded-bl-4xl flex items-center justify-center">
+                    <MoonLoader size={20} color="white" />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="submit"
+                    className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950"
+                  >
+                    SUBMIT
+                  </button>
+                  <Link
+                    href={`${applink}/provider/${provider_id}/consultation`}
+                    className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center"
+                  >
+                    BACK
+                  </Link>
+                </>
+              )}
+            </div>
+          </form>
         </div>
-
-    </Card>
-    
+      </Card>
     </>
-  )
+  );
 }
 
-export default Consultation
+export default Consultation;

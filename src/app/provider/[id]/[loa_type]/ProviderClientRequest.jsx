@@ -10,12 +10,11 @@ import Link from "next/link";
 import { applink } from "@/lib/applink";
 import ClientErrorLogForm from "@/app/request-loa/ClientErrorLogForm";
 
-
 function ProviderClientRequest({ provider, loa_type, hashed_id }) {
   const [loading, setLoading] = useState(false);
 
-   const [errorLogs, setErrorLogs] = useState([])
-   const [showErrorLogsModal, setShowErrorLogsModal] = useState(false)
+  const [errorLogs, setErrorLogs] = useState([]);
+  const [showErrorLogsModal, setShowErrorLogsModal] = useState(false);
 
   const {
     register,
@@ -35,7 +34,7 @@ function ProviderClientRequest({ provider, loa_type, hashed_id }) {
     },
   });
 
-  const { submitClient } = useClientRequest()
+  const { submitClient } = useClientRequest();
 
   const patientType = [
     {
@@ -52,19 +51,18 @@ function ProviderClientRequest({ provider, loa_type, hashed_id }) {
   const verificationDetailsType = watch("verificationDetailsType");
 
   const onSubmit = (data) => {
-    setLoading(true)
-
+    setLoading(true);
 
     const mergedData = {
       ...data,
-      hashed_id
-    }
+      hashed_id,
+    };
     submitClient({
-        ...mergedData,
-        setLoading,
-        setErrorLogs,
-        setShowErrorLogsModal
-    })
+      ...mergedData,
+      setLoading,
+      setErrorLogs,
+      setShowErrorLogsModal,
+    });
   };
 
   useEffect(() => {
@@ -78,7 +76,6 @@ function ProviderClientRequest({ provider, loa_type, hashed_id }) {
     });
   }, [verificationDetailsType, typeOfPatient, reset]);
 
-
   return (
     <>
       <Card>
@@ -86,7 +83,7 @@ function ProviderClientRequest({ provider, loa_type, hashed_id }) {
           {provider?.provider}
         </h1>
         <h1 className="text-center text-[#1E3161] font-bold roboto">
-          {loa_type.slice(0,1).toUpperCase() + loa_type.slice(1)}
+          {loa_type.slice(0, 1).toUpperCase() + loa_type.slice(1)}
         </h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
@@ -107,10 +104,10 @@ function ProviderClientRequest({ provider, loa_type, hashed_id }) {
               value: provider?.email,
             })}
           />
-          <input 
-            type="hidden" 
-            {...register('loa_type', {
-              value: loa_type
+          <input
+            type="hidden"
+            {...register("loa_type", {
+              value: loa_type,
             })}
           />
 
@@ -138,7 +135,7 @@ function ProviderClientRequest({ provider, loa_type, hashed_id }) {
                   htmlFor="personal_details"
                   className="text-[11px] roboto font-bold text-[#1E3161]"
                 >
-                  Use Personal Details 
+                  Use Personal Details
                 </label>
               </div>
 
@@ -160,153 +157,218 @@ function ProviderClientRequest({ provider, loa_type, hashed_id }) {
             </div>
 
             <div className="border-2 rounded-lg py-2 px-3 border-black/30 shadow-[3px_3px_4px_0px_rgba(0,0,0,0.25)]">
-              <h1 className="font-bold roboto text-sm">Patient Information (as shown in Emergency Room card)</h1>
+              <h1 className="font-bold roboto text-sm">
+                Patient Information (as shown in Emergency Room card)
+              </h1>
               <div className="mt-2 flex flex-col gap-2">
-
                 {/* Insurance Details */}
                 {verificationDetailsType == "insurance" ? (
                   <>
-                  <div>
-                    <label htmlFor="er_card" className="text-[#1E3161] font-semibold roboto">ER Card #</label>
-                    <input 
-                      type="text" 
-                      id="er_card" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                      {...register('erCardNumber', {
-                        required: "ER Card # is required"
-                      })}
+                    <div>
+                      <label
+                        htmlFor="er_card"
+                        className="text-[#1E3161] font-semibold roboto"
+                      >
+                        ER Card #
+                      </label>
+                      <input
+                        type="text"
+                        id="er_card"
+                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
+                        {...register("erCardNumber", {
+                          required: "ER Card # is required",
+                        })}
                       />
-                      {errors?.erCardNumber && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.erCardNumber?.message}</h1>}
-                  </div>
+                      {errors?.erCardNumber && (
+                        <h1 className="text-red-800 text-sm font-semibold roboto">
+                          {errors?.erCardNumber?.message}
+                        </h1>
+                      )}
+                    </div>
 
-                  <div>
-                    <label htmlFor="dob" className="text-[#1E3161] font-semibold roboto">Date of Birth</label>
-                    <input 
-                      type="date" 
-                      id="dob" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100"
-                      {...register('dob', {
-                        required: "Date of Birth is required"
-                      })}
-                      onKeyDown={(e) => e.preventDefault()}
+                    <div>
+                      <label
+                        htmlFor="dob"
+                        className="text-[#1E3161] font-semibold roboto"
+                      >
+                        Date of Birth
+                      </label>
+                      <input
+                        type="date"
+                        id="dob"
+                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100"
+                        {...register("dob", {
+                          required: "Date of Birth is required",
+                        })}
+                        onKeyDown={(e) => e.preventDefault()}
                       />
-                      {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
-                  </div>
-
+                      {errors?.dob && (
+                        <h1 className="text-red-800 text-sm font-semibold roboto">
+                          {errors?.dob?.message}
+                        </h1>
+                      )}
+                    </div>
                   </>
                 ) : (
                   <>
-                  <div>
-                    <label htmlFor="last_name" className="text-[#1E3161] font-semibold roboto">Last Name</label>
-                    <input 
-                      type="text" 
-                      id="last_name" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                      {...register('patientLastName', {
-                        required: "Last Name is required"
-                      })}
+                    <div>
+                      <label
+                        htmlFor="last_name"
+                        className="text-[#1E3161] font-semibold roboto"
+                      >
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        id="last_name"
+                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
+                        {...register("patientLastName", {
+                          required: "Last Name is required",
+                        })}
                       />
-                      {errors?.patientLastName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.patientLastName?.message}</h1>}
-                  </div>
+                      {errors?.patientLastName && (
+                        <h1 className="text-red-800 text-sm font-semibold roboto">
+                          {errors?.patientLastName?.message}
+                        </h1>
+                      )}
+                    </div>
 
-                  <div>
-                    <label htmlFor="first_name" className="text-[#1E3161] font-semibold roboto">First Name</label>
-                    <input 
-                      type="text" 
-                      id="first_name" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                      {...register('patientFirstName', {
-                        required: "First Name is required"
-                      })}
+                    <div>
+                      <label
+                        htmlFor="first_name"
+                        className="text-[#1E3161] font-semibold roboto"
+                      >
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        id="first_name"
+                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
+                        {...register("patientFirstName", {
+                          required: "First Name is required",
+                        })}
                       />
-                      {errors?.patientFirstName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.patientFirstName?.message}</h1>}
-                  </div>
+                      {errors?.patientFirstName && (
+                        <h1 className="text-red-800 text-sm font-semibold roboto">
+                          {errors?.patientFirstName?.message}
+                        </h1>
+                      )}
+                    </div>
 
-                  <div>
-                    <label htmlFor="dob" className="text-[#1E3161] font-semibold roboto">Date of Birth</label>
-                    <input 
-                      type="date" 
-                      id="dob" 
-                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100"
-                      {...register('dob', {
-                        required: "Date of Birth is required"
-                      })}
-                      onKeyDown={(e) => e.preventDefault()}
+                    <div>
+                      <label
+                        htmlFor="dob"
+                        className="text-[#1E3161] font-semibold roboto"
+                      >
+                        Date of Birth
+                      </label>
+                      <input
+                        type="date"
+                        id="dob"
+                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto bg-gray-100"
+                        {...register("dob", {
+                          required: "Date of Birth is required",
+                        })}
+                        onKeyDown={(e) => e.preventDefault()}
                       />
-                      {errors?.dob && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.dob?.message}</h1>}
-                  </div>
+                      {errors?.dob && (
+                        <h1 className="text-red-800 text-sm font-semibold roboto">
+                          {errors?.dob?.message}
+                        </h1>
+                      )}
+                    </div>
                   </>
-
                 )}
-
               </div>
 
               {typeOfPatient == "dependent" && (
-                <h1 className="font-bold roboto mt-2 text-sm">Employee Information</h1>
+                <h1 className="font-bold roboto mt-2 text-sm">
+                  Employee Information
+                </h1>
               )}
               <div className="mt-2 flex flex-col gap-2">
                 {typeOfPatient == "dependent" && (
                   <>
-                <div>
-                  <label htmlFor="last_name" className="text-[#1E3161] font-semibold roboto">Last Name</label>
-                  <input 
-                    type="text" 
-                    id="last_name" 
-                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                    {...register('employeeLastName', {
-                      required: "Last Name is required"
-                    })}
-                    />
-                    {errors?.employeeLastName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.employeeLastName?.message}</h1>}
-                </div>
+                    <div>
+                      <label
+                        htmlFor="last_name"
+                        className="text-[#1E3161] font-semibold roboto"
+                      >
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        id="last_name"
+                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
+                        {...register("employeeLastName", {
+                          required: "Last Name is required",
+                        })}
+                      />
+                      {errors?.employeeLastName && (
+                        <h1 className="text-red-800 text-sm font-semibold roboto">
+                          {errors?.employeeLastName?.message}
+                        </h1>
+                      )}
+                    </div>
 
-                <div>
-                  <label htmlFor="first_name" className="text-[#1E3161] font-semibold roboto">First Name</label>
-                  <input 
-                    type="text" 
-                    id="first_name" 
-                    className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                    {...register('employeeFirstName', {
-                      required: "First Name is required"
-                    })}
-                    />
-                    {errors?.employeeFirstName && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.employeeFirstName?.message}</h1>}
-                </div>
-                  
-                  
+                    <div>
+                      <label
+                        htmlFor="first_name"
+                        className="text-[#1E3161] font-semibold roboto"
+                      >
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        id="first_name"
+                        className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
+                        {...register("employeeFirstName", {
+                          required: "First Name is required",
+                        })}
+                      />
+                      {errors?.employeeFirstName && (
+                        <h1 className="text-red-800 text-sm font-semibold roboto">
+                          {errors?.employeeFirstName?.message}
+                        </h1>
+                      )}
+                    </div>
                   </>
                 )}
 
                 {loading ? (
-                    <>
-                    <div className='bg-[#1E3161] text-white py-2 rounded-r-4xl cursor-pointer rounded-bl-4xl flex items-center justify-center'>
-                        <MoonLoader size={20} color='white' />
+                  <>
+                    <div className="bg-[#1E3161] text-white py-2 rounded-r-4xl cursor-pointer rounded-bl-4xl flex items-center justify-center">
+                      <MoonLoader size={20} color="white" />
                     </div>
-                    </>
+                  </>
                 ) : (
-                    <>
-                    <button type="submit" className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto">SUBMIT</button>
-                    <Link href={`${applink}/provider/${hashed_id}`} className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto">
+                  <>
+                    <button
+                      type="submit"
+                      className="bg-[#1E3161] text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto"
+                    >
+                      SUBMIT
+                    </button>
+                    <Link
+                      href={`${applink}/provider/${hashed_id}`}
+                      className="bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto"
+                    >
                       BACK
                     </Link>
-                    </>
+                  </>
                 )}
-
-
               </div>
             </div>
-
-
           </div>
         </form>
       </Card>
 
-    {showErrorLogsModal && (
-      <ClientErrorLogForm 
-        onClose={() => setShowErrorLogsModal(false)}
-        errorData={errorLogs}
-      />
-    )}
+      {showErrorLogsModal && (
+        <ClientErrorLogForm
+          onClose={() => setShowErrorLogsModal(false)}
+          errorData={errorLogs}
+        />
+      )}
     </>
   );
 }

@@ -6,8 +6,10 @@ import { MoonLoader } from "react-spinners";
 import Label from "@/components/Label";
 import Input from "@/components/Input";
 
-function FollowUpRequest() {
-  const [loading, setLoading] = useState(false);
+function FollowUpRequestForm({ onBack }) {
+  const [loadingFollowup, setLoadingFollowup] = useState(false);
+  const { submitFollowupRequest } = ClientRequestDesktop();
+
   const {
     register,
     handleSubmit,
@@ -15,21 +17,19 @@ function FollowUpRequest() {
     formState: { errors },
   } = useForm();
 
-  const { submitFollowupRequest } = ClientRequestDesktop();
-
-  const onSubmit = (data) => {
-    setLoading(true);
+  const onSubmitFollowup = (data) => {
+    setLoadingFollowup(true);
     submitFollowupRequest({
       reference_number: data.reference_number,
-      setLoading,
+      setLoading: setLoadingFollowup,
       reset,
     });
   };
 
   return (
-    <div className="mt-4">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4 max-w-md mx-auto pb-6">
+    <div className="">
+      <form onSubmit={handleSubmit(onSubmitFollowup)}>
+        <div className="flex flex-col gap-4 max-w-md mx-auto py-2">
           <div className="text-center mb-4">
             <h2 className="text-xl font-bold text-[#1E3161] roboto">
               FOLLOW UP REQUEST
@@ -56,22 +56,32 @@ function FollowUpRequest() {
               </span>
             )}
           </div>
-          {loading ? (
-            <div className="bg-[#1E3161] text-white py-1 rounded-r-4xl rounded-bl-4xl flex items-center justify-center w-full">
+          {loadingFollowup ? (
+            <div className="bg-[#1E3161] w-full text-white py-2 rounded-r-4xl rounded-bl-4xl flex items-center justify-center">
               <MoonLoader size={20} color="white" />
             </div>
           ) : (
             <button
               type="submit"
-              className="bg-[#1E3161] w-full text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 font-bold roboto mt-2"
+              className="bg-[#1E3161] w-full text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto -mt"
             >
               SUBMIT
             </button>
           )}
+          <button
+            type="button"
+            onClick={() => {
+              reset();
+              if (onBack) onBack();
+            }}
+            className="bg-red-700 w-full text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto -mt-2"
+          >
+            BACK
+          </button>
         </div>
       </form>
     </div>
   );
 }
 
-export default FollowUpRequest;
+export default FollowUpRequestForm;

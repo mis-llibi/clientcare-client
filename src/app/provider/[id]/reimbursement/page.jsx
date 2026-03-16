@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import Stepper from "./Stepper";
 import SelectionStep from "./SelectionStep";
@@ -5,7 +6,7 @@ import VerificationStep from "./VerificationStep";
 import ReimbursementForm from "./ReimbursementForm";
 import UploadStep from "./UploadStep";
 
-function Reimbursement() {
+function Reimbursement({ onBack }) {
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState(null); // 'online' or 'upload'
   const [verifiedData, setVerifiedData] = useState(null);
@@ -45,7 +46,7 @@ function Reimbursement() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto pb-10">
+    <div className="w-full max-w-5xl mx-auto">
       <div className="text-white text-center my-2">
         <h1 className="text-[#1E3161] font-bold roboto text-lg">
           REIMBURSEMENT
@@ -57,34 +58,36 @@ function Reimbursement() {
         <Stepper currentStep={step} steps={steps} />
       </div>
 
-      {/* Dynamic Step Content */}
-      <div className="flex-1 p-6 md:p-10 transition-all duration-300">
-        {step === 1 && <SelectionStep onSelect={handleSelectMode} />}
+      {/* Content Area */}
+      <div className="bg-white min-h-[500px] p-6">
+        {step === 1 && (
+          <SelectionStep onSelect={handleSelectMode} onBack={onBack} />
+        )}
 
         {step === 2 && (
           <VerificationStep
             onVerify={handleVerify}
-            onBack={handleBack}
-            initialData={verifiedData}
+            onBack={() => setStep(1)}
+            initialData={verifiedData} // Optional: preserve if they go back
           />
         )}
 
         {step === 3 && (
           <ReimbursementForm
             verifiedData={verifiedData}
-            initialData={formData}
             mode={mode}
-            onBack={handleBack}
+            onBack={() => setStep(2)}
             onNext={handleDetailsSubmit}
+            initialData={formData}
           />
         )}
 
         {step === 4 && (
           <UploadStep
             verifiedData={verifiedData}
-            formData={formData}
             mode={mode}
-            onBack={handleBack}
+            formData={formData}
+            onBack={() => setStep(3)}
             onReset={handleReset}
           />
         )}

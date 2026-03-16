@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaFileAlt, FaCheckCircle } from "react-icons/fa";
@@ -279,20 +280,20 @@ const UploadStep = ({ verifiedData, mode, formData, onBack, onReset }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6">
-          <button
-            type="button"
-            onClick={onBack}
-            className="w-full sm:w-auto px-8 py-3 text-gray-500 font-bold hover:text-gray-700 transition-colors roboto cursor-pointer"
-          >
-            ← BACK
-          </button>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
           <button
             type="submit"
             disabled={loading || !privacyConsent || fileArray.length === 0}
-            className="w-full sm:w-auto bg-[#0073aa] text-white px-12 py-3 rounded-lg font-bold hover:bg-[#005f8d] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg roboto cursor-pointer"
+            className="w-full bg-[#1E3161] flex justify-center items-center text-white py-1 rounded-r-4xl cursor-pointer shadow-lg rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-[#005f8d] disabled:opacity-50 disabled:cursor-not-allowed roboto"
           >
             {loading ? <MoonLoader size={20} color="white" /> : "SUBMIT CLAIM"}
+          </button>
+          <button
+            type="button"
+            onClick={onBack}
+            className="w-full bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto"
+          >
+            BACK
           </button>
         </div>
       </form>
