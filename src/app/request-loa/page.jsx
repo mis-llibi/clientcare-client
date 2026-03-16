@@ -10,7 +10,7 @@ import Card from "@/components/ClientCare_Desktop/Card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Consultation from "./Consultation";
 import Laboratory from "./Laboratory";
-import Reimbursement from "./Reimbursement";
+import Reimbursement from "./Reimbursement/Reimbursement";
 import FollowUpRequest from "./FollowUpRequest";
 import TermsOfUse from "@/components/TermsOfUse";
 import NotificationSystem from "@/components/NotificationSystem";
@@ -64,12 +64,12 @@ function RequestLoa() {
                     >
                       Laboratory
                     </TabsTrigger>
-                    {/* <TabsTrigger
+                    <TabsTrigger
                       value="reimbursement"
                       className="roboto w-full sm:w-auto"
                     >
                       Reimbursement
-                    </TabsTrigger> */}
+                    </TabsTrigger>
                     <TabsTrigger
                       value="followup"
                       className="roboto w-full sm:w-auto"

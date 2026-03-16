@@ -85,7 +85,7 @@ function Home() {
                 Laboratory
               </Link>
 
-              {/* <button
+              <button
                 onClick={() => setStep("reimbursement")}
                 className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 roboto w-full max-w-[250px] text-center"
               >
@@ -97,7 +97,7 @@ function Home() {
                 className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 roboto w-full max-w-[250px] text-center"
               >
                 Follow Up Request
-              </button> */}
+              </button>
             </div>
           </div>
         </CardComponent>
