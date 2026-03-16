@@ -5,7 +5,7 @@ import PhoneInputMask from "@/components/InputMask";
 import { MoonLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import { ClientRequestDesktop } from "@/hooks/ClientRequestDesktop";
-import ClientErrorLogForm from "./ClientErrorLogForm";
+import ClientErrorLogForm from "../ClientErrorLogForm";
 
 const VerificationStep = ({ onVerify, onBack, initialData }) => {
   const [loading, setLoading] = React.useState(false);
