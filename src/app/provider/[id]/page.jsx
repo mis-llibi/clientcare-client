@@ -85,12 +85,12 @@ function Home() {
                 Laboratory
               </Link>
 
-              <button
+              {/* <button
                 onClick={() => setStep("reimbursement")}
                 className="px-4 py-2 rounded-lg bg-[#1E3161] text-white hover:opacity-90 roboto w-full max-w-[250px] text-center"
               >
                 Reimbursement
-              </button>
+              </button> */}
 
               <button
                 onClick={() => setStep("followup")}
