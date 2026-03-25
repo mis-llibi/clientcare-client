@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import Label from "@/components/Label";
 import SelectComponent from '@/components/Select'
-import FindProviderDialog from '../request-loa/FindHospitalDialog'
+import FindProviderDialog from '../../request-loa/FindHospitalDialog'
 
 import useHrForm from '@/hooks/useHrForm'
 import { useSearchParams } from 'next/navigation'
