@@ -19,6 +19,7 @@ function SelectComponent({
   className,
   control,
   name,
+  rules,
   ...props
 }) {
   if (control && name) {
@@ -27,6 +28,7 @@ function SelectComponent({
       <Controller
         control={control}
         name={name}
+        rules={rules}
         defaultValue={defaultValue || ""} // 👈 ensure default is not undefined
         render={({ field }) => (
           <Select
@@ -39,7 +41,7 @@ function SelectComponent({
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {itemList.map((item, i) => (
+                {itemList?.map((item, i) => (
                   <SelectItem value={item.value} key={i} className={"roboto"}>
                     {item.name}
                   </SelectItem>
@@ -60,7 +62,7 @@ function SelectComponent({
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {itemList.map((item, i) => (
+          {itemList?.map((item, i) => (
             <SelectItem value={item.value} key={i}>
               {item.name}
             </SelectItem>
