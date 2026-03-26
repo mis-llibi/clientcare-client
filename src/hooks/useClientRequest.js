@@ -1,182 +1,208 @@
-'use client'
-import React from 'react'
-import axios from '@/lib/axios'
+"use client";
+import React from "react";
+import axios from "@/lib/axios";
 import { useRouter } from "next/navigation";
-import Swal from 'sweetalert2';
-
-
+import Swal from "sweetalert2";
 
 export const useClientRequest = () => {
+  const router = useRouter();
+  const csrf = () => axios.get("/sanctum/csrf-cookie");
 
-    const router = useRouter()
-    const csrf = () => axios.get('/sanctum/csrf-cookie')
-
-    const getProvider = async({setIsError, setIsLoading, setProvider, id}) => {
-        await csrf()
-        axios.get('/api/get-provider-id', {
+  const getProvider = async ({ setIsError, setIsLoading, setProvider, id }) => {
+    await csrf();
+    axios
+      .get("/api/get-provider-id", {
         params: {
-            id
+          id,
+        },
+      })
+      .then((res) => {
+        setProvider(res.data.provider);
+      })
+      .catch((err) => {
+        if (err.status == 422) {
+          setIsError(true);
         }
-        })
-        .then((res) => {
-        setProvider(res.data.provider)
-        })
-        .catch((err) => {
-            if(err.status == 422){
-                setIsError(true)
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const submitClient = async ({
+    setLoading,
+    setErrorLogs,
+    setShowErrorLogsModal,
+    ...props
+  }) => {
+    await csrf();
+
+    axios
+      .post("/api/submit-client-request", {
+        ...props,
+      })
+      .then((res) => {
+        // console.log(res.data)
+        router.push(res.data);
+      })
+      .catch((err) => {
+        if (
+          err.status == 404 &&
+          err.response.data.message == "Cannot find the patient"
+        ) {
+          Swal.fire({
+            title: "Validation Error",
+            text: `We are unable to validate your information. Please check your input and try again.`,
+            icon: "error",
+            showDenyButton: true,
+            showCancelButton: false,
+            showConfirmButton: true,
+            confirmButtonText: "Report",
+            denyButtonText: "Close",
+          }).then((res) => {
+            if (res.isConfirmed) {
+              setErrorLogs(err.response.data.error_data);
+              setShowErrorLogsModal(true);
+            } else {
+              setErrorLogs(null);
+              setShowErrorLogsModal(false);
             }
-        })
-        .finally(() => {
-            setIsLoading(false)
-        })
+          });
+        } else if (
+          err.status == 404 &&
+          err.response?.data?.message == "Please refer to your HR"
+        ) {
+          Swal.fire({
+            title: "Action Required",
+            text: "Please refer to your HR",
+            icon: "info",
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: `${err.response.data.message}`,
+            icon: "error",
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
+  const checkRefNo = async ({
+    setIsLoading,
+    setIsError,
+    setIsSubmitted,
+    setGetData,
+    setGetDoctors,
+    setGetHospitalName,
+    ...props
+  } = {}) => {
+    await csrf();
 
+    axios
+      .get("/api/update-client-request", {
+        params: {
+          ...props,
+        },
+      })
+      .then((res) => {
+        // console.log(res)
+        if (res.data.isSubmitted) {
+          setIsSubmitted(true);
+        } else {
+          setGetData(res.data.data);
+          setGetDoctors(res.data.doctors);
+          setGetHospitalName(res.data.provider);
+        }
+      })
+      .catch((err) => {
+        // console.log(err)
+        if (err.status == 404) {
+          setIsError(true);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
-    }
+  const submitClientRequestConsultation = async ({
+    setLoading,
+    setIsSubmitted,
+    setIsAuto,
+    ...props
+  }) => {
+    await csrf();
 
-    const submitClient = async({setLoading, setErrorLogs, setShowErrorLogsModal, ...props}) => {
-            await csrf()
-            
-            axios.post('/api/submit-client-request', {
-                ...props
-            })
-            .then((res) => {
-                // console.log(res.data)
-                router.push(res.data)
-            })
-            .catch((err) => {
-                if(err.status == 404 && err.response.data.message == "Cannot find the patient"){
-                        Swal.fire({
-                            title: "Validation Error",
-                            text: `We are unable to validate your information. Please check your input and try again.`,
-                            icon: "error",
-                            showDenyButton: true,
-                            showCancelButton: false,
-                            showConfirmButton: true,
-                            confirmButtonText: "Report",
-                            denyButtonText: "Close"
-                        }).then((res) => {
-                            if(res.isConfirmed){
-                                setErrorLogs(err.response.data.error_data)
-                                setShowErrorLogsModal(true)
-                            }else{
-                                setErrorLogs(null)
-                                setShowErrorLogsModal(false)
-                            }
-                        })
-                    }else{
-                        Swal.fire({
-                            title: "Error",
-                            text: `${err.response.data.message}`,
-                            icon: "error"
-                        })
-                    }
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-        
-    }
+    axios
+      .post("/api/submit-update-request/consultation", props)
+      .then((res) => {
+        // console.log(res)
+        if (res.status == 201) {
+          setIsSubmitted(true);
+          setIsAuto(res.data.isAuto);
+        }
+      })
+      .catch((err) => {
+        if (err.status == 422) {
+          Swal.fire({
+            title: "Error",
+            text: `${err.response.data.message}`,
+            icon: "error",
+            customClass: {
+              title: "roboto",
+              htmlContainer: "roboto", // applies to text
+            },
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-    const checkRefNo = async({setIsLoading, setIsError, setIsSubmitted, setGetData, setGetDoctors, setGetHospitalName, ...props} = {} ) => {
-        await csrf()
+  const submitClientRequestLaboratory = async ({
+    formData,
+    setLoading,
+    setIsSubmitted,
+  }) => {
+    await csrf();
+    axios
+      .post("/api/submit-update-request/laboratory", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          setIsSubmitted(true);
+        }
+      })
+      .catch((err) => {
+        if (err.status == 422) {
+          Swal.fire({
+            title: "Error",
+            text: `${err.response.data.message}`,
+            icon: "error",
+            customClass: {
+              title: "roboto",
+              htmlContainer: "roboto", // applies to text
+            },
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-        axios.get('/api/update-client-request', {
-            params: {
-                ...props
-            }
-        })
-        .then((res) => {
-            // console.log(res)
-            if(res.data.isSubmitted){
-                setIsSubmitted(true)
-            }else{
-                setGetData(res.data.data)
-                setGetDoctors(res.data.doctors)
-                setGetHospitalName(res.data.provider)
-            }
-        })
-        .catch((err) => {
-            // console.log(err)
-            if(err.status == 404){
-                setIsError(true)
-            }
-        })
-        .finally(() => {
-            setIsLoading(false)
-        })
-    }
-
-    const submitClientRequestConsultation = async({setLoading, setIsSubmitted, setIsAuto, ...props}) => {
-        await csrf()
-
-        axios.post('/api/submit-update-request/consultation', props)
-        .then((res) => {
-            // console.log(res)
-            if(res.status == 201){
-                setIsSubmitted(true)
-                setIsAuto(res.data.isAuto)
-            }
-        })
-        .catch((err) => {
-            if(err.status == 422){
-                Swal.fire({
-                    title: "Error",
-                    text: `${err.response.data.message}`,
-                    icon: "error",
-                    customClass: {
-                        title: 'roboto',
-                        htmlContainer: 'roboto' // applies to text
-                    }
-                })
-            }
-        })
-        .finally(() => {
-            setLoading(false)
-        })
-    }
-
-    const submitClientRequestLaboratory = async ({ formData, setLoading, setIsSubmitted }) => {
-
-        await csrf()
-        axios.post('/api/submit-update-request/laboratory', formData, {
-            headers: {
-                "Content-Type" : "multipart/form-data"
-            }
-        })
-        .then((res) => {
-            if(res.status == 200){
-                setIsSubmitted(true)
-            }
-        })
-        .catch((err) => {
-            if(err.status == 422){
-                Swal.fire({
-                    title: "Error",
-                    text: `${err.response.data.message}`,
-                    icon: "error",
-                    customClass: {
-                        title: 'roboto',
-                        htmlContainer: 'roboto' // applies to text
-                    }
-                })
-            }
-        })
-        .finally(() => {
-            setLoading(false);
-        })
-
-    };
-
-
-  
   return {
     getProvider,
     submitClient,
     checkRefNo,
     submitClientRequestConsultation,
-    submitClientRequestLaboratory
-  }
-}
-
-
+    submitClientRequestLaboratory,
+  };
+};

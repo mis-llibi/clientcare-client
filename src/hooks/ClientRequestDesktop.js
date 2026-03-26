@@ -127,6 +127,15 @@ export const ClientRequestDesktop = () => {
               setShowErrorLogsModal(false);
             }
           });
+        } else if (
+          err.status == 404 &&
+          err.response?.data?.message == "Please refer to your HR"
+        ) {
+          Swal.fire({
+            title: "Action Required",
+            text: "Please refer to your HR",
+            icon: "info",
+          });
         } else {
           Swal.fire({
             title: "Error",
@@ -188,6 +197,15 @@ export const ClientRequestDesktop = () => {
               setErrorLogs(null);
               setShowErrorLogsModal(false);
             }
+          });
+        } else if (
+          err.status == 404 &&
+          err.response.data.message == "Please refer to your HR"
+        ) {
+          Swal.fire({
+            title: "Action Required",
+            text: "Please refer to your HR",
+            icon: "info",
           });
         } else {
           Swal.fire({
@@ -473,25 +491,47 @@ export const ClientRequestDesktop = () => {
           }
         })
         .catch((err) => {
-          Swal.fire({
-            title: "Error",
-            text:
-              err.response?.data?.message ||
-              "Something went wrong. Please try again later.",
-            icon: "error",
-          });
+          if (
+            err.response?.status === 403 &&
+            err.response?.data?.limit_reached
+          ) {
+            Swal.fire({
+              title: "Limit Reached",
+              text: err.response.data.message,
+              icon: "error",
+            });
+          } else {
+            Swal.fire({
+              title: "Error",
+              text:
+                err.response?.data?.message ||
+                "Something went wrong. Please try again later.",
+              icon: "error",
+            });
+          }
         })
         .finally(() => {
           setLoading(false);
         });
     } catch (error) {
-      Swal.fire({
-        title: "Error",
-        text:
-          error.response?.data?.message ||
-          "Something went wrong. Please try again later.",
-        icon: "error",
-      });
+      if (
+        error.response?.status === 403 &&
+        error.response?.data?.limit_reached
+      ) {
+        Swal.fire({
+          title: "Limit Reached",
+          text: error.response.data.message,
+          icon: "warning",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text:
+            error.response?.data?.message ||
+            "Something went wrong. Please try again later.",
+          icon: "error",
+        });
+      }
       setLoading(false);
     }
   };
