@@ -332,7 +332,7 @@ export default function HrPage() {
                                     className="text-xs text-white px-2 py-1 rounded-sm cursor-pointer bg-blue-600 hover:bg-blue-500 active:bg-blue-700 focus:outline-none"
                                     onClick={() => handleViewFiles(row)}
                                   >
-                                    View
+                                    View Lab Request
                                   </button>
                                 )}
                                 <button
