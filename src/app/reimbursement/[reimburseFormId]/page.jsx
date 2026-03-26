@@ -1,55 +1,55 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
-import { EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import { FontFamily, FontSize, TextStyle } from '@tiptap/extension-text-style';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Placeholder from '@tiptap/extension-placeholder';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { FontFamily, FontSize, TextStyle } from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import Placeholder from "@tiptap/extension-placeholder";
 
 const FONT_OPTIONS = [
-  'Roboto',
-  'Arial',
-  'Georgia',
-  'Times New Roman',
-  'Trebuchet MS',
-  'Courier New',
+  "Roboto",
+  "Arial",
+  "Georgia",
+  "Times New Roman",
+  "Trebuchet MS",
+  "Courier New",
 ];
 
 const FONT_STACKS = {
   Roboto: "'Roboto', Arial, Helvetica, sans-serif",
-  Arial: 'Arial, Helvetica, sans-serif',
+  Arial: "Arial, Helvetica, sans-serif",
   Georgia: "Georgia, 'Times New Roman', serif",
-  'Times New Roman': "'Times New Roman', Times, serif",
-  'Trebuchet MS': "'Trebuchet MS', Helvetica, sans-serif",
-  'Courier New': "'Courier New', Courier, monospace",
+  "Times New Roman": "'Times New Roman', Times, serif",
+  "Trebuchet MS": "'Trebuchet MS', Helvetica, sans-serif",
+  "Courier New": "'Courier New', Courier, monospace",
 };
 
 const MIN_FONT_SIZE = 12;
 const MAX_FONT_SIZE = 72;
 const DEFAULT_FONT_SIZE = 15;
 
-const DEFAULT_MESSAGE = `Hello member,
+const DEFAULT_MESSAGE = `Hello {{reimbursement.member_id}},
 
-Thank you for your reimbursement submission.
+Thank you for your reimbursement submission (Ref: {{reimbursement.reimburse_form_id}}).
 To proceed, please provide the additional required documents.
 
 Our team will continue processing once all requirements are complete.`;
 
 function toEditorHtml(plainText) {
-  const normalized = plainText.replace(/\r/g, '');
-  if (!normalized) return '<p></p>';
+  const normalized = plainText.replace(/\r/g, "");
+  if (!normalized) return "<p></p>";
 
   return normalized
-    .split('\n')
-    .map((line) => `<p>${line ? escapeHtml(line) : '<br />'}</p>`)
-    .join('');
+    .split("\n")
+    .map((line) => `<p>${line ? escapeHtml(line) : "<br />"}</p>`)
+    .join("");
 }
 
 function normalizeEditorText(value) {
-  return value.replace(/\r/g, '').replace(/\u00a0/g, ' ');
+  return value.replace(/\r/g, "").replace(/\u00a0/g, " ");
 }
 
 function applyTemplate(content, templateVariables) {
@@ -61,11 +61,11 @@ function applyTemplate(content, templateVariables) {
 }
 
 function applyTemplateToRichHtml(contentHtml, fallbackText, templateVariables) {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return toEditorHtml(applyTemplate(fallbackText, templateVariables));
   }
 
-  const root = document.createElement('div');
+  const root = document.createElement("div");
   root.innerHTML = contentHtml;
 
   const walker = document.createTreeWalker(root, window.NodeFilter.SHOW_TEXT);
@@ -76,7 +76,10 @@ function applyTemplateToRichHtml(contentHtml, fallbackText, templateVariables) {
   }
 
   textNodes.forEach((textNode) => {
-    textNode.textContent = applyTemplate(textNode.textContent || '', templateVariables);
+    textNode.textContent = applyTemplate(
+      textNode.textContent || "",
+      templateVariables,
+    );
   });
 
   return root.innerHTML;
@@ -84,17 +87,17 @@ function applyTemplateToRichHtml(contentHtml, fallbackText, templateVariables) {
 
 function escapeHtml(value) {
   return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function withApiBase(path) {
-  const base = "https://corporate-api.llibi.app";
+  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "").trim();
   if (!base) return path;
-  return `${base.replace(/\/+$/, '')}${path}`;
+  return `${base.replace(/\/+$/, "")}${path}`;
 }
 
 function clampFontSize(value) {
@@ -103,21 +106,23 @@ function clampFontSize(value) {
 
 function parseFontSize(value) {
   if (!value) return DEFAULT_FONT_SIZE;
-  const parsed = Number.parseInt(String(value).replace(/[^\d]/g, ''), 10);
+  const parsed = Number.parseInt(String(value).replace(/[^\d]/g, ""), 10);
   return Number.isFinite(parsed) ? clampFontSize(parsed) : DEFAULT_FONT_SIZE;
 }
 
 function resolveFontOption(fontFamily) {
-  if (!fontFamily) return 'Roboto';
+  if (!fontFamily) return "Roboto";
 
-  const match = Object.entries(FONT_STACKS).find(([, stack]) => stack === fontFamily);
-  return match ? match[0] : 'Roboto';
+  const match = Object.entries(FONT_STACKS).find(
+    ([, stack]) => stack === fontFamily,
+  );
+  return match ? match[0] : "Roboto";
 }
 
 function resolveTextAlign(editor) {
-  if (editor.isActive({ textAlign: 'center' })) return 'center';
-  if (editor.isActive({ textAlign: 'right' })) return 'right';
-  return 'left';
+  if (editor.isActive({ textAlign: "center" })) return "center";
+  if (editor.isActive({ textAlign: "right" })) return "right";
+  return "left";
 }
 
 export default function ClientCareReimbursementComposerPage() {
@@ -129,20 +134,24 @@ export default function ClientCareReimbursementComposerPage() {
     ? params.reimburseFormId[0]
     : params?.reimburseFormId;
 
-  const signature = searchParams.get('signature') || '';
-  const expires = searchParams.get('expires') || '';
+  const signature = searchParams.get("signature") || "";
+  const expires = searchParams.get("expires") || "";
 
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const [error, setError] = useState('');
-  const [sendResult, setSendResult] = useState('');
+  const [error, setError] = useState("");
+  const [sendResult, setSendResult] = useState("");
   const [payload, setPayload] = useState(null);
 
-  const [recipientEmail, setRecipientEmail] = useState('');
-  const [subject, setSubject] = useState('LLIBI - Additional Reimbursement Documents Needed');
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [subject, setSubject] = useState(
+    "LLIBI - Additional Reimbursement Documents Needed",
+  );
   const [message, setMessage] = useState(DEFAULT_MESSAGE);
-  const [messageHtml, setMessageHtml] = useState(() => toEditorHtml(DEFAULT_MESSAGE));
-  const [fontFamily, setFontFamily] = useState('Roboto');
+  const [messageHtml, setMessageHtml] = useState(() =>
+    toEditorHtml(DEFAULT_MESSAGE),
+  );
+  const [fontFamily, setFontFamily] = useState("Roboto");
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
   const [fontSizeInput, setFontSizeInput] = useState(String(DEFAULT_FONT_SIZE));
   const [isBold, setIsBold] = useState(false);
@@ -150,21 +159,21 @@ export default function ClientCareReimbursementComposerPage() {
   const [isUnderline, setIsUnderline] = useState(false);
   const [isBulletList, setIsBulletList] = useState(false);
   const [isOrderedList, setIsOrderedList] = useState(false);
-  const [textAlign, setTextAlign] = useState('left');
+  const [textAlign, setTextAlign] = useState("left");
 
   function syncToolbarState(editorInstance) {
-    const textStyleAttrs = editorInstance.getAttributes('textStyle') || {};
+    const textStyleAttrs = editorInstance.getAttributes("textStyle") || {};
     const nextFont = resolveFontOption(textStyleAttrs.fontFamily);
     const nextSize = parseFontSize(textStyleAttrs.fontSize);
 
     setFontFamily(nextFont);
     setFontSize(nextSize);
     setFontSizeInput(String(nextSize));
-    setIsBold(editorInstance.isActive('bold'));
-    setIsItalic(editorInstance.isActive('italic'));
-    setIsUnderline(editorInstance.isActive('underline'));
-    setIsBulletList(editorInstance.isActive('bulletList'));
-    setIsOrderedList(editorInstance.isActive('orderedList'));
+    setIsBold(editorInstance.isActive("bold"));
+    setIsItalic(editorInstance.isActive("italic"));
+    setIsUnderline(editorInstance.isActive("underline"));
+    setIsBulletList(editorInstance.isActive("bulletList"));
+    setIsOrderedList(editorInstance.isActive("orderedList"));
     setTextAlign(resolveTextAlign(editorInstance));
   }
 
@@ -183,19 +192,24 @@ export default function ClientCareReimbursementComposerPage() {
         horizontalRule: false,
       }),
       TextStyle.configure({ mergeNestedSpanStyles: true }),
-      FontFamily.configure({ types: ['textStyle'] }),
-      FontSize.configure({ types: ['textStyle'] }),
+      FontFamily.configure({ types: ["textStyle"] }),
+      FontSize.configure({ types: ["textStyle"] }),
       Underline,
-      TextAlign.configure({ types: ['paragraph'], alignments: ['left', 'center', 'right'] }),
-      Placeholder.configure({ placeholder: 'Write your message with placeholders...' }),
+      TextAlign.configure({
+        types: ["paragraph"],
+        alignments: ["left", "center", "right"],
+      }),
+      Placeholder.configure({
+        placeholder: "Write your message with placeholders...",
+      }),
     ],
     content: messageHtml,
     editorProps: {
       attributes: {
-        class: 'composer-editor-content',
+        class: "composer-editor-content",
       },
       handlePaste(view, event) {
-        const plainText = event.clipboardData?.getData('text/plain');
+        const plainText = event.clipboardData?.getData("text/plain");
         if (!plainText) return false;
 
         event.preventDefault();
@@ -204,15 +218,19 @@ export default function ClientCareReimbursementComposerPage() {
       },
     },
     onCreate: ({ editor: editorInstance }) => {
-      const initialText = normalizeEditorText(editorInstance.getText({ blockSeparator: '\n' }));
+      const initialText = normalizeEditorText(
+        editorInstance.getText({ blockSeparator: "\n" }),
+      );
       setMessage(initialText);
-      setMessageHtml(editorInstance.getHTML() || '<p></p>');
+      setMessageHtml(editorInstance.getHTML() || "<p></p>");
       captureSelection(editorInstance);
       syncToolbarState(editorInstance);
     },
     onUpdate: ({ editor: editorInstance }) => {
-      setMessage(normalizeEditorText(editorInstance.getText({ blockSeparator: '\n' })));
-      setMessageHtml(editorInstance.getHTML() || '<p></p>');
+      setMessage(
+        normalizeEditorText(editorInstance.getText({ blockSeparator: "\n" })),
+      );
+      setMessageHtml(editorInstance.getHTML() || "<p></p>");
       captureSelection(editorInstance);
       syncToolbarState(editorInstance);
     },
@@ -280,7 +298,7 @@ export default function ClientCareReimbursementComposerPage() {
   }
 
   function adjustTextIndentBySpaces(direction) {
-    const INDENT_TOKEN = '\u00a0\u00a0\u00a0\u00a0';
+    const INDENT_TOKEN = "\u00a0\u00a0\u00a0\u00a0";
     const OUTDENT_PATTERN = /^(?:\u00a0| ){1,4}/;
 
     runEditorCommand((chain) =>
@@ -314,7 +332,7 @@ export default function ClientCareReimbursementComposerPage() {
             if (!node || !node.isTextblock) return;
 
             const start = pos + 1;
-            const text = node.textContent || '';
+            const text = node.textContent || "";
 
             if (direction > 0) {
               tr.insertText(INDENT_TOKEN, start);
@@ -332,15 +350,18 @@ export default function ClientCareReimbursementComposerPage() {
         if (!changed) return false;
         if (dispatch) dispatch(tr);
         return true;
-      })
+      }),
     );
   }
 
   function indentSelection() {
     if (!editor) return;
 
-    const inList = editor.isActive('bulletList') || editor.isActive('orderedList');
-    const didIndentList = inList ? runEditorCommand((chain) => chain.sinkListItem('listItem')) : false;
+    const inList =
+      editor.isActive("bulletList") || editor.isActive("orderedList");
+    const didIndentList = inList
+      ? runEditorCommand((chain) => chain.sinkListItem("listItem"))
+      : false;
 
     if (!didIndentList) {
       adjustTextIndentBySpaces(1);
@@ -350,8 +371,11 @@ export default function ClientCareReimbursementComposerPage() {
   function outdentSelection() {
     if (!editor) return;
 
-    const inList = editor.isActive('bulletList') || editor.isActive('orderedList');
-    const didOutdentList = inList ? runEditorCommand((chain) => chain.liftListItem('listItem')) : false;
+    const inList =
+      editor.isActive("bulletList") || editor.isActive("orderedList");
+    const didOutdentList = inList
+      ? runEditorCommand((chain) => chain.liftListItem("listItem"))
+      : false;
 
     if (!didOutdentList) {
       adjustTextIndentBySpaces(-1);
@@ -372,30 +396,32 @@ export default function ClientCareReimbursementComposerPage() {
   }
 
   async function handleSend() {
-    setSendResult('');
-    setError('');
+    setSendResult("");
+    setError("");
 
     if (!recipientEmail.trim()) {
-      setError('Recipient email is required.');
+      setError("Recipient email is required.");
       return;
     }
 
     const editorText = editor
-      ? normalizeEditorText(editor.getText({ blockSeparator: '\n' }))
+      ? normalizeEditorText(editor.getText({ blockSeparator: "\n" }))
       : message;
     const editorHtml = editor ? editor.getHTML() : messageHtml;
 
     if (!subject.trim() || !editorText.trim()) {
-      setError('Subject and message are required.');
+      setError("Subject and message are required.");
       return;
     }
 
     setSending(true);
     try {
-      const endpoint = withApiBase(`/api/reimbursement/client-care/${encodeURIComponent(reimburseFormId)}/send-email`);
+      const endpoint = withApiBase(
+        `/api/reimbursement/client-care/${encodeURIComponent(reimburseFormId)}/send-email`,
+      );
       const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           signature,
           expires: Number(expires),
@@ -409,9 +435,9 @@ export default function ClientCareReimbursementComposerPage() {
       const json = await response.json();
       if (!response.ok || !json.success) {
         const details = json?.details?.unknown_variables?.length
-          ? ` Unknown variables: ${json.details.unknown_variables.join(', ')}`
-          : '';
-        setError(`${json.error || 'Failed to send email.'}${details}`);
+          ? ` Unknown variables: ${json.details.unknown_variables.join(", ")}`
+          : "";
+        setError(`${json.error || "Failed to send email."}${details}`);
         return;
       }
 
@@ -428,43 +454,51 @@ export default function ClientCareReimbursementComposerPage() {
   const canRedo = editor?.can().chain().focus().redo().run() ?? false;
 
   const templateVariables = payload?.template_variables || {};
-  const variableKeys = useMemo(() => Object.keys(templateVariables).sort(), [templateVariables]);
+  const variableKeys = useMemo(
+    () => Object.keys(templateVariables).sort(),
+    [templateVariables],
+  );
 
   const previewHtml = useMemo(
     () => applyTemplateToRichHtml(messageHtml, message, templateVariables),
-    [messageHtml, message, templateVariables]
+    [messageHtml, message, templateVariables],
   );
 
   useEffect(() => {
     async function loadData() {
       if (!reimburseFormId || !signature || !expires) {
-        setError('Missing signed parameters. Please use the original email link.');
+        setError(
+          "Missing signed parameters. Please use the original email link.",
+        );
         setLoading(false);
         return;
       }
 
       setLoading(true);
-      setError('');
+      setError("");
 
       try {
         const endpoint = withApiBase(
           `/api/reimbursement/client-care/${encodeURIComponent(reimburseFormId)}?signature=${encodeURIComponent(
-            signature
-          )}&expires=${encodeURIComponent(expires)}`
+            signature,
+          )}&expires=${encodeURIComponent(expires)}`,
         );
 
-        const response = await fetch(endpoint, { method: 'GET' });
+        const response = await fetch(endpoint, { method: "GET" });
         const json = await response.json();
 
         if (!response.ok || !json.success) {
-          setError(json.error || 'Unable to load reimbursement details.');
+          setError(json.error || "Unable to load reimbursement details.");
           setLoading(false);
           return;
         }
 
         setPayload(json.data);
-        setRecipientEmail(json.data?.reimbursement?.email_address || '');
-        setSubject(json.data?.suggested_subject || 'LLIBI - Additional Reimbursement Documents Needed');
+        setRecipientEmail(json.data?.reimbursement?.email_address || "");
+        setSubject(
+          json.data?.suggested_subject ||
+            "LLIBI - Additional Reimbursement Documents Needed",
+        );
       } catch (fetchError) {
         setError(`Failed to load data: ${fetchError.message}`);
       } finally {
@@ -477,11 +511,34 @@ export default function ClientCareReimbursementComposerPage() {
 
   if (loading) {
     return (
-      <main style={{ ...styles.page, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ ...styles.loadingContainer, padding: '50px 60px', overflow: 'hidden', position: 'relative' }}>
+      <main
+        style={{
+          ...styles.page,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            ...styles.loadingContainer,
+            padding: "50px 60px",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
           <div className="animation-container">
             <div className="paper-plane">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1e3161" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#1e3161"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="m22 2-7 20-4-9-9-4Z" />
                 <path d="M22 2 11 13" />
               </svg>
@@ -490,7 +547,13 @@ export default function ClientCareReimbursementComposerPage() {
             <div className="cloud c2" />
             <div className="cloud c3" />
           </div>
-          <p style={{ ...styles.loadingText, marginTop: '20px', fontSize: '18px' }}>
+          <p
+            style={{
+              ...styles.loadingText,
+              marginTop: "20px",
+              fontSize: "18px",
+            }}
+          >
             Training our carrier pigeons...
           </p>
           <style jsx>{`
@@ -514,20 +577,52 @@ export default function ClientCareReimbursementComposerPage() {
               height: 10px;
               animation: cloud-move 3s linear infinite;
             }
-            .c1 { width: 30px; top: 10px; right: -20px; animation-delay: 0s; }
-            .c2 { width: 45px; bottom: 15px; right: -40px; animation-delay: 1s; }
-            .c3 { width: 25px; top: 40px; right: -30px; animation-delay: 2s; }
+            .c1 {
+              width: 30px;
+              top: 10px;
+              right: -20px;
+              animation-delay: 0s;
+            }
+            .c2 {
+              width: 45px;
+              bottom: 15px;
+              right: -40px;
+              animation-delay: 1s;
+            }
+            .c3 {
+              width: 25px;
+              top: 40px;
+              right: -30px;
+              animation-delay: 2s;
+            }
 
             @keyframes fly {
-              0%, 100% { transform: translateY(0) rotate(0deg); }
-              25% { transform: translateY(-10px) rotate(-5deg); }
-              75% { transform: translateY(10px) rotate(5deg); }
+              0%,
+              100% {
+                transform: translateY(0) rotate(0deg);
+              }
+              25% {
+                transform: translateY(-10px) rotate(-5deg);
+              }
+              75% {
+                transform: translateY(10px) rotate(5deg);
+              }
             }
             @keyframes cloud-move {
-              from { transform: translateX(50px); opacity: 0; }
-              20% { opacity: 0.6; }
-              80% { opacity: 0.6; }
-              to { transform: translateX(-150px); opacity: 0; }
+              from {
+                transform: translateX(50px);
+                opacity: 0;
+              }
+              20% {
+                opacity: 0.6;
+              }
+              80% {
+                opacity: 0.6;
+              }
+              to {
+                transform: translateX(-150px);
+                opacity: 0;
+              }
             }
           `}</style>
         </div>
@@ -549,13 +644,18 @@ export default function ClientCareReimbursementComposerPage() {
         <section style={styles.card}>
           <h1 style={styles.title}>Compose Lacking Documents Email</h1>
           <p style={styles.subtitle}>
-            Reference: <strong>{payload?.reimbursement?.reimburse_form_id}</strong>
+            Reference:{" "}
+            <strong>{payload?.reimbursement?.reimburse_form_id}</strong>
           </p>
 
           <div style={styles.row}>
             <label style={styles.label}>Recipient Email</label>
             <input
-              style={{ ...styles.input, background: '#f1f5f9', cursor: 'default' }}
+              style={{
+                ...styles.input,
+                background: "#f1f5f9",
+                cursor: "default",
+              }}
               value={recipientEmail}
               readOnly
               placeholder="member@email.com"
@@ -565,7 +665,11 @@ export default function ClientCareReimbursementComposerPage() {
           <div style={styles.row}>
             <label style={styles.label}>Subject</label>
             <input
-              style={{ ...styles.input, background: '#f1f5f9', cursor: 'default' }}
+              style={{
+                ...styles.input,
+                background: "#f1f5f9",
+                cursor: "default",
+              }}
               value={subject}
               readOnly
               placeholder="Email subject"
@@ -883,8 +987,13 @@ export default function ClientCareReimbursementComposerPage() {
           {error ? <p style={styles.errorText}>{error}</p> : null}
           {sendResult ? <p style={styles.successText}>{sendResult}</p> : null}
 
-          <button type="button" style={styles.sendButton} onClick={handleSend} disabled={sending}>
-            {sending ? 'Sending...' : 'Send Email'}
+          <button
+            type="button"
+            style={styles.sendButton}
+            onClick={handleSend}
+            disabled={sending}
+          >
+            {sending ? "Sending..." : "Send Email"}
           </button>
         </section>
 
@@ -892,25 +1001,34 @@ export default function ClientCareReimbursementComposerPage() {
           <h2 style={styles.previewTitle}>Preview</h2>
           <div style={styles.previewShell}>
             <div style={styles.previewHeader}>
-              <h3 style={styles.previewHeaderTitle}>Insufficient/Deficient Claims Document</h3>
+              <h3 style={styles.previewHeaderTitle}>
+                Insufficient/Deficient Claims Document
+              </h3>
+              <p style={styles.previewHeaderSub}>Additional Document Request</p>
             </div>
 
             <div style={styles.previewBody}>
               <p style={styles.previewMeta}>Dear Valued Member,</p>
-              <p style={styles.previewMeta}>Please review the message below from our claims team.</p>
+              <p style={styles.previewMeta}>
+                Please review the message below from our claims team.
+              </p>
 
               <div style={styles.previewDetails}>
                 <p>
-                  <strong>Reference:</strong> {payload?.reimbursement?.reimburse_form_id}
+                  <strong>Reference:</strong>{" "}
+                  {payload?.reimbursement?.reimburse_form_id}
                 </p>
                 <p>
-                  <strong>Member ID:</strong> {payload?.reimbursement?.member_id}
+                  <strong>Member ID:</strong>{" "}
+                  {payload?.reimbursement?.member_id}
                 </p>
                 <p>
-                  <strong>Requirement Type:</strong> {payload?.reimbursement?.requirement_type}
+                  <strong>Requirement Type:</strong>{" "}
+                  {payload?.reimbursement?.requirement_type}
                 </p>
                 <p>
-                  <strong>Files Submitted:</strong> {payload?.reimbursement?.files_count}
+                  <strong>Files Submitted:</strong>{" "}
+                  {payload?.reimbursement?.files_count}
                 </p>
               </div>
 
@@ -948,7 +1066,11 @@ export default function ClientCareReimbursementComposerPage() {
         .toolbar-action,
         .toolbar-select,
         .toolbar-input {
-          transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+          transition:
+            background-color 0.16s ease,
+            border-color 0.16s ease,
+            color 0.16s ease,
+            transform 0.16s ease;
         }
 
         .toolbar-action:hover:not(:disabled) {
@@ -980,7 +1102,10 @@ export default function ClientCareReimbursementComposerPage() {
           margin-bottom: 0;
         }
 
-        .composer-editor :global(.composer-editor-content p.is-editor-empty:first-child::before) {
+        .composer-editor
+          :global(
+            .composer-editor-content p.is-editor-empty:first-child::before
+          ) {
           content: attr(data-placeholder);
           color: #98a2b3;
           float: left;
@@ -1017,353 +1142,353 @@ export default function ClientCareReimbursementComposerPage() {
 
 const styles = {
   page: {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #eef3fb 0%, #f8fafc 100%)',
-    padding: '24px',
-    color: '#1d2939',
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #eef3fb 0%, #f8fafc 100%)",
+    padding: "24px",
+    color: "#1d2939",
     fontFamily: "'Trebuchet MS', Helvetica, sans-serif",
-    overflowX: 'hidden',
+    overflowX: "hidden",
   },
   layout: {
-    maxWidth: '1280px',
-    margin: '0 auto',
-    display: 'grid',
-    gridTemplateColumns: '1.15fr 1fr',
-    gap: '20px',
+    maxWidth: "1280px",
+    margin: "0 auto",
+    display: "grid",
+    gridTemplateColumns: "1.15fr 1fr",
+    gap: "20px",
     minWidth: 0,
   },
   card: {
-    background: '#ffffff',
-    border: '1px solid #d0d7e2',
-    borderRadius: '12px',
-    padding: '20px',
-    boxShadow: '0 6px 24px rgba(15, 23, 42, 0.08)',
+    background: "#ffffff",
+    border: "1px solid #d0d7e2",
+    borderRadius: "12px",
+    padding: "20px",
+    boxShadow: "0 6px 24px rgba(15, 23, 42, 0.08)",
     minWidth: 0,
   },
   previewCard: {
-    background: '#ffffff',
-    border: '1px solid #d0d7e2',
-    borderRadius: '12px',
-    padding: '20px',
-    boxShadow: '0 6px 24px rgba(15, 23, 42, 0.08)',
+    background: "#ffffff",
+    border: "1px solid #d0d7e2",
+    borderRadius: "12px",
+    padding: "20px",
+    boxShadow: "0 6px 24px rgba(15, 23, 42, 0.08)",
     minWidth: 0,
   },
   loadingContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '16px',
-    background: '#ffffff',
-    border: '1px solid #d0d7e2',
-    borderRadius: '16px',
-    padding: '40px 48px',
-    boxShadow: '0 8px 32px rgba(15, 23, 42, 0.1)',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "16px",
+    background: "#ffffff",
+    border: "1px solid #d0d7e2",
+    borderRadius: "16px",
+    padding: "40px 48px",
+    boxShadow: "0 8px 32px rgba(15, 23, 42, 0.1)",
   },
   loadingText: {
     margin: 0,
-    fontSize: '16px',
+    fontSize: "16px",
     fontWeight: 600,
-    color: '#1e3161',
-    letterSpacing: '0.01em',
+    color: "#1e3161",
+    letterSpacing: "0.01em",
   },
   cardError: {
-    maxWidth: '720px',
-    margin: '0 auto',
-    background: '#fff5f5',
-    border: '1px solid #fecaca',
-    color: '#991b1b',
-    borderRadius: '12px',
-    padding: '18px',
-    fontSize: '15px',
+    maxWidth: "720px",
+    margin: "0 auto",
+    background: "#fff5f5",
+    border: "1px solid #fecaca",
+    color: "#991b1b",
+    borderRadius: "12px",
+    padding: "18px",
+    fontSize: "15px",
   },
   title: {
-    margin: '0 0 6px 0',
-    fontSize: '22px',
+    margin: "0 0 6px 0",
+    fontSize: "22px",
     fontWeight: 700,
-    color: '#1e3161',
+    color: "#1e3161",
   },
   subtitle: {
-    margin: '0 0 18px 0',
-    fontSize: '14px',
-    color: '#475467',
+    margin: "0 0 18px 0",
+    fontSize: "14px",
+    color: "#475467",
   },
   row: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
-    marginBottom: '14px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px",
+    marginBottom: "14px",
   },
   label: {
-    fontSize: '13px',
+    fontSize: "13px",
     fontWeight: 600,
-    color: '#334155',
+    color: "#334155",
   },
   input: {
-    height: '40px',
-    border: '1px solid #cbd5e1',
-    borderRadius: '8px',
-    padding: '0 12px',
-    fontSize: '14px',
-    color: '#1f2937',
-    background: '#fff',
+    height: "40px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "8px",
+    padding: "0 12px",
+    fontSize: "14px",
+    color: "#1f2937",
+    background: "#fff",
   },
   select: {
-    height: '40px',
-    border: '1px solid #cbd5e1',
-    borderRadius: '8px',
-    padding: '0 12px',
-    fontSize: '14px',
-    color: '#1f2937',
-    background: '#fff',
+    height: "40px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "8px",
+    padding: "0 12px",
+    fontSize: "14px",
+    color: "#1f2937",
+    background: "#fff",
   },
   editorShell: {
-    minHeight: '220px',
-    border: '1px solid #cbd5e1',
-    borderRadius: '8px',
-    padding: '12px',
-    color: '#1f2937',
-    background: '#fff',
+    minHeight: "220px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "8px",
+    padding: "12px",
+    color: "#1f2937",
+    background: "#fff",
     lineHeight: 1.6,
-    overflowY: 'auto',
-    fontSize: '15px',
+    overflowY: "auto",
+    fontSize: "15px",
     fontFamily: FONT_STACKS.Roboto,
   },
   controls: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    marginBottom: '14px',
-    padding: '12px',
-    borderRadius: '10px',
-    border: '1px solid #d8e2f2',
-    background: '#f8fbff',
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+    marginBottom: "14px",
+    padding: "12px",
+    borderRadius: "10px",
+    border: "1px solid #d8e2f2",
+    background: "#f8fbff",
     minWidth: 0,
   },
   toolbarTopRow: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-    gap: '12px',
-    alignItems: 'end',
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: "12px",
+    alignItems: "end",
     minWidth: 0,
   },
   toolbarField: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px",
     minWidth: 0,
   },
   toolbarGroups: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(165px, 1fr))',
-    gap: '10px',
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(165px, 1fr))",
+    gap: "10px",
     minWidth: 0,
   },
   toolbarGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    background: '#ffffff',
-    border: '1px solid #e2e8f0',
-    borderRadius: '8px',
-    padding: '8px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    background: "#ffffff",
+    border: "1px solid #e2e8f0",
+    borderRadius: "8px",
+    padding: "8px",
     minWidth: 0,
   },
   toolbarGroupLabel: {
     margin: 0,
-    fontSize: '11px',
+    fontSize: "11px",
     lineHeight: 1,
-    letterSpacing: '0.04em',
-    textTransform: 'uppercase',
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
     fontWeight: 700,
-    color: '#64748b',
+    color: "#64748b",
   },
   fontSizeRow: {
-    display: 'grid',
-    gridTemplateColumns: '32px minmax(0, 1fr) 32px',
-    gap: '6px',
-    alignItems: 'center',
+    display: "grid",
+    gridTemplateColumns: "32px minmax(0, 1fr) 32px",
+    gap: "6px",
+    alignItems: "center",
     minWidth: 0,
   },
   indentRow: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-    gap: '6px',
-    alignItems: 'center',
+    display: "grid",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    gap: "6px",
+    alignItems: "center",
     minWidth: 0,
   },
   fontSizeInput: {
-    height: '40px',
-    border: '1px solid #cbd5e1',
-    borderRadius: '8px',
-    padding: '0 10px',
-    fontSize: '14px',
-    color: '#1f2937',
-    background: '#fff',
-    textAlign: 'center',
+    height: "40px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "8px",
+    padding: "0 10px",
+    fontSize: "14px",
+    color: "#1f2937",
+    background: "#fff",
+    textAlign: "center",
     minWidth: 0,
   },
   smallControlButton: {
-    height: '40px',
-    border: '1px solid #cbd5e1',
-    borderRadius: '8px',
-    background: '#fff',
-    color: '#1f2937',
-    fontSize: '18px',
+    height: "40px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "8px",
+    background: "#fff",
+    color: "#1f2937",
+    fontSize: "18px",
     lineHeight: 1,
-    cursor: 'pointer',
+    cursor: "pointer",
     fontWeight: 600,
   },
   indentControlButton: {
-    height: '40px',
-    border: '1px solid #cbd5e1',
-    borderRadius: '8px',
-    background: '#fff',
-    color: '#1f2937',
-    fontSize: '13px',
+    height: "40px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "8px",
+    background: "#fff",
+    color: "#1f2937",
+    fontSize: "13px",
     lineHeight: 1,
-    cursor: 'pointer',
+    cursor: "pointer",
     fontWeight: 700,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
   },
   toolbarButtonRow: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '6px',
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "6px",
     minWidth: 0,
   },
   toolbarButton: {
-    minWidth: '32px',
-    height: '34px',
-    padding: '0 8px',
-    borderRadius: '8px',
-    border: '1px solid #cbd5e1',
-    background: '#fff',
-    color: '#1f2937',
-    fontSize: '13px',
+    minWidth: "32px",
+    height: "34px",
+    padding: "0 8px",
+    borderRadius: "8px",
+    border: "1px solid #cbd5e1",
+    background: "#fff",
+    color: "#1f2937",
+    fontSize: "13px",
     fontWeight: 700,
-    cursor: 'pointer',
-    whiteSpace: 'nowrap',
+    cursor: "pointer",
+    whiteSpace: "nowrap",
   },
   toolbarButtonWide: {
     minWidth: 0,
-    flex: '1 1 calc(50% - 3px)',
+    flex: "1 1 calc(50% - 3px)",
   },
   toolbarButtonActive: {
-    background: '#e8eef9',
-    border: '1px solid #8fb0f0',
-    color: '#1d4ed8',
+    background: "#e8eef9",
+    border: "1px solid #8fb0f0",
+    color: "#1d4ed8",
   },
   variableSection: {
-    marginBottom: '16px',
+    marginBottom: "16px",
   },
   variableLabel: {
-    fontSize: '13px',
+    fontSize: "13px",
     fontWeight: 600,
-    margin: '0 0 8px 0',
-    color: '#334155',
+    margin: "0 0 8px 0",
+    color: "#334155",
   },
   variableWrap: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '8px',
-    maxHeight: '120px',
-    overflowY: 'auto',
-    padding: '2px',
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "8px",
+    maxHeight: "120px",
+    overflowY: "auto",
+    padding: "2px",
   },
   variableButton: {
-    background: '#e8eef9',
-    border: '1px solid #c5d4f0',
-    color: '#1e3a8a',
-    borderRadius: '20px',
-    padding: '6px 10px',
-    fontSize: '12px',
-    cursor: 'pointer',
-    maxWidth: '100%',
-    overflowWrap: 'anywhere',
+    background: "#e8eef9",
+    border: "1px solid #c5d4f0",
+    color: "#1e3a8a",
+    borderRadius: "20px",
+    padding: "6px 10px",
+    fontSize: "12px",
+    cursor: "pointer",
+    maxWidth: "100%",
+    overflowWrap: "anywhere",
   },
   sendButton: {
-    width: '100%',
-    height: '44px',
-    borderRadius: '10px',
-    border: 'none',
-    background: '#1e3161',
-    color: '#fff',
-    fontSize: '15px',
+    width: "100%",
+    height: "44px",
+    borderRadius: "10px",
+    border: "none",
+    background: "#1e3161",
+    color: "#fff",
+    fontSize: "15px",
     fontWeight: 700,
-    cursor: 'pointer',
+    cursor: "pointer",
   },
   errorText: {
-    margin: '0 0 12px 0',
-    color: '#b42318',
-    fontSize: '13px',
-    background: '#fef3f2',
-    border: '1px solid #fecdca',
-    borderRadius: '8px',
-    padding: '8px 10px',
+    margin: "0 0 12px 0",
+    color: "#b42318",
+    fontSize: "13px",
+    background: "#fef3f2",
+    border: "1px solid #fecdca",
+    borderRadius: "8px",
+    padding: "8px 10px",
   },
   successText: {
-    margin: '0 0 12px 0',
-    color: '#067647',
-    fontSize: '13px',
-    background: '#ecfdf3',
-    border: '1px solid #abefc6',
-    borderRadius: '8px',
-    padding: '8px 10px',
+    margin: "0 0 12px 0",
+    color: "#067647",
+    fontSize: "13px",
+    background: "#ecfdf3",
+    border: "1px solid #abefc6",
+    borderRadius: "8px",
+    padding: "8px 10px",
   },
   previewTitle: {
-    margin: '0 0 12px 0',
-    fontSize: '20px',
-    color: '#1e3161',
+    margin: "0 0 12px 0",
+    fontSize: "20px",
+    color: "#1e3161",
   },
   previewShell: {
-    border: '1px solid #e2e8f0',
-    borderRadius: '10px',
-    overflow: 'hidden',
-    background: '#f8fafc',
+    border: "1px solid #e2e8f0",
+    borderRadius: "10px",
+    overflow: "hidden",
+    background: "#f8fafc",
   },
   previewHeader: {
-    background: '#1e3161',
-    padding: '16px 18px',
-    color: '#fff',
+    background: "#1e3161",
+    padding: "16px 18px",
+    color: "#fff",
   },
   previewHeaderTitle: {
     margin: 0,
-    fontSize: '18px',
+    fontSize: "18px",
   },
   previewHeaderSub: {
-    margin: '4px 0 0 0',
-    fontSize: '13px',
+    margin: "4px 0 0 0",
+    fontSize: "13px",
     opacity: 0.9,
   },
   previewBody: {
-    padding: '16px 18px 20px 18px',
-    background: '#ffffff',
+    padding: "16px 18px 20px 18px",
+    background: "#ffffff",
   },
   previewMeta: {
-    margin: '0 0 10px 0',
-    color: '#334155',
-    fontSize: '14px',
+    margin: "0 0 10px 0",
+    color: "#334155",
+    fontSize: "14px",
     lineHeight: 1.6,
   },
   previewDetails: {
-    margin: '14px 0',
-    background: '#f8f9fa',
-    border: '1px solid #e6e9ee',
-    borderLeft: '4px solid #1e3161',
-    borderRadius: '8px',
-    padding: '12px',
-    fontSize: '13px',
-    color: '#334155',
+    margin: "14px 0",
+    background: "#f8f9fa",
+    border: "1px solid #e6e9ee",
+    borderLeft: "4px solid #1e3161",
+    borderRadius: "8px",
+    padding: "12px",
+    fontSize: "13px",
+    color: "#334155",
     lineHeight: 1.5,
   },
   previewMessage: {
-    marginTop: '14px',
-    background: '#f8f9fa',
-    border: '1px solid #e6e9ee',
-    borderRadius: '8px',
-    padding: '14px',
-    color: '#333333',
+    marginTop: "14px",
+    background: "#f8f9fa",
+    border: "1px solid #e6e9ee",
+    borderRadius: "8px",
+    padding: "14px",
+    color: "#333333",
     lineHeight: 1.7,
-    overflowWrap: 'anywhere',
+    overflowWrap: "anywhere",
   },
 };
