@@ -1,5 +1,7 @@
 import axios from "@/lib/axios";
+import Swal from "sweetalert2";
 import useSWR from "swr";
+
 
 export default function useHrForm() {
   const csrf = () => axios.get("/sanctum/csrf-cookie");
@@ -18,16 +20,31 @@ export default function useHrForm() {
     }));
   });
 
-  const submitHrForms = async ({ setLoading, ...props }) => {
+  const submitHrForms = async ({ setLoading, reset, setSelectedHospital, ...props }) => {
     await csrf();
 
     axios
       .post("/api/submit-hr-patient", props)
       .then((res) => {
-        console.log(res);
+        if(res.status == 200){
+          Swal.fire({
+            title: "Success",
+            text: "Submit Form Successfully",
+            icon: "success"
+          })
+          reset()
+          setSelectedHospital('')
+
+        }
       })
       .catch((err) => {
-        console.log(err);
+        if(err.status == 400){
+          Swal.fire({
+            title: "Error",
+            text: "Submit Form Error",
+            icon: "error"
+          })
+        }
       })
       .finally(() => {
         setLoading(false);

@@ -27,6 +27,7 @@ export default function HrForms() {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset
   } = useForm({
     defaultValues: {
       company_id: "",
@@ -65,6 +66,8 @@ export default function HrForms() {
     submitHrForms({
       ...mergeData,
       setLoading,
+      reset,
+      setSelectedHospital
     });
   };
 
