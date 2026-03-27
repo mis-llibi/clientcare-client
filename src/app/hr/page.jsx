@@ -114,6 +114,8 @@ export default function HrPage() {
       title: "Disapprove this request?",
       text: "This will mark the request as disapproved and notify the patient.",
       icon: "warning",
+      input: "textarea",
+      inputPlaceholder: "Enter your remarks here...",
       showCancelButton: true,
       confirmButtonColor: "#dc2626",
       cancelButtonColor: "#6b7280",
@@ -134,6 +136,7 @@ export default function HrPage() {
           setLoading,
           id: row.id,
           status: 14,
+          disapproveRemarks: result.value || "",
         });
       }
     });
