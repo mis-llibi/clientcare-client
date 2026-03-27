@@ -1,15 +1,19 @@
 "use client";
 
 export default function HrFilesModal({ row, attachments, onClose }) {
-  const providerRaw = row.providerName?.split("||")?.[1] || "";
-  const [provName, provAddr, provCity, provState] = providerRaw.split("++");
-  const doctorRaw = row.doctorName?.split("||")?.[1] || "";
-  const [doctorFullName, doctorSpec] = (doctorRaw || "").split("++");
+
+
+  const provider = row?.providerName?.split('++')
+  const doctor = row?.doctorName?.split('++')
+
+
   const patientName = row.isDependent
     ? `${row.depLastName}, ${row.depFirstName}`
     : `${row.lastName}, ${row.firstName}`;
   const memberId = row.isDependent ? row.depMemberID : row.memberID;
   const dob = row.isDependent ? row.depDob : row.dob;
+
+  
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -141,27 +145,27 @@ export default function HrFilesModal({ row, attachments, onClose }) {
               </h3>
               <p className="mb-1">
                 <span className="font-bold">HOSPITAL/CLINIC: </span>
-                <span className="text-blue-600">{provName || "N/A"}</span>
+                <span className="text-blue-600">{provider && provider[0] || "N/A"}</span>
               </p>
               <p className="mb-1">
                 <span className="font-bold">ADDRESS: </span>
-                <span className="text-blue-600">{provAddr || ""}</span>
+                <span className="text-blue-600">{provider && provider[1] || ""}</span>
               </p>
               <p className="mb-1">
                 <span className="font-bold">CITY: </span>
-                <span className="text-blue-600">{provCity || ""}</span>
+                <span className="text-blue-600">{provider && provider[2] || ""}</span>
               </p>
               <p className="mb-1">
                 <span className="font-bold">STATE: </span>
-                <span className="text-blue-600">{provState || ""}</span>
+                <span className="text-blue-600">{provider && provider[3] || ""}</span>
               </p>
               <p className="mb-1">
                 <span className="font-bold">DOCTOR NAME: </span>
-                <span className="text-blue-600">{doctorFullName || ""}</span>
+                <span className="text-blue-600">{doctor && doctor[0] || ""}</span>
               </p>
               <p className="mb-1">
                 <span className="font-bold">SPECIALIZATION: </span>
-                <span className="text-blue-600">{doctorSpec || ""}</span>
+                <span className="text-blue-600">{doctor && doctor[1] || ""}</span>
               </p>
             </div>
           </div>

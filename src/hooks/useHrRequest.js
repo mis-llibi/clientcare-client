@@ -89,7 +89,7 @@ export const useHr = ({ name, status, page = 1 }) => {
         props,
       );
       mutate();
-      console.log(response);
+      // console.log(response);
       const result = response.data;
       Swal.fire({
         title: "Updated",
