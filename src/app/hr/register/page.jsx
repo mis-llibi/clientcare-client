@@ -18,9 +18,11 @@ export default function HrRegisterPage() {
   const [password, setPassword] = useState("");
   const [password_confirmation, setPasswordConfirmation] = useState("");
   const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const submitForm = (e) => {
     e.preventDefault();
+    setLoading(true);
     register({
       first_name,
       last_name,
@@ -28,6 +30,7 @@ export default function HrRegisterPage() {
       password,
       password_confirmation,
       setErrors,
+      setLoading,
     });
   };
 
@@ -111,9 +114,32 @@ export default function HrRegisterPage() {
 
           <button
             type="submit"
-            className="w-full bg-[#1E3161] text-white py-2 rounded-lg hover:bg-[#162548] transition cursor-pointer"
+            disabled={loading}
+            className="w-full bg-[#1E3161] text-white py-2 rounded-lg hover:bg-[#162548] transition cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Register
+            {loading && (
+              <svg
+                className="animate-spin h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8z"
+                />
+              </svg>
+            )}
+            {loading ? "" : "Register"}
           </button>
         </form>
 

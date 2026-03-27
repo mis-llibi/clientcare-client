@@ -21,7 +21,7 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
   const csrf = () => axios.get("/sanctum/csrf-cookie");
 
-  const register = async ({ setErrors, ...props }) => {
+  const register = async ({ setErrors, setLoading, ...props }) => {
     await csrf();
 
     setErrors([]);
@@ -32,10 +32,11 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       .catch((error) => {
         if (error.response?.status !== 422) throw error;
         setErrors(error.response.data.errors);
-      });
+      })
+      .finally(() => setLoading && setLoading(false));
   };
 
-  const login = async ({ setErrors, setStatus, ...props }) => {
+  const login = async ({ setErrors, setStatus, setLoading, ...props }) => {
     await csrf();
 
     setErrors([]);
@@ -47,7 +48,8 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       .catch((error) => {
         if (error.response?.status !== 422) throw error;
         setErrors(error.response.data.errors);
-      });
+      })
+      .finally(() => setLoading && setLoading(false));
   };
 
   const logout = async () => {
