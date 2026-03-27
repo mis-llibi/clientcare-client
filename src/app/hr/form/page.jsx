@@ -36,6 +36,8 @@ export default function HrForms() {
       patientType: "employee",
       chiefComplaint: "",
       provider: "",
+      email: "",
+      alt_email: "",
     },
   });
 
@@ -90,7 +92,7 @@ export default function HrForms() {
           <Card className="rounded-3xl border border-slate-200 shadow-xl">
             <CardHeader className="space-y-2 border-b bg-white/80 backdrop-blur">
               <CardTitle className="text-2xl font-bold tracking-tight md:text-3xl">
-                HR Patient Form
+                For HR Approval
               </CardTitle>
               <CardDescription className="text-sm md:text-base">
                 Fill out the patient details below.
@@ -137,7 +139,7 @@ export default function HrForms() {
                       htmlFor="patientFirstName"
                       className="text-[#1E3161] font-semibold"
                     >
-                      Patient First Name
+                      Patient First Name <span className="text-red-700">*</span>
                     </label>
                     <input
                       type="text"
@@ -159,7 +161,7 @@ export default function HrForms() {
                       htmlFor="patientLastName"
                       className="text-[#1E3161] font-semibold"
                     >
-                      Patient Last Name
+                      Patient Last Name <span className="text-red-700">*</span>
                     </label>
                     <input
                       type="text"
@@ -176,10 +178,48 @@ export default function HrForms() {
                     )}
                   </div>
 
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="email"
+                      className="text-[#1E3161] font-semibold"
+                    >
+                      Email <span className="text-red-700">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
+                      {...register("email", {
+                        required: "Email is required",
+                      })}
+                    />
+                    {errors.email && (
+                      <p className="text-red-800 text-sm font-semibold roboto">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="alt_email"
+                      className="text-[#1E3161] font-semibold"
+                    >
+                      Alternative Email
+                    </label>
+                    <input
+                      type="email"
+                      id="alt_email"
+                      className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
+                      {...register("alt_email")}
+                    />
+                  </div>
+
                   <div className="md:col-span-2">
                     <Label
                       label={"Chief Complaint"}
                       htmlFor={"chiefComplaint"}
+                      required={true}
                     />
                     <textarea
                       id="chiefComplaint"

@@ -91,7 +91,13 @@ export const ClientRequestDesktop = () => {
               text: `Your request has been submitted, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
               icon: "success",
             });
-          } else {
+          } else if(res.data.isAuto == true && res.data.isHr == true){
+            Swal.fire({
+              title: "Successful Request for LOA",
+              text: `Submitted for your HR's Approval`,
+              icon: "success",
+            });
+          }else {
             Swal.fire({
               title: "Successful Request for LOA",
               text: `Your request has been successfully approved, we already send you the loa in your email`,
