@@ -282,6 +282,9 @@ export default function HrPage() {
                       Hospital
                     </th>
                     <th className="border border-gray-300 p-2 text-center text-sm">
+                      LOA Type
+                    </th>
+                    <th className="border border-gray-300 p-2 text-center text-sm">
                       Status
                     </th>
                     <th className="border border-gray-300 p-2 text-center text-sm">
@@ -319,6 +322,9 @@ export default function HrPage() {
                         </td>
                         <td className="border border-gray-300 p-2 text-center text-sm">
                           {row.providerName?.split("++")[0] || "-"}
+                        </td>
+                        <td className="border border-gray-300 p-2 text-center text-sm">
+                          {row.loaType?.toUpperCase() ?? "-"}
                         </td>
                         <td className="border border-gray-300 p-2 text-center text-sm">
                           {row.status === 12 && "Pending"}
