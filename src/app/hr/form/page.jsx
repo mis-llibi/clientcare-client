@@ -39,7 +39,7 @@ function HrFormsContent() {
     handleSubmit,
     formState: { errors },
     setValue,
-    reset
+    reset,
   } = useForm({
     defaultValues: {
       company_id: "",
@@ -93,7 +93,7 @@ function HrFormsContent() {
       ...mergeData,
       setLoading,
       reset,
-      setSelectedHospital
+      setSelectedHospital,
     });
   };
 

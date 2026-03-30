@@ -94,13 +94,13 @@ export const ClientRequestDesktop = () => {
           } else if (res.data.isAuto == false && res.data.isHr == true) {
             Swal.fire({
               title: "Successful Request for LOA",
-              text: `Your request has been submitted for your HR's approval, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
+              text: `Your request has been submitted, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
               icon: "success",
             });
           } else if (res.data.isAuto == true && res.data.isHr == true) {
             Swal.fire({
               title: "Successful Request for LOA",
-              text: `Submitted for your HR's Approval`,
+              text: `Your request has been submitted, your reference is ${res.data?.refno}. We will notify you through the email and mobile number you provided`,
               icon: "success",
             });
           } else {
