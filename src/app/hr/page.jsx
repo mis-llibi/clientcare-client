@@ -265,6 +265,15 @@ export default function HrPage() {
                   <span className="text-blue-500 text-sm">Loading...</span>
                 )}
               </div>
+              <div className="flex basis-1/4 items-center justify-end">
+                <a
+                  className="text-blue-700 font-bold self-center capitalize  border border-gray-300 px-3 py-2 rounded-md text-xs"
+                  href={"https://corporate.llibi.com"}
+                  target='_blank'
+                  >
+                  Issue LOA
+                </a>
+              </div>
             </div>
 
             {/* Table */}

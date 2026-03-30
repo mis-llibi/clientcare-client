@@ -16,6 +16,8 @@ import FindHospitalDialog from "@/app/request-loa/FindHospitalDialog";
 
 import useHrForm from "@/hooks/useHrForm";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { isProd } from "@/lib/axios";
 
 export default function HrForms() {
   return (
@@ -32,6 +34,17 @@ export default function HrForms() {
 function HrFormsContent() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("user_id");
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!userId) {
+      router.push(
+        isProd
+          ? process.env.NEXT_PUBLIC_DEPLOYED_ADMIN_CCE_FRONTEND
+          : process.env.NEXT_PUBLIC_ADMIN_CCE_FRONTEND
+      );
+    }
+  }, [userId, router]);
 
   const {
     register,
