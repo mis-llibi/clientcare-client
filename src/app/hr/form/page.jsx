@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,20 @@ import FindHospitalDialog from "@/app/request-loa/FindHospitalDialog";
 import useHrForm from "@/hooks/useHrForm";
 import { useSearchParams } from "next/navigation";
 
+
 export default function HrForms() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+        <p className="text-slate-500">Loading...</p>
+      </div>
+    }>
+      <HrFormsContent />
+    </Suspense>
+  );
+}
+
+export default function HrFormsContent() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("user_id");
 
