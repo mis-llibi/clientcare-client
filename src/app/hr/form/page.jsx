@@ -50,6 +50,7 @@ function HrFormsContent() {
       provider: "",
       email: "",
       alt_email: "",
+      loaType: ""
     },
   });
 
@@ -66,6 +67,17 @@ function HrFormsContent() {
     {
       name: "Patient is Dependent",
       value: "dependent",
+    },
+  ];
+
+  const loaType = [
+    {
+      name: "Consultation",
+      value: "consultation",
+    },
+    {
+      name: "Laboratory",
+      value: "laboratory",
     },
   ];
 
@@ -142,6 +154,28 @@ function HrFormsContent() {
                     {errors.company_id && (
                       <p className="text-red-800 text-sm font-semibold roboto">
                         {errors.company_id.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="md:col-span-2 space-y-2">
+                    <label
+                      htmlFor="loaType"
+                      className="text-[#1E3161] font-semibold"
+                    >
+                      LOA Type
+                    </label>
+                    <SelectComponent
+                      // defaultValue={"employee"}
+                      itemList={loaType}
+                      className={"w-full border-2 roboto"}
+                      control={control}
+                      name={"loaType"}
+                      rules={{ required: "LOA Type is Required" }}
+                    />
+                    {errors.loaType && (
+                      <p className="text-red-800 text-sm font-semibold roboto">
+                        {errors.loaType.message}
                       </p>
                     )}
                   </div>
