@@ -54,7 +54,10 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
   const logout = async () => {
     if (!error) {
-      await axios.post("/hr/logout").then(() => mutate());
+      await axios
+        .post("/hr/logout")
+        .then(() => mutate())
+        .catch(() => {});
     }
 
     window.location.pathname = "/hr/login";

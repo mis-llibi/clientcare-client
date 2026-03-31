@@ -16,6 +16,8 @@ import FindHospitalDialog from "@/app/request-loa/FindHospitalDialog";
 
 import useHrForm from "@/hooks/useHrForm";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { isProd } from "@/lib/axios";
 
 export default function HrForms() {
   return (
@@ -32,6 +34,17 @@ export default function HrForms() {
 function HrFormsContent() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("user_id");
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!userId) {
+      router.push(
+        isProd
+          ? process.env.NEXT_PUBLIC_DEPLOYED_ADMIN_CCE_FRONTEND
+          : process.env.NEXT_PUBLIC_ADMIN_CCE_FRONTEND
+      );
+    }
+  }, [userId, router]);
 
   const {
     register,
@@ -39,7 +52,7 @@ function HrFormsContent() {
     handleSubmit,
     formState: { errors },
     setValue,
-    reset
+    reset,
   } = useForm({
     defaultValues: {
       company_id: "",
@@ -50,6 +63,7 @@ function HrFormsContent() {
       provider: "",
       email: "",
       alt_email: "",
+      loaType: ""
     },
   });
 
@@ -69,6 +83,17 @@ function HrFormsContent() {
     },
   ];
 
+  const loaType = [
+    {
+      name: "Consultation",
+      value: "consultation",
+    },
+    {
+      name: "Laboratory",
+      value: "laboratory",
+    },
+  ];
+
   const onSubmit = (data) => {
     const mergeData = {
       ...data,
@@ -81,7 +106,7 @@ function HrFormsContent() {
       ...mergeData,
       setLoading,
       reset,
-      setSelectedHospital
+      setSelectedHospital,
     });
   };
 
@@ -142,6 +167,28 @@ function HrFormsContent() {
                     {errors.company_id && (
                       <p className="text-red-800 text-sm font-semibold roboto">
                         {errors.company_id.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="md:col-span-2 space-y-2">
+                    <label
+                      htmlFor="loaType"
+                      className="text-[#1E3161] font-semibold"
+                    >
+                      LOA Type
+                    </label>
+                    <SelectComponent
+                      // defaultValue={"employee"}
+                      itemList={loaType}
+                      className={"w-full border-2 roboto"}
+                      control={control}
+                      name={"loaType"}
+                      rules={{ required: "LOA Type is Required" }}
+                    />
+                    {errors.loaType && (
+                      <p className="text-red-800 text-sm font-semibold roboto">
+                        {errors.loaType.message}
                       </p>
                     )}
                   </div>
