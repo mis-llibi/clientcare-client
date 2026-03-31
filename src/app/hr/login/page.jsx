@@ -98,7 +98,7 @@ export default function HrLoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-4">
+        {/* <p className="text-center text-sm text-gray-600 mt-4">
           Don&apos;t have an account?{" "}
           <Link
             href="/hr/register"
@@ -106,7 +106,7 @@ export default function HrLoginPage() {
           >
             Register
           </Link>
-        </p>
+        </p> */}
       </div>
     </div>
   );
