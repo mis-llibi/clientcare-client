@@ -1,18 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHrAuth } from "@/hooks/useHrAuth";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
 import SelectComponent from "@/components/Select";
 import useHrForm from "@/hooks/useHrForm";
 import PhoneInputMask from "@/components/InputMask";
+import { useRouter } from "next/navigation";
+
+
 
 export default function HrRegisterPage() {
-  const { register } = useHrAuth({
-    middleware: "guest",
-    redirectIfAuthenticated: "/hr",
+
+
+  const router = useRouter()
+  const { register, user, isLoading } = useHrAuth({
+    middleware: "auth",
   });
+
+  useEffect(() => {
+    if(user && !user?.is_admin){
+      router.push('/hr')
+    }
+  }, [user])
+
+
+
+
 
   const { companies } = useHrForm();
 
@@ -62,6 +77,17 @@ export default function HrRegisterPage() {
       setLoading,
     });
   };
+
+  if(isLoading){
+    return(
+      <>
+      <div>
+        Loading....
+      </div>
+      
+      </>
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
