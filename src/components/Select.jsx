@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import React from "react"
-import { Controller } from "react-hook-form"
+import React from "react";
+import { Controller } from "react-hook-form";
 
 import {
   Select,
@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 function SelectComponent({
   defaultValue,
@@ -51,7 +51,7 @@ function SelectComponent({
           </Select>
         )}
       />
-    )
+    );
   }
 
   // ✅ Standalone usage (not controlled by RHF)
@@ -70,7 +70,7 @@ function SelectComponent({
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }
 
-export default SelectComponent
+export default SelectComponent;

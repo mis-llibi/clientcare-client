@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useHr } from "@/hooks/useHrRequest";
 import { useHrAuth } from "@/hooks/useHrAuth";
-import LiveClock from "@/components/LiveClock";
+
 import axios from "@/lib/axios";
 import Swal from "sweetalert2";
 import HrFilesModal from "@/app/hr/HrFilesModal";
+import Link from "next/link";
+import Header from "@/components/Hr/Header";
 
 export default function HrPage() {
   const { user, logout } = useHrAuth({ middleware: "auth" });
@@ -180,57 +182,10 @@ export default function HrPage() {
         <div className="max-w-full mx-auto sm:px-6 lg:px-8">
           <div className="p-6 bg-white border-b border-gray-300 shadow-sm sm:rounded-lg">
             {/* Main Header — logo + title + clock + user dropdown */}
-            <div className="flex-none md:flex gap-5 font-bold text-xl text-gray-900">
-              <Image
-                src="/logo.png"
-                alt="Lacson & Lacson Logo"
-                width={200}
-                height={60}
-                style={{ objectFit: "contain" }}
-                priority
-              />
-              <div className="my-auto w-full">
-                <div className="w-full text-center md:text-right">
-                  <p>
-                    HR <span className="text-blue-900">Client Care Portal</span>
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    <LiveClock />
-                  </p>
-                  <div className="flex justify-end">
-                    <div className="relative group">
-                      <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
-                        <span className="capitalize">
-                          {user?.last_name + ", " + user?.first_name}
-                        </span>
-                        <span className="ml-1">
-                          <svg
-                            className="fill-current h-4 w-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </span>
-                      </button>
-                      <div className="absolute right-0 mt-1 w-40 bg-white rounded-md shadow-lg border border-gray-100 hidden group-focus-within:block z-50">
-                        <button
-                          onClick={logout}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 font-normal"
-                        >
-                          Logout
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr className="my-2 mb-3 border-b-4 shadow border-blue-900 rounded-lg" />
+            <Header 
+              logout={logout}
+              user={user}
+            />
 
             {/* Search Form */}
             <div className="flex gap-2 mb-4">

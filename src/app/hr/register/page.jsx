@@ -1,38 +1,93 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHrAuth } from "@/hooks/useHrAuth";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
-import Link from "next/link";
+import SelectComponent from "@/components/Select";
+import useHrForm from "@/hooks/useHrForm";
+import PhoneInputMask from "@/components/InputMask";
+import { useRouter } from "next/navigation";
+
+
 
 export default function HrRegisterPage() {
-  const { register } = useHrAuth({
-    middleware: "guest",
-    redirectIfAuthenticated: "/hr",
+
+
+  const router = useRouter()
+  const { register, user, isLoading } = useHrAuth({
+    middleware: "auth",
   });
 
+  useEffect(() => {
+    if(user && !user?.is_admin){
+      router.push('/hr')
+    }
+  }, [user])
+
+
+
+
+
+  const { companies } = useHrForm();
+
+  const [companyId, setCompanyId] = useState("");
+  const [username, setUsername] = useState("");
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirmation, setPasswordConfirmation] = useState("");
+  const [contact_number, setContactNumber] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const submitForm = (e) => {
     e.preventDefault();
+    if (!companyId) {
+      setErrors({ company_name: ["Please select a company"] });
+      return;
+    }
     setLoading(true);
+
+    let formatted_contact = contact_number;
+    if (formatted_contact) {
+      const digits = formatted_contact.replace(/\D/g, "");
+      if (digits.startsWith("63")) {
+        formatted_contact = "0" + digits.slice(2);
+      } else if (!digits.startsWith("0")) {
+        formatted_contact = "0" + digits;
+      } else {
+        formatted_contact = digits;
+      }
+    }
+
+    const comp = companies.find((c) => String(c.value) === String(companyId));
     register({
+      company_name: comp ? comp.name : "",
+      comp_code: comp ? comp.comp_code : "",
+      username,
       first_name,
       last_name,
       email,
       password,
       password_confirmation,
+      contact_number: formatted_contact,
       setErrors,
       setLoading,
     });
   };
+
+  if(isLoading){
+    return(
+      <>
+      <div>
+        Loading....
+      </div>
+      
+      </>
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -43,6 +98,36 @@ export default function HrRegisterPage() {
 
         <form onSubmit={submitForm} className="space-y-4">
           <div>
+            <Label htmlFor="company_name" label="Company Name" />
+            <SelectComponent
+              itemList={companies}
+              className="w-full border border-black/30 py-1 px-2 rounded-lg outline-[#1E3161] bg-white text-left"
+              value={companyId}
+              onValueChange={setCompanyId}
+              placeholder="Select Company"
+            />
+            {errors.company_name && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.company_name[0]}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="username" label="Username" />
+            <Input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username[0]}</p>
+            )}
+          </div>
+
+          <div>
             <Label htmlFor="first_name" label="First Name" />
             <Input
               id="first_name"
@@ -50,7 +135,6 @@ export default function HrRegisterPage() {
               value={first_name}
               onChange={(e) => setFirstName(e.target.value)}
               required
-              autoFocus
             />
             {errors.first_name && (
               <p className="text-red-500 text-sm mt-1">
@@ -84,6 +168,20 @@ export default function HrRegisterPage() {
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="contact_number" label="Contact Number" />
+            <PhoneInputMask
+              value={contact_number}
+              onChange={setContactNumber}
+              placeholder="+63 (___)-___-____"
+            />
+            {errors.contact_number && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.contact_number[0]}
+              </p>
             )}
           </div>
 
@@ -142,16 +240,6 @@ export default function HrRegisterPage() {
             {loading ? "" : "Register"}
           </button>
         </form>
-
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Already have an account?{" "}
-          <Link
-            href="/hr/login"
-            className="text-[#1E3161] font-semibold hover:underline"
-          >
-            Login
-          </Link>
-        </p>
       </div>
     </div>
   );
