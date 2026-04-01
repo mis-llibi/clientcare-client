@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import React from "react"
-import { Controller } from "react-hook-form"
+import React from "react";
+import { Controller } from "react-hook-form";
 
 import {
   Select,
@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 function SelectComponent({
   defaultValue,
@@ -42,7 +42,7 @@ function SelectComponent({
             <SelectContent>
               <SelectGroup>
                 {itemList?.map((item, i) => (
-                  <SelectItem value={item.value} key={item.value || i} className={"roboto"}>
+                  <SelectItem value={item.value} key={i} className={"roboto"}>
                     {item.name}
                   </SelectItem>
                 ))}
@@ -51,7 +51,7 @@ function SelectComponent({
           </Select>
         )}
       />
-    )
+    );
   }
 
   // ✅ Standalone usage (not controlled by RHF)
@@ -63,14 +63,14 @@ function SelectComponent({
       <SelectContent>
         <SelectGroup>
           {itemList?.map((item, i) => (
-            <SelectItem value={item.value} key={item.value || i}>
+            <SelectItem value={item.value} key={i}>
               {item.name}
             </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }
 
-export default SelectComponent
+export default SelectComponent;
