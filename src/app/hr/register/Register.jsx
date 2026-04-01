@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useHrAuth } from "@/hooks/useHrAuth";
 import Input from "@/components/Input";
 import Label from "@/components/Label";
-import Link from "next/link";
 import SelectComponent from "@/components/Select";
 import useHrForm from "@/hooks/useHrForm";
 import PhoneInputMask from "@/components/InputMask";
@@ -215,16 +214,6 @@ export default function HrRegisterPage() {
             {loading ? "" : "Register"}
           </button>
         </form>
-
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Already have an account?{" "}
-          <Link
-            href="/hr/login"
-            className="text-[#1E3161] font-semibold hover:underline"
-          >
-            Login
-          </Link>
-        </p>
       </div>
     </div>
   );
