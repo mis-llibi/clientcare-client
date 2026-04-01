@@ -18,6 +18,7 @@ export default function HrRegisterPage() {
   const { companies } = useHrForm();
 
   const [companyId, setCompanyId] = useState("");
+  const [username, setUsername] = useState("");
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,6 +52,7 @@ export default function HrRegisterPage() {
     register({
       company_name: comp ? comp.name : "",
       comp_code: comp ? comp.comp_code : "",
+      username,
       first_name,
       last_name,
       email,
@@ -83,6 +85,20 @@ export default function HrRegisterPage() {
               <p className="text-red-500 text-sm mt-1">
                 {errors.company_name[0]}
               </p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="username" label="Username" />
+            <Input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username[0]}</p>
             )}
           </div>
 
