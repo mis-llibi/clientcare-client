@@ -2,6 +2,7 @@ import useSWR from "swr";
 import axios from "@/lib/axios";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
   const router = useRouter();
@@ -63,6 +64,51 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     window.location.pathname = "/hr/login";
   };
 
+  const changePassword = async ({ setLoading, reset, ...props }) => {
+    await csrf();
+
+    axios
+      .put("/hr/change-password", props)
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Password changed successfully!",
+          confirmButtonColor: "#1E3161",
+        });
+
+        reset()
+      })
+      .catch((err) => {
+        if (err.response?.status === 422) {
+          const errors = err.response.data.errors;
+
+          let errorMessages = "";
+
+          Object.keys(errors).forEach((key) => {
+            errorMessages += `${errors[key][0]}\n`;
+          });
+
+          Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text: errorMessages,
+            confirmButtonColor: "#1E3161",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err.response?.data?.message || "Something went wrong",
+            confirmButtonColor: "#1E3161",
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     if (middleware === "guest" && redirectIfAuthenticated && user) {
       router.push(redirectIfAuthenticated);
@@ -83,5 +129,6 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     register,
     login,
     logout,
+    changePassword
   };
 };
