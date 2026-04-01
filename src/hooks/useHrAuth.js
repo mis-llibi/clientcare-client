@@ -3,6 +3,7 @@ import axios from "@/lib/axios";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { usePathname } from "next/navigation";
 
 export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
   const router = useRouter();
@@ -11,6 +12,7 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     data: user,
     error,
     mutate,
+    isLoading,
   } = useSWR("/hr/user", () =>
     axios
       .get("/hr/user")
@@ -126,6 +128,7 @@ export const useHrAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
   return {
     user,
+    isLoading,
     register,
     login,
     logout,
