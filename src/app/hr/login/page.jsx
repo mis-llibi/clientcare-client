@@ -12,7 +12,7 @@ export default function HrLoginPage() {
     redirectIfAuthenticated: "/hr",
   });
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const [status, setStatus] = useState(null);
@@ -21,7 +21,7 @@ export default function HrLoginPage() {
   const submitForm = (e) => {
     e.preventDefault();
     setLoading(true);
-    login({ email, password, setErrors, setStatus, setLoading });
+    login({ username, password, setErrors, setStatus, setLoading });
   };
 
   return (
@@ -39,17 +39,17 @@ export default function HrLoginPage() {
 
         <form onSubmit={submitForm} className="space-y-4">
           <div>
-            <Label htmlFor="email" label="Email" />
+            <Label htmlFor="username" label="Username" />
             <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               autoFocus
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>
+            {errors.username && (
+              <p className="text-red-500 text-sm mt-1">{errors.username[0]}</p>
             )}
           </div>
 

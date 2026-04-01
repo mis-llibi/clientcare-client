@@ -42,7 +42,7 @@ function SelectComponent({
             <SelectContent>
               <SelectGroup>
                 {itemList?.map((item, i) => (
-                  <SelectItem value={item.value} key={i} className={"roboto"}>
+                  <SelectItem value={item.value} key={item.value || i} className={"roboto"}>
                     {item.name}
                   </SelectItem>
                 ))}
@@ -63,7 +63,7 @@ function SelectComponent({
       <SelectContent>
         <SelectGroup>
           {itemList?.map((item, i) => (
-            <SelectItem value={item.value} key={i}>
+            <SelectItem value={item.value} key={item.value || i}>
               {item.name}
             </SelectItem>
           ))}
