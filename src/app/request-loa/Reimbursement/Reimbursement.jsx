@@ -3,7 +3,6 @@ import Stepper from "./Stepper";
 import SelectionStep from "./SelectionStep";
 import VerificationStep from "./VerificationStep";
 import ReimbursementForm from "./ReimbursementForm";
-import UploadStep from "./UploadStep";
 
 function Reimbursement() {
   const [step, setStep] = useState(1);
@@ -15,7 +14,6 @@ function Reimbursement() {
     { number: 1, title: "Selection" },
     { number: 2, title: "Validation" },
     { number: 3, title: "Details" },
-    { number: 4, title: "Upload" },
   ];
 
   const handleSelectMode = (selectedMode) => {
@@ -75,17 +73,7 @@ function Reimbursement() {
             initialData={formData}
             mode={mode}
             onBack={handleBack}
-            onNext={handleDetailsSubmit}
-          />
-        )}
-
-        {step === 4 && (
-          <UploadStep
-            verifiedData={verifiedData}
-            formData={formData}
-            mode={mode}
-            onBack={handleBack}
-            onReset={handleReset}
+            onNext={handleReset}
           />
         )}
       </div>
