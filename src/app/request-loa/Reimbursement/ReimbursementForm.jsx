@@ -685,6 +685,7 @@ const ReimbursementForm = ({
                   </label>
                   <input
                     type="date"
+                    max={new Date().toISOString().split("T")[0]}
                     {...register("date_availment", { required: true })}
                     className="w-full border p-2 rounded-lg text-sm bg-white"
                   />

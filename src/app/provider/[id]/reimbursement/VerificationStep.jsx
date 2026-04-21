@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import SelectComponent from "@/components/Select";
@@ -6,6 +5,7 @@ import PhoneInputMask from "@/components/InputMask";
 import { MoonLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import { ClientRequestDesktop } from "@/hooks/ClientRequestDesktop";
+import ClientErrorLogForm from "../../../request-loa/ClientErrorLogForm";
 
 const VerificationStep = ({ onVerify, onBack, initialData }) => {
   const [loading, setLoading] = React.useState(false);
@@ -324,11 +324,19 @@ const VerificationStep = ({ onVerify, onBack, initialData }) => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6">
+          <button
+            type="button"
+            onClick={onBack}
+            className="w-full sm:w-auto px-8 py-3 text-gray-500 font-bold hover:text-gray-700 transition-colors roboto cursor-pointer"
+          >
+            ← BACK
+          </button>
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1E3161] flex justify-center items-center text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-blue-950 roboto"
+            className="w-full sm:w-auto bg-[#1E3161] text-white px-12 py-3 rounded-lg font-bold hover:bg-blue-900 transition-all flex items-center justify-center gap-2 shadow-lg roboto cursor-pointer"
           >
             {loading ? (
               <MoonLoader size={18} color="white" />
@@ -336,16 +344,15 @@ const VerificationStep = ({ onVerify, onBack, initialData }) => {
               "VERIFY MEMBERSHIP"
             )}
           </button>
-
-          <button
-            type="button"
-            onClick={onBack}
-            className="w-full bg-red-700 text-white py-1 rounded-r-4xl cursor-pointer rounded-bl-4xl hover:scale-105 transition duration-300 hover:bg-red-800 text-center roboto"
-          >
-            BACK
-          </button>
         </div>
       </form>
+
+      {showErrorLogsModal && (
+        <ClientErrorLogForm
+          onClose={() => setShowErrorLogsModal(false)}
+          errorData={errorLogs}
+        />
+      )}
     </div>
   );
 };
