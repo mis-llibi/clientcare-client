@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Stepper from "./Stepper";
 import SelectionStep from "./SelectionStep";
