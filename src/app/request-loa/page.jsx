@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
@@ -16,13 +17,11 @@ import FollowUpRequest from "./FollowUpRequest";
 import TermsOfUse from "@/components/TermsOfUse";
 import NotificationSystem from "@/components/NotificationSystem";
 
-function RequestLoa() {
-  // flow: 'terms' -> 'notification' -> 'main'
+function RequestLoaContent() {
   const [step, setStep] = useState("terms");
 
-  const params = useSearchParams()
-  const cceId = params.get('cce_id')
-
+  const params = useSearchParams();
+  const cceId = params.get("cce_id");
 
   return (
     <>
@@ -44,6 +43,7 @@ function RequestLoa() {
                   <span>Of</span>
                   <span>Authority</span>
                 </h2>
+
                 <Image
                   unoptimized
                   src={PortalSticky}
@@ -63,18 +63,14 @@ function RequestLoa() {
                     >
                       Consultation
                     </TabsTrigger>
+
                     <TabsTrigger
                       value="laboratory"
                       className="roboto w-full sm:w-auto"
                     >
                       Laboratory
                     </TabsTrigger>
-                    {/* <TabsTrigger
-                      value="reimbursement"
-                      className="roboto w-full sm:w-auto"
-                    >
-                      Reimbursement
-                    </TabsTrigger> */}
+
                     <TabsTrigger
                       value="followup"
                       className="roboto w-full sm:w-auto"
@@ -108,4 +104,10 @@ function RequestLoa() {
   );
 }
 
-export default RequestLoa;
+export default function RequestLoa() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RequestLoaContent />
+    </Suspense>
+  );
+}
