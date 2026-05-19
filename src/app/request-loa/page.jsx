@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 // Assets
 import PortalSticky from "@/assets/0115.gif";
@@ -18,6 +19,10 @@ import NotificationSystem from "@/components/NotificationSystem";
 function RequestLoa() {
   // flow: 'terms' -> 'notification' -> 'main'
   const [step, setStep] = useState("terms");
+
+  const params = useSearchParams()
+  const cceId = params.get('cce_id')
+
 
   return (
     <>
@@ -79,11 +84,11 @@ function RequestLoa() {
                   </TabsList>
 
                   <TabsContent value="consultation">
-                    <Consultation />
+                    <Consultation cceId={cceId} />
                   </TabsContent>
 
                   <TabsContent value="laboratory">
-                    <Laboratory />
+                    <Laboratory cceId={cceId} />
                   </TabsContent>
 
                   <TabsContent value="reimbursement">

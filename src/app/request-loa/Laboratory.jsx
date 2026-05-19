@@ -16,7 +16,7 @@ import { ClientRequestDesktop } from '@/hooks/ClientRequestDesktop';
 import Swal from 'sweetalert2';
 import ClientErrorLogForm from './ClientErrorLogForm';
 
-function Laboratory() {
+function Laboratory({cceId}) {
 
     const [loading, setLoading] = useState(false)
 
@@ -142,6 +142,7 @@ function Laboratory() {
       formData.append('verificationDetailsType', data.verificationDetailsType)
       formData.append('employeeFirstName', data?.employeeFirstName)
       formData.append('employeeLastName', data?.employeeLastName)
+      formData.append('cceId', cceId)
 
 
       if (data.files && data.files.length > 0) {

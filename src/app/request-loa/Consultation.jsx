@@ -16,7 +16,8 @@ import { MoonLoader } from "react-spinners";
 import FindProviderDialog from "./FindHospitalDialog";
 import ClientErrorLogForm from "./ClientErrorLogForm";
 
-function Consultation() {
+function Consultation({cceId}) {
+
   const [loading, setLoading] = useState(false);
 
   const [selectedHospital, setSelectedHospital] = useState();
@@ -161,6 +162,11 @@ function Consultation() {
         data.contact = "0" + digits;
       }
     }
+    
+    const mergedData = {
+      ...data,
+      cceId
+    }
 
     Swal.fire({
       title: "Are you sure?",
@@ -178,7 +184,7 @@ function Consultation() {
       if (result.isConfirmed) {
         setLoading(true);
         submitRequestConsultation({
-          ...data,
+          ...mergedData,
           setLoading,
           reset,
           setSelectedHospital,
