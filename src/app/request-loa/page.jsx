@@ -72,6 +72,12 @@ function RequestLoaContent() {
                     </TabsTrigger>
 
                     <TabsTrigger
+                      value="reimbursement"
+                      className="roboto w-full sm:w-auto"
+                    >
+                      Reimbursement
+                    </TabsTrigger>
+                    <TabsTrigger
                       value="followup"
                       className="roboto w-full sm:w-auto"
                     >
