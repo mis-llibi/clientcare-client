@@ -443,8 +443,12 @@ function Laboratory({cceId}) {
                 type="text" 
                 id="email" 
                 className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                {...register('email', {
-                  required: "Email is required"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Please enter a valid email address",
+                  },
                 })}
                 />
                 {errors?.email && <h1 className="text-red-800 text-sm font-semibold roboto">{errors?.email?.message}</h1>}
@@ -455,9 +459,14 @@ function Laboratory({cceId}) {
                 type="text" 
                 id="alt_email" 
                 className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto" 
-                {...register('alt_email')}
+                {...register("alt_email", {
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Please enter a valid email address",
+                  },
+                })}
                 />
-                {/* {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>} */}
+                {errors?.alt_email && <h1 className="text-red-800 text-sm font-semibold">{errors?.alt_email?.message}</h1>}
             </div>
             <div>
               <label htmlFor="contact" className="text-[#1E3161] font-semibold roboto">Contact #</label>

@@ -212,9 +212,19 @@ function Consultation({
                 <Label label={"Email (optional)"} htmlFor={"email"} />
                 <Input
                   type="email"
-                  {...register("email")}
+                  {...register("email", {
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Please enter a valid email address",
+                    },
+                  })}
                   className={"roboto"}
                 />
+                {errors?.email && (
+                  <h1 className="text-red-800 text-sm font-semibold roboto">
+                    {errors?.email?.message}
+                  </h1>
+                )}
               </div>
 
               <div>

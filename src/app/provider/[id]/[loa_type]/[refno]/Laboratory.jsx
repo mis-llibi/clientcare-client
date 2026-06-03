@@ -185,7 +185,21 @@ function Laboratory({ patient, provider, refno, setIsSubmitted, provider_id }) {
 
           <div>
             <Label label={"Email (optional)"} htmlFor={"email"} />
-            <Input type="email" {...register("email")} className={"roboto"} />
+            <Input 
+              type="email" 
+              {...register("email", {
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Please enter a valid email address",
+                },
+              })}
+              className={"roboto"} 
+            />
+            {errors?.email && (
+              <h1 className="text-red-800 text-sm font-semibold roboto">
+                {errors?.email?.message}
+              </h1>
+            )}
           </div>
 
           <div>
