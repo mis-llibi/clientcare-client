@@ -556,7 +556,7 @@ function Consultation({cceId}) {
                   Email <span className="text-red-700 text-sm">(required)</span>
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
                   {...register("email", {
@@ -577,7 +577,7 @@ function Consultation({cceId}) {
                   Alternate Email (optional)
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="alt_email"
                   className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
                   {...register("alt_email")}
