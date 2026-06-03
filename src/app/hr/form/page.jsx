@@ -250,6 +250,10 @@ function HrFormsContent() {
                       className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
                       {...register("email", {
                         required: "Email is required",
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: "Please enter a valid email address",
+                        },
                       })}
                     />
                     {errors.email && (
@@ -270,7 +274,12 @@ function HrFormsContent() {
                       type="email"
                       id="alt_email"
                       className="border border-black/30 w-full py-1 px-2 rounded-lg outline-[#1E3161] roboto"
-                      {...register("alt_email")}
+                      {...register("alt_email", {
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: "Please enter a valid email address",
+                        },
+                      })}
                     />
                   </div>
 

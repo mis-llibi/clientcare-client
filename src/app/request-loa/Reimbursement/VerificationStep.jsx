@@ -288,7 +288,11 @@ const VerificationStep = ({ onVerify, onBack, initialData }) => {
                   placeholder="email@example.com"
                   className={`w-full border ${errors.email ? "border-red-500" : "border-gray-300"} p-2 rounded-lg outline-[#1E3161] text-sm bg-white`}
                   {...register("email", {
-                    required: "Email Address is required.",
+                    required: "Email Address is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Please enter a valid email address",
+                    },
                   })}
                 />
                 {errors.email && (

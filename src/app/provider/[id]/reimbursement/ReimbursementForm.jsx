@@ -524,12 +524,18 @@ const ReimbursementForm = ({
                   </label>
                   <input
                     type="email"
-                    {...register("employee_email", { required: true })}
+                    {...register("employee_email", {
+                      required: 'Email Address is required',
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Please enter a valid email address",
+                      },
+                    })}
                     className="w-full border p-2 rounded-lg text-sm bg-white"
                   />
                   {errors.employee_email && (
                     <span className="text-red-500 text-xs roboto ml-2">
-                      Email Address is required
+                      {errors?.employee_email.message}
                     </span>
                   )}
                 </div>
@@ -877,12 +883,18 @@ const ReimbursementForm = ({
                   </label>
                   <input
                     type="email"
-                    {...register("employee_email", { required: true })}
+                    {...register("employee_email", {
+                      required: 'Email Address is required',
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Please enter a valid email address",
+                      },
+                    })}
                     className="w-full border p-2 rounded-lg text-sm bg-white"
                   />
                   {errors.employee_email && (
                     <span className="text-red-500 text-xs roboto ml-2">
-                      Email Address is required
+                      {errors?.employee_email.message}
                     </span>
                   )}
                 </div>
