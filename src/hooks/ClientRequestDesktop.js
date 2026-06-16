@@ -1,4 +1,5 @@
 import axios from "@/lib/axios";
+import Axios from "axios";
 import useSWR from "swr";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
@@ -241,66 +242,67 @@ export const ClientRequestDesktop = () => {
     cb,
   }) => {
     try {
-      await csrf();
-      axios
-        .post("/api/validate-reimbursement", formData)
-        .then((res) => {
-          if (res.status == 201) {
-            if (cb) {
-              // Pass the entire response data including member_id
-              cb(res.data);
-            } else {
-              Swal.fire({
-                title: "Validation Success",
-                text: `Your information has been successfully validated.`,
-                icon: "success",
-              });
-              reset();
-            }
-          }
-        })
-        .catch((err) => {
-          if (
-            err.status == 404 &&
-            err.response.data.message == "Cannot find the patient"
-          ) {
-            Swal.fire({
-              title: "Validation Error",
-              text: `We are unable to validate your information. Please check your input and try again.`,
-              icon: "error",
-              showDenyButton: true,
-              showCancelButton: false,
-              showConfirmButton: true,
-              confirmButtonText: "Report",
-              denyButtonText: "Close",
-            }).then((res) => {
-              if (res.isConfirmed) {
-                setErrorLogs(err.response.data.error_data);
-                setShowErrorLogsModal(true);
-              } else {
-                setErrorLogs(null);
-                setShowErrorLogsModal(false);
-              }
-            });
-          } else {
-            Swal.fire({
-              title: "Error",
-              text: `${err.response.data.message}`,
-              icon: "error",
-            });
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      const res = await Axios.post(
+        "https://corporate-api.llibi.app/api/member-validation",
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        },
+      );
+
+      if (res.status === 200 || res.status === 201) {
+        if (cb) {
+          cb(res.data);
+        } else {
+          Swal.fire({
+            title: "Validation Success",
+            text: "Your information has been successfully validated.",
+            icon: "success",
+          });
+          reset();
+        }
+      }
     } catch (error) {
-      Swal.fire({
-        title: "Error",
-        text:
-          error.response?.data?.message ||
-          "Something went wrong. Please try again later.",
-        icon: "error",
-      });
+      const status = error.response?.status;
+      const message =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again later.";
+
+      if (status === 403) {
+        Swal.fire({
+          title: "Validation Error",
+          text: message,
+          icon: "error",
+        });
+      } else if (status === 404 && message === "Cannot find the patient") {
+        Swal.fire({
+          title: "Validation Error",
+          text: "We are unable to validate your information. Please check your input and try again.",
+          icon: "error",
+          showDenyButton: true,
+          showCancelButton: false,
+          showConfirmButton: true,
+          confirmButtonText: "Report",
+          denyButtonText: "Close",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            setErrorLogs(error.response?.data?.error_data);
+            setShowErrorLogsModal(true);
+          } else {
+            setErrorLogs(null);
+            setShowErrorLogsModal(false);
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: message,
+          icon: "error",
+        });
+      }
+    } finally {
       setLoading(false);
     }
   };
