@@ -16,7 +16,7 @@ import { MoonLoader } from "react-spinners";
 import FindProviderDialog from "./FindHospitalDialog";
 import ClientErrorLogForm from "./ClientErrorLogForm";
 
-function Consultation({cceId}) {
+function Consultation({cceId, platform}) {
 
   const [loading, setLoading] = useState(false);
 
@@ -165,7 +165,8 @@ function Consultation({cceId}) {
     
     const mergedData = {
       ...data,
-      cceId
+      cceId,
+      platform
     }
 
     Swal.fire({

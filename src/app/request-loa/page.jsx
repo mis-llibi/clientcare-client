@@ -22,6 +22,7 @@ function RequestLoaContent() {
 
   const params = useSearchParams();
   const cceId = params.get("cce_id");
+  const platform = params.get("platform")
 
   return (
     <>
@@ -86,11 +87,11 @@ function RequestLoaContent() {
                   </TabsList>
 
                   <TabsContent value="consultation">
-                    <Consultation cceId={cceId} />
+                    <Consultation cceId={cceId} platform={platform} />
                   </TabsContent>
 
                   <TabsContent value="laboratory">
-                    <Laboratory cceId={cceId} />
+                    <Laboratory cceId={cceId} platform={platform} />
                   </TabsContent>
 
                   <TabsContent value="reimbursement">
