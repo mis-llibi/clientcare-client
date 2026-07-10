@@ -143,7 +143,9 @@ function Laboratory({cceId, platform}) {
       formData.append('employeeFirstName', data?.employeeFirstName)
       formData.append('employeeLastName', data?.employeeLastName)
       formData.append('cceId', cceId)
-      formData.append('platform', platform)
+      if(platform != null){
+        formData.append('platform', platform)
+      }
 
 
       if (data.files && data.files.length > 0) {
