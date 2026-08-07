@@ -26,7 +26,7 @@ export default function HrPage() {
   const [filesModalData, setFilesModalData] = useState([]);
   const [filesModalRow, setFilesModalRow] = useState(null);
 
-  const { clients, pagination, searchRequest, updateRequestApproval, viewBy } =
+  const { clients, pagination, searchRequest, updateRequestApproval, viewBy, isLoading } =
     useHr({
       name: name,
       status: searchStatus,
@@ -34,8 +34,9 @@ export default function HrPage() {
     });
 
   const statusOptions = [
-    { value: "", label: "Default = Pending" },
-    { value: 12, label: "Pending" },
+    { value: 12, label: "Default = Pending" },
+    { value: 13, label: "Approved by HR" },
+    { value: 14, label: "Disapproved by HR" },
   ];
 
   const handleSearch = (e) => {
@@ -258,7 +259,18 @@ export default function HrPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {clients?.length > 0 ? (
+                  {isLoading ? (
+                    <>
+                    <tr>
+                      <td
+                        className="text-center border bg-red-50 p-2 font-semibold"
+                        colSpan={14}
+                      >
+                        Loading...
+                      </td>
+                    </tr>
+                    </>
+                  ) : clients?.length > 0 ? (
                     clients?.map((row, i) => (
                       <tr
                         key={i}
@@ -322,23 +334,25 @@ export default function HrPage() {
                                 </button>
                               </>
                             ) : (
-                              <button
-                                className="relative text-xs text-white px-2 py-1 rounded-sm cursor-pointer bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:outline-none"
-                                onClick={() => view(row)}
-                              >
-                                VIEW
-                                {row.provider_remarks && (
-                                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white z-10">
-                                    !
-                                  </span>
-                                )}
-                              </button>
+                              // <button
+                              //   className="relative text-xs text-white px-2 py-1 rounded-sm cursor-pointer bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:outline-none"
+                              //   onClick={() => view(row)}
+                              // >
+                              //   VIEW
+                              //   {row.provider_remarks && (
+                              //     <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white z-10">
+                              //       !
+                              //     </span>
+                              //   )}
+                              // </button>
+                              null
                             )}
                           </div>
                         </td>
                       </tr>
                     ))
                   ) : (
+                    <>
                     <tr>
                       <td
                         className="text-center border bg-red-50 p-2 font-semibold"
@@ -347,6 +361,7 @@ export default function HrPage() {
                         No patient found
                       </td>
                     </tr>
+                    </>
                   )}
                 </tbody>
               </table>

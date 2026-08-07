@@ -4,7 +4,7 @@ import axios from "@/lib/axios";
 import Swal from "sweetalert2";
 
 export const useHr = ({ name, status, page = 1 }) => {
-  const { data: clients, mutate } = useSWR(
+  const { data: clients, mutate, isLoading } = useSWR(
     `/api/hr-search-request/${name || 0}/${status || 12}?page=${page}`,
     () =>
       axios
@@ -138,5 +138,6 @@ export const useHr = ({ name, status, page = 1 }) => {
     searchRequest,
     updateRequestApproval,
     viewBy,
+    isLoading
   };
 };
