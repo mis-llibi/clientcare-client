@@ -716,7 +716,7 @@ const ReimbursementForm = ({
                 </div>
                 <div className="space-y-1 order-first md:col-span-2">
                   <label className="text-[11px] font-bold text-gray-500 uppercase">
-                    Amount <span className="text-red-500">*</span>
+                    Reimbursement Amount <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
@@ -945,7 +945,7 @@ const ReimbursementForm = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1 md:col-span-2">
                   <label className="text-[11px] font-bold text-gray-500 uppercase">
-                    Amount <span className="text-red-500">*</span>
+                    Reimbursement Amount <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
