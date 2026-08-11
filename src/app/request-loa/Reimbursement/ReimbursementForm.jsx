@@ -141,6 +141,7 @@ const ReimbursementForm = ({
       account_holder_address: initialData?.account_holder_address || "",
       bank_name: initialData?.bank_name || "",
       account_number: initialData?.account_number || "",
+      amount: initialData?.amount ?? "",
       date_availment: initialData?.date_availment || "",
       date_submission:
         initialData?.date_submission || new Date().toISOString().split("T")[0],
@@ -195,6 +196,7 @@ const ReimbursementForm = ({
       );
 
       finalFormData.append("requirement_type", claimType);
+      finalFormData.append("amount", data.amount);
 
       if (data.files && Object.keys(data.files).length > 0) {
         Object.entries(data.files).forEach(([req, fileArr]) => {
@@ -712,6 +714,40 @@ const ReimbursementForm = ({
                     className="w-full border p-2 rounded-lg text-sm bg-gray-100 cursor-not-allowed"
                   />
                 </div>
+                <div className="space-y-1 order-first md:col-span-2">
+                  <label className="text-[11px] font-bold text-gray-500 uppercase">
+                    Amount <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    onKeyDown={(event) => {
+                      if (["-", "+", "e", "E"].includes(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onPaste={(event) => {
+                      if (event.clipboardData.getData("text").includes("-")) {
+                        event.preventDefault();
+                      }
+                    }}
+                    min="0.01"
+                    step="0.01"
+                    {...register("amount", {
+                      required: "Amount is required",
+                      valueAsNumber: true,
+                      validate: (value) =>
+                        Number.isFinite(value) && value > 0
+                          ? true
+                          : "Amount must be greater than 0",
+                    })}
+                    className="w-full border p-2 rounded-lg text-sm bg-white"
+                  />
+                  {errors.amount && (
+                    <span className="text-red-500 text-xs roboto ml-2">
+                      {errors.amount.message}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -895,6 +931,49 @@ const ReimbursementForm = ({
                   {errors.employee_email && (
                     <span className="text-red-500 text-xs roboto ml-2">
                       {errors?.employee_email.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Section: Claim Information (Upload Mode) */}
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 space-y-4">
+              <h4 className="text-sm font-bold text-[#1E3161] uppercase tracking-wider border-b pb-2 roboto">
+                Claim Information
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1 md:col-span-2">
+                  <label className="text-[11px] font-bold text-gray-500 uppercase">
+                    Amount <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    onKeyDown={(event) => {
+                      if (["-", "+", "e", "E"].includes(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onPaste={(event) => {
+                      if (event.clipboardData.getData("text").includes("-")) {
+                        event.preventDefault();
+                      }
+                    }}
+                    min="0.01"
+                    step="0.01"
+                    {...register("amount", {
+                      required: "Amount is required",
+                      valueAsNumber: true,
+                      validate: (value) =>
+                        Number.isFinite(value) && value > 0
+                          ? true
+                          : "Amount must be greater than 0",
+                    })}
+                    className="w-full border p-2 rounded-lg text-sm bg-white"
+                  />
+                  {errors.amount && (
+                    <span className="text-red-500 text-xs roboto ml-2">
+                      {errors.amount.message}
                     </span>
                   )}
                 </div>
