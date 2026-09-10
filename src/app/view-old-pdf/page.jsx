@@ -11,28 +11,29 @@ function Page() {
 
   const [filename, setFilename] = useState("")
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    await axios.get('https://corporate-api.llibi.app/api/view-old/generated-loa', {
-      params: {
-        filename
-      }
-    })
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      if(err){
-        Swal.fire({
-          title: "Error",
-          text: "Cannot find OLD LOA, please contact MIS",
-          icon: "error"
-        })
-      }
-    })
 
-    
+    if (!filename.trim()) return
 
+    try {
+      const res = await axios.get('https://corporate-api.llibi.app/api/view-old/generated-loa', {
+        params: { filename: filename.trim() }
+      })
+
+      if (res.data?.url) {
+        // Redirect current tab:
+        window.location.href = res.data.url
+        // Or open in a new tab:
+        // window.open(res.data.url, '_blank')
+      }
+    } catch (err) {
+      Swal.fire({
+        title: "Error",
+        text: "Cannot find OLD LOA, please contact MIS",
+        icon: "error"
+      })
+    }
   }
 
 
