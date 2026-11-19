@@ -61,7 +61,9 @@ const ReimbursementForm = ({
   const [isSummaryModalOpen, setIsSummaryModalOpen] = useState(false);
   const [formDataToSubmit, setFormDataToSubmit] = useState(null);
 
-  const requiredDocs = claimType ? REQ_DATA[claimType] : [];
+  const requiredDocs = (claimType ? REQ_DATA[claimType] : []).filter(
+    (req) => isUploadOnly || req !== "Accomplished Reimbursement Form",
+  );
   const uploadedReqs = requiredDocs.filter(
     (req) => files[req] && files[req].length > 0,
   );
@@ -370,8 +372,8 @@ const ReimbursementForm = ({
 
             {/* Requirements Checklist */}
             <div className="space-y-4 pt-4">
-              {claimType && REQ_DATA[claimType] ? (
-                REQ_DATA[claimType].map((req, index) => (
+              {claimType && requiredDocs.length > 0 ? (
+                requiredDocs.map((req, index) => (
                   <div
                     key={index}
                     className={`border rounded-xl p-4 shadow-sm flex flex-col gap-2 ${
@@ -822,8 +824,8 @@ const ReimbursementForm = ({
 
               {/* Requirements Checklist */}
               <div className="space-y-4 pt-4">
-                {claimType && REQ_DATA[claimType] ? (
-                  REQ_DATA[claimType].map((req, index) => (
+                {claimType && requiredDocs.length > 0 ? (
+                  requiredDocs.map((req, index) => (
                     <div
                       key={index}
                       className={`border rounded-xl p-4 shadow-sm flex flex-col gap-2 ${
